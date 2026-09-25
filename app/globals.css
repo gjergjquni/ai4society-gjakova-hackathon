@@ -146,7 +146,7 @@
     background-size: cover;
     background-position: center 42%;
     transform: scale(1.12);
-    filter: saturate(0.55) contrast(1.2) brightness(0.42);
+    filter: saturate(0.72) contrast(1.15) brightness(0.62);
     animation: cinema-drift 36s ease-in-out infinite alternate;
   }
 
@@ -154,15 +154,15 @@
     position: absolute;
     inset: 0;
     background:
-      radial-gradient(ellipse 85% 70% at 50% 28%, rgb(8 16 14 / 0.15) 0%, rgb(5 10 9 / 0.55) 52%, rgb(3 6 5 / 0.92) 100%),
-      linear-gradient(180deg, rgb(4 8 7 / 0.72) 0%, rgb(4 8 7 / 0.28) 38%, rgb(3 6 5 / 0.82) 100%),
-      linear-gradient(90deg, rgb(3 6 5 / 0.55) 0%, transparent 22%, transparent 78%, rgb(3 6 5 / 0.55) 100%);
+      radial-gradient(ellipse 90% 75% at 50% 30%, rgb(8 16 14 / 0.08) 0%, rgb(5 10 9 / 0.38) 58%, rgb(3 6 5 / 0.78) 100%),
+      linear-gradient(180deg, rgb(4 8 7 / 0.48) 0%, rgb(4 8 7 / 0.12) 42%, rgb(3 6 5 / 0.62) 100%),
+      linear-gradient(90deg, rgb(3 6 5 / 0.35) 0%, transparent 24%, transparent 76%, rgb(3 6 5 / 0.35) 100%);
   }
 
   .cinema-bg-grain {
     position: absolute;
     inset: -40%;
-    opacity: 0.18;
+    opacity: 0.14;
     mix-blend-mode: overlay;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     animation: cinema-grain 0.8s steps(2) infinite;
