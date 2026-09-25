@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import SwarmDashboard from "@/components/swarm-dashboard";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -36,6 +37,10 @@ type Announcement = {
 };
 
 export default function Home() {
+  return <SwarmDashboard />;
+}
+
+export function LegacyHome() {
   const [issues, setIssues] = useState<Issue[]>([
     {
       id: "1",
