@@ -195,6 +195,15 @@
     backdrop-filter: blur(14px);
   }
 
+  .panel-clear {
+    border: 1px solid rgb(255 255 255 / 0.22);
+    border-radius: 1rem;
+    background: rgb(255 255 255 / 0.03);
+    box-shadow: none;
+    backdrop-filter: none;
+    text-shadow: 0 1px 10px rgb(0 0 0 / 0.55);
+  }
+
   .leaflet-container {
     background: #dce4ec;
     font-family: inherit;

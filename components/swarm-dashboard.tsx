@@ -12,16 +12,13 @@ import {
   Clock3,
   Crosshair,
   FileText,
-  GitMerge,
   ImagePlus,
   Lightbulb,
   MapPin,
   Navigation,
-  Radio,
   Route,
   Search,
   Send,
-  ShieldAlert,
   Sparkles,
   TrafficCone,
   Trash2,
@@ -332,29 +329,7 @@ export default function SwarmDashboard() {
               <Waves className="size-5" strokeWidth={2.7} />
               <span className="absolute -right-1 -top-1 size-2.5 rounded-full border-2 border-[#07110f] bg-[#65e4ff]" />
             </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="text-lg font-bold tracking-[-0.03em]">PULSI</span>
-                <span className="rounded-full border border-[#d6f36a]/25 bg-[#d6f36a]/10 px-2 py-0.5 text-[9px] font-bold tracking-[0.16em] text-[#d6f36a]">
-                  GJAKOVA
-                </span>
-              </div>
-              <p className="hidden text-[10px] tracking-[0.08em] text-white/35 sm:block">
-                INTELIGJENCA QYTETARE NË KOHË REALE
-              </p>
-            </div>
-          </div>
-
-          <div className="hidden items-center gap-1 rounded-full border border-white/8 bg-white/[0.035] p-1 md:flex">
-            <button className="rounded-full bg-white/10 px-4 py-1.5 text-xs font-medium text-white">
-              Pamja operative
-            </button>
-            <button className="rounded-full px-4 py-1.5 text-xs text-white/45 transition hover:text-white">
-              Analitika
-            </button>
-            <button className="rounded-full px-4 py-1.5 text-xs text-white/45 transition hover:text-white">
-              Departamentet
-            </button>
+            <span className="text-lg font-bold tracking-[-0.03em]">PULSI</span>
           </div>
 
           <div className="flex items-center gap-2">
@@ -380,13 +355,9 @@ export default function SwarmDashboard() {
       <div className="relative z-10 mx-auto max-w-[1500px] px-4 py-6 sm:px-6">
         <section className="mb-6 flex flex-col justify-between gap-4 lg:flex-row lg:items-end">
           <div>
-            <div className="mb-2 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#65e4ff]">
-              <Radio className="size-3.5" />
-              Situata në qytet · live
-            </div>
             <h1 className="max-w-2xl text-3xl font-semibold leading-[1.08] tracking-[-0.045em] sm:text-4xl">
-              Çfarë kërkon vëmendjen e
-              <span className="text-[#d6f36a]"> Gjakovës tani?</span>
+              Një <span className="text-[#d6f36a]">sinjal</span> nga qytetari. Një hap për{" "}
+              <span className="text-[#d6f36a]">Gjakovën</span>.
             </h1>
           </div>
           <p className="max-w-lg text-sm leading-6 text-white/46">
@@ -395,34 +366,9 @@ export default function SwarmDashboard() {
           </p>
         </section>
 
-        <section className="mb-4 grid grid-cols-2 gap-3 lg:grid-cols-4">
-          {[
-            { label: "Sinjale sot", value: "186", delta: "+24%", icon: Radio, color: "#65e4ff" },
-            { label: "Probleme aktive", value: "42", delta: "11 kritike", icon: ShieldAlert, color: "#ff5e66" },
-            { label: "Raporte të bashkuara", value: "68", delta: "36% më pak duplikate", icon: GitMerge, color: "#8f7cff" },
-            { label: "Dërguar për veprim", value: "14", delta: "6 departamente", icon: Send, color: "#d6f36a" },
-          ].map((stat) => (
-            <div key={stat.label} className="panel-soft group flex min-h-24 items-center gap-3 p-4">
-              <div
-                className="grid size-10 shrink-0 place-items-center rounded-xl border"
-                style={{ color: stat.color, borderColor: `${stat.color}28`, background: `${stat.color}0d` }}
-              >
-                <stat.icon className="size-4.5" />
-              </div>
-              <div className="min-w-0">
-                <p className="truncate text-[10px] uppercase tracking-[0.12em] text-white/35">{stat.label}</p>
-                <div className="mt-1 flex items-baseline gap-2">
-                  <span className="text-2xl font-semibold tracking-[-0.04em]">{stat.value}</span>
-                  <span className="hidden text-[10px] text-white/38 xl:inline">{stat.delta}</span>
-                </div>
-              </div>
-            </div>
-          ))}
-        </section>
-
-        <section className="grid gap-4 xl:grid-cols-[1.05fr_1.35fr_0.76fr]">
-          <div className="panel min-w-0 overflow-hidden">
-            <div className="flex items-center justify-between border-b border-white/7 px-4 py-4">
+        <section className="grid gap-4 lg:grid-cols-[3fr_1fr]">
+          <div className="panel-clear min-w-0 overflow-hidden">
+            <div className="flex items-center justify-between border-b border-white/10 px-4 py-4">
               <div>
                 <div className="flex items-center gap-2">
                   <Activity className="size-4 text-[#d6f36a]" />
@@ -441,7 +387,7 @@ export default function SwarmDashboard() {
                   key={issue.id}
                   onClick={() => setSelectedId(issue.id)}
                   className={`group w-full px-4 py-4 text-left transition ${
-                    selectedId === issue.id ? "bg-white/[0.065]" : "hover:bg-white/[0.035]"
+                    selectedId === issue.id ? "bg-white/[0.06]" : "hover:bg-white/[0.03]"
                   }`}
                 >
                   <div className="flex gap-3">
@@ -488,24 +434,21 @@ export default function SwarmDashboard() {
           </div>
 
           <div className="panel relative min-h-[510px] overflow-hidden">
-            <div className="absolute inset-x-0 top-0 z-20 flex items-center justify-between p-4">
-              <div>
-                <div className="flex items-center gap-2">
-                  <MapPin className="size-4 text-[#65e4ff]" />
-                  <h2 className="text-sm font-semibold">Harta e sinjaleve</h2>
-                </div>
-                <p className="mt-1 text-[10px] text-white/35">Gjakovë · 42 probleme aktive</p>
+            <div className="absolute inset-x-0 top-0 z-20 flex flex-col gap-2 p-3">
+              <div className="flex items-center gap-2">
+                <MapPin className="size-4 shrink-0 text-[#65e4ff]" />
+                <h2 className="truncate text-sm font-semibold">Harta</h2>
               </div>
-              <div className="flex rounded-lg border border-white/8 bg-[#0c1714]/80 p-1 backdrop-blur">
+              <div className="flex self-start rounded-lg border border-white/8 bg-[#0c1714]/80 p-1 backdrop-blur">
                 <button
                   onClick={() => setMapStyle("streets")}
-                  className={`rounded-md px-2.5 py-1 text-[10px] ${mapStyle === "streets" ? "bg-white/10 text-white" : "text-white/40"}`}
+                  className={`rounded-md px-2 py-1 text-[10px] ${mapStyle === "streets" ? "bg-white/10 text-white" : "text-white/40"}`}
                 >
                   Rrugët
                 </button>
                 <button
                   onClick={() => setMapStyle("satellite")}
-                  className={`rounded-md px-2.5 py-1 text-[10px] ${mapStyle === "satellite" ? "bg-white/10 text-white" : "text-white/40"}`}
+                  className={`rounded-md px-2 py-1 text-[10px] ${mapStyle === "satellite" ? "bg-white/10 text-white" : "text-white/40"}`}
                 >
                   Sateliti
                 </button>
@@ -520,105 +463,99 @@ export default function SwarmDashboard() {
                 onSelect={setSelectedId}
               />
 
-              <div className="absolute bottom-4 left-4 right-4 z-20 rounded-2xl border border-white/9 bg-[#0a1512]/92 p-4 shadow-2xl backdrop-blur-xl">
-                <div className="flex items-start justify-between gap-4">
+              <div className="absolute bottom-3 left-3 right-3 z-20 rounded-xl border border-white/9 bg-[#0a1512]/92 p-3 shadow-2xl backdrop-blur-xl">
+                <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0">
-                    <div className="mb-1 flex items-center gap-2">
+                    <div className="mb-1 flex items-center gap-1.5">
                       <span className="text-[10px] font-bold text-white/35">#{selected.rank}</span>
-                      <span className="rounded-full px-2 py-0.5 text-[9px] font-bold" style={{ color: selected.color, backgroundColor: `${selected.color}12` }}>
-                        {selected.severity}
-                      </span>
-                      <span className="text-[9px] text-white/30">{selected.id}</span>
+                      <span className="truncate text-[9px] text-white/30">{selected.id}</span>
                     </div>
-                    <h3 className="truncate text-base font-semibold">{selected.title}</h3>
-                    <p className="mt-1 flex items-center gap-1 text-[10px] text-white/40">
-                      <MapPin className="size-3" /> {selected.location}
-                    </p>
+                    <h3 className="truncate text-sm font-semibold">{selected.title}</h3>
                   </div>
-                  <div className="text-right">
-                    <div className="text-3xl font-semibold tracking-[-0.06em]" style={{ color: selected.color }}>
+                  <div className="shrink-0 text-right">
+                    <div className="text-2xl font-semibold tracking-[-0.06em]" style={{ color: selected.color }}>
                       {selected.priority}
                     </div>
-                    <div className="text-[9px] uppercase tracking-wider text-white/30">prioritet</div>
                   </div>
                 </div>
                 <button
                   onClick={() => setDetailsOpen(true)}
-                  className="mt-3 flex w-full items-center justify-between rounded-lg border border-white/7 bg-white/[0.035] px-3 py-2 text-[10px] text-white/60 transition hover:bg-white/[0.07] hover:text-white"
+                  className="mt-2 flex w-full items-center justify-between rounded-lg border border-white/7 bg-white/[0.035] px-2.5 py-1.5 text-[10px] text-white/60 transition hover:bg-white/[0.07] hover:text-white"
                 >
-                  Shih arsyetimin dhe veprimin e rekomanduar
+                  Detajet
                   <ArrowUpRight className="size-3.5" />
                 </button>
               </div>
             </div>
           </div>
 
-          <aside className="space-y-4">
-            <div className="panel overflow-hidden">
-              <div className="border-b border-white/7 px-4 py-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Bot className="size-4 text-[#8f7cff]" />
-                    <h2 className="text-sm font-semibold">Swarm AI</h2>
-                  </div>
-                  <span className="text-[9px] uppercase tracking-[0.14em] text-[#52d6a4]">në punë</span>
+        </section>
+
+        <section className="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          <div className="panel overflow-hidden">
+            <div className="border-b border-white/7 px-4 py-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Bot className="size-4 text-[#8f7cff]" />
+                  <h2 className="text-sm font-semibold">Swarm AI</h2>
                 </div>
-                <p className="mt-1 text-[10px] text-white/35">Agjentë të koordinuar, jo një chatbot</p>
+                <span className="text-[9px] uppercase tracking-[0.14em] text-[#52d6a4]">në punë</span>
               </div>
-              <div className="grid grid-cols-2 gap-px bg-white/6">
-                {agents.map((agent, index) => (
-                  <div
-                    key={agent.name}
-                    className={`relative bg-[#0b1613] p-3 transition duration-500 ${
-                      activeAgent === index ? "bg-white/[0.065]" : ""
-                    }`}
-                  >
-                    {activeAgent === index && (
-                      <span className="absolute right-2 top-2 size-1.5 animate-pulse rounded-full" style={{ backgroundColor: agent.color }} />
-                    )}
-                    <agent.icon className="mb-2 size-4" style={{ color: agent.color }} />
-                    <p className="text-[11px] font-medium">{agent.name}</p>
-                    <p className="mt-0.5 text-[8px] text-white/30">{agent.detail}</p>
-                  </div>
-                ))}
-              </div>
+              <p className="mt-1 text-[10px] text-white/35">Agjentë të koordinuar, jo një chatbot</p>
             </div>
+            <div className="grid grid-cols-2 gap-px bg-white/6">
+              {agents.map((agent, index) => (
+                <div
+                  key={agent.name}
+                  className={`relative bg-[#0b1613] p-3 transition duration-500 ${
+                    activeAgent === index ? "bg-white/[0.065]" : ""
+                  }`}
+                >
+                  {activeAgent === index && (
+                    <span className="absolute right-2 top-2 size-1.5 animate-pulse rounded-full" style={{ backgroundColor: agent.color }} />
+                  )}
+                  <agent.icon className="mb-2 size-4" style={{ color: agent.color }} />
+                  <p className="text-[11px] font-medium">{agent.name}</p>
+                  <p className="mt-0.5 text-[8px] text-white/30">{agent.detail}</p>
+                </div>
+              ))}
+            </div>
+          </div>
 
-            <div className="panel overflow-hidden">
-              <div className="flex items-center justify-between border-b border-white/7 px-4 py-3.5">
-                <h2 className="text-xs font-semibold">Aktiviteti i fundit</h2>
-                <Search className="size-3.5 text-white/25" />
-              </div>
-              <div className="space-y-0 px-4">
-                {activity.map((item, index) => (
-                  <div key={item.text} className="relative flex gap-3 border-b border-white/6 py-3 last:border-0">
-                    <div className="relative mt-1">
-                      <span className="block size-2 rounded-full" style={{ backgroundColor: item.color }} />
-                      {index < activity.length - 1 && <span className="absolute left-[3px] top-3 h-9 w-px bg-white/8" />}
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center justify-between gap-2">
-                        <span className="text-[9px] font-semibold" style={{ color: item.color }}>{item.agent}</span>
-                        <span className="text-[8px] text-white/25">{item.time}</span>
-                      </div>
-                      <p className="mt-0.5 text-[10px] leading-4 text-white/55">{item.text}</p>
-                    </div>
+          <div className="panel overflow-hidden">
+            <div className="flex items-center justify-between border-b border-white/7 px-4 py-3.5">
+              <h2 className="text-xs font-semibold">Aktiviteti i fundit</h2>
+              <Search className="size-3.5 text-white/25" />
+            </div>
+            <div className="space-y-0 px-4">
+              {activity.map((item, index) => (
+                <div key={item.text} className="relative flex gap-3 border-b border-white/6 py-3 last:border-0">
+                  <div className="relative mt-1">
+                    <span className="block size-2 rounded-full" style={{ backgroundColor: item.color }} />
+                    {index < activity.length - 1 && <span className="absolute left-[3px] top-3 h-9 w-px bg-white/8" />}
                   </div>
-                ))}
-              </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-[9px] font-semibold" style={{ color: item.color }}>{item.agent}</span>
+                      <span className="text-[8px] text-white/25">{item.time}</span>
+                    </div>
+                    <p className="mt-0.5 text-[10px] leading-4 text-white/55">{item.text}</p>
+                  </div>
+                </div>
+              ))}
             </div>
+          </div>
 
-            <div className="rounded-2xl border border-[#d6f36a]/15 bg-[#d6f36a]/[0.055] p-4">
-              <div className="mb-2 flex items-center gap-2 text-[#d6f36a]">
-                <Sparkles className="size-4" />
-                <span className="text-[10px] font-bold uppercase tracking-[0.12em]">Sinjal i swarm-it</span>
-              </div>
-              <p className="text-xs leading-5 text-white/66">
-                4 probleme në qendër po ndikojnë të njëjtin korridor. Koordinimi i dy ekipeve mund të
-                shmangë 3 dalje të ndara.
-              </p>
+          <div className="panel flex flex-col justify-center border-[#d6f36a]/15 bg-[#d6f36a]/[0.055] p-5 md:col-span-2 xl:col-span-1">
+            <div className="mb-2 flex items-center gap-2 text-[#d6f36a]">
+              <Sparkles className="size-4" />
+              <span className="text-[10px] font-bold uppercase tracking-[0.12em]">Sinjal i swarm-it</span>
             </div>
-          </aside>
+            <p className="text-sm leading-6 text-white/66">
+              4 probleme në qendër po ndikojnë të njëjtin korridor. Koordinimi i dy ekipeve mund të
+              shmangë 3 dalje të ndara.
+            </p>
+          </div>
         </section>
       </div>
 
