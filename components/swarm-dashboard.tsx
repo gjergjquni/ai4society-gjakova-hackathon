@@ -3,21 +3,16 @@
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import {
   Activity,
-  AlertTriangle,
   ArrowUpRight,
   Bot,
   BrainCircuit,
-  Building2,
-  Camera,
   Check,
   ChevronRight,
-  CircleDot,
   Clock3,
   Crosshair,
   FileText,
   GitMerge,
   ImagePlus,
-  Layers3,
   Lightbulb,
   MapPin,
   Navigation,
@@ -27,10 +22,8 @@ import {
   Send,
   ShieldAlert,
   Sparkles,
-  TrafficCone,
   Users,
   Waves,
-  X,
   Zap,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";

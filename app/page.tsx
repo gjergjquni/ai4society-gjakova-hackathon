@@ -228,7 +228,7 @@ export function LegacyHome() {
             </p>
             <div className="flex gap-4 flex-wrap">
               <Dialog>
-                <DialogTrigger asChild>
+                <DialogTrigger>
                   <Button size="lg" variant="secondary" className="bg-white text-blue-900 hover:bg-blue-50">
                     📢 Raporto Problem
                   </Button>
@@ -334,7 +334,7 @@ export function LegacyHome() {
                 <p className="text-gray-600 mb-6">Gjurmo statusin e problemeve në komunitet</p>
               </div>
               <Dialog>
-                <DialogTrigger asChild>
+                <DialogTrigger>
                   <Button>+ Raporto Problem të Ri</Button>
                 </DialogTrigger>
                 <DialogContent className="max-w-md">
@@ -447,7 +447,7 @@ export function LegacyHome() {
             <div className="max-w-3xl mx-auto">
               <Card>
                 <CardHeader>
-                  <CardTitle>💬 Si mund t'ju ndihmoj sot?</CardTitle>
+                  <CardTitle>💬 Si mund t&apos;ju ndihmoj sot?</CardTitle>
                   <CardDescription>
                     Pyetni mbi çdo shërbim komunal, dokumente, orare, ose procedura administrative
                   </CardDescription>
