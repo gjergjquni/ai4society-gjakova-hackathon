@@ -212,7 +212,10 @@ const activity = [
 export default function SwarmDashboard() {
   const [issues, setIssues] = useState(seedIssues);
   const [selectedId, setSelectedId] = useState(seedIssues[0].id);
-  const [reportOpen, setReportOpen] = useState(false);
+  const [reportOpen, setReportOpen] = useState(() =>
+    typeof window !== "undefined" &&
+    new URLSearchParams(window.location.search).get("report") === "1",
+  );
   const [detailsOpen, setDetailsOpen] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [processing, setProcessing] = useState(false);
