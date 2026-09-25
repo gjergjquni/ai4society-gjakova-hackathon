@@ -320,7 +320,7 @@ export default function SwarmDashboard() {
   return (
     <main className="relative min-h-screen overflow-x-hidden text-[#edf4ef]">
       <div className="cinema-bg" aria-hidden>
-        <img src="/gjakova-dusk.png" alt="" className="cinema-bg-photo" />
+        <div className="cinema-bg-photo" />
         <div className="cinema-bg-shade" />
         <div className="cinema-bg-grain" />
       </div>
