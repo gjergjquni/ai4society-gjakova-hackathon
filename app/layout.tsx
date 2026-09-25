@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Gjakova Connect - Platforma Qytetare",
-  description: "Platforma dixhitale për qytetarët e Gjakovës - Raporto probleme, akseso shërbime, dhe lidhu me komunitetin",
+  title: "PULSI — Protokolli qytetar i Gjakovës",
+  description: "Protokoll peer-to-peer me swarm AI për raportimin dhe prioritetin e problemeve komunale në Gjakovë",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

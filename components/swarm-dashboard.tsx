@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import {
   Activity,
@@ -22,20 +23,30 @@ import {
   Send,
   ShieldAlert,
   Sparkles,
+  TrafficCone,
+  Trash2,
+  Droplets,
+  Lamp,
+  Footprints,
+  CarFront,
   Users,
   Waves,
   Zap,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+
+const GjakovaMap = dynamic(() => import("@/components/gjakova-map"), {
+  ssr: false,
+  loading: () => <div className="absolute inset-0 bg-[#dce4ec]" />,
+});
 
 type Issue = {
   id: string;
   rank: number;
   title: string;
   category: string;
+  categoryId: string;
   location: string;
   reports: number;
   priority: number;
@@ -47,9 +58,33 @@ type Issue = {
   impact: string;
   recommendation: string;
   reasons: { label: string; value: number }[];
-  map: { x: number; y: number };
+  coords: { lat: number; lng: number };
   color: string;
 };
+
+const categories = [
+  { id: "pothole", label: "Gropë", icon: TrafficCone },
+  { id: "waste", label: "Mbeturina", icon: Trash2 },
+  { id: "light", label: "Ndriçim", icon: Lamp },
+  { id: "water", label: "Rrjedhje uji", icon: Droplets },
+  { id: "sidewalk", label: "Trotuar", icon: Footprints },
+  { id: "traffic", label: "Trafik", icon: CarFront },
+];
+
+const severities = [
+  { id: "critical", label: "Rrezik", hint: "dikush mund të lëndohet" },
+  { id: "blocking", label: "Bllokon", hint: "ndalon rrugën ose shërbimin" },
+  { id: "annoying", label: "Bezdis", hint: "nuk është urgjent" },
+];
+
+const places = [
+  { id: "sheshi", label: "Sheshi i Gjakovës", coords: { lat: 42.3806, lng: 20.4312 }, merge: { pothole: "GJK-1031" } },
+  { id: "qender", label: "Rr. Nënë Tereza", coords: { lat: 42.3801, lng: 20.4304 }, merge: { pothole: "GJK-1031" } },
+  { id: "carshia", label: "Çarshia e Madhe", coords: { lat: 42.3809, lng: 20.4272 }, merge: { light: "GJK-1047" } },
+  { id: "spitali", label: "Pranë Spitalit", coords: { lat: 42.3854, lng: 20.4276 }, merge: { water: "GJK-1042" } },
+  { id: "ura", label: "Ura e Terzive", coords: { lat: 42.3724, lng: 20.4308 }, merge: { waste: "GJK-1019" } },
+  { id: "cabrati", label: "Çabrati", coords: { lat: 42.3878, lng: 20.4198 }, merge: {} },
+];
 
 const seedIssues: Issue[] = [
   {
@@ -74,7 +109,8 @@ const seedIssues: Issue[] = [
       { label: "Lokacion kritik", value: 23 },
       { label: "Përhapja", value: 18 },
     ],
-    map: { x: 59, y: 38 },
+    categoryId: "water",
+    coords: { lat: 42.3854, lng: 20.4276 },
     color: "#ff5e66",
   },
   {
@@ -82,6 +118,7 @@ const seedIssues: Issue[] = [
     rank: 2,
     title: "Gropë e rrezikshme në rrugë",
     category: "Infrastrukturë",
+    categoryId: "pothole",
     location: "Rr. Nënë Tereza · Qendër",
     reports: 17,
     priority: 87,
@@ -99,7 +136,7 @@ const seedIssues: Issue[] = [
       { label: "Rrezik aksidenti", value: 24 },
       { label: "Përsëritje", value: 15 },
     ],
-    map: { x: 44, y: 54 },
+    coords: { lat: 42.3801, lng: 20.4304 },
     color: "#ff9f43",
   },
   {
@@ -107,6 +144,7 @@ const seedIssues: Issue[] = [
     rank: 3,
     title: "Deponi ilegale po zgjerohet",
     category: "Mbeturina",
+    categoryId: "waste",
     location: "Ura e Terzive · dalje jugore",
     reports: 31,
     priority: 82,
@@ -124,7 +162,7 @@ const seedIssues: Issue[] = [
       { label: "Ndikim mjedisor", value: 20 },
       { label: "Afër lumit", value: 13 },
     ],
-    map: { x: 70, y: 72 },
+    coords: { lat: 42.3724, lng: 20.4308 },
     color: "#d6f36a",
   },
   {
@@ -132,6 +170,7 @@ const seedIssues: Issue[] = [
     rank: 4,
     title: "Ndriçim publik jashtë funksionit",
     category: "Ndriçim",
+    categoryId: "light",
     location: "Çarshia e Madhe",
     reports: 12,
     priority: 71,
@@ -149,7 +188,7 @@ const seedIssues: Issue[] = [
       { label: "Zonë turistike", value: 20 },
       { label: "Kohëzgjatja", value: 12 },
     ],
-    map: { x: 34, y: 32 },
+    coords: { lat: 42.3809, lng: 20.4272 },
     color: "#8f7cff",
   },
 ];
@@ -178,7 +217,14 @@ export default function SwarmDashboard() {
   const [submitted, setSubmitted] = useState(false);
   const [processing, setProcessing] = useState(false);
   const [activeAgent, setActiveAgent] = useState(0);
-  const [form, setForm] = useState({ description: "", location: "" });
+  const [mapStyle, setMapStyle] = useState<"streets" | "satellite">("streets");
+  const [form, setForm] = useState({
+    categoryId: "",
+    severityId: "",
+    placeId: "",
+    photo: false,
+  });
+  const [mergedId, setMergedId] = useState("GJK-1031");
 
   useEffect(() => {
     const timer = window.setInterval(
@@ -195,26 +241,76 @@ export default function SwarmDashboard() {
 
   function submitReport(event: FormEvent) {
     event.preventDefault();
+    if (!form.categoryId || !form.severityId || !form.placeId) return;
+
+    const place = places.find((item) => item.id === form.placeId);
+    const category = categories.find((item) => item.id === form.categoryId);
+    if (!place || !category) return;
+
+    const existingId = (place.merge as Record<string, string | undefined>)[form.categoryId];
     setProcessing(true);
+
     window.setTimeout(() => {
-      setIssues((current) =>
-        current.map((issue) =>
-          issue.id === "GJK-1031"
-            ? { ...issue, reports: issue.reports + 1, priority: 89, trend: issue.trend + 2 }
-            : issue,
-        ),
-      );
-      setSelectedId("GJK-1031");
+      if (existingId) {
+        setIssues((current) =>
+          current.map((issue) =>
+            issue.id === existingId
+              ? {
+                  ...issue,
+                  reports: issue.reports + 1,
+                  priority: Math.min(99, issue.priority + 2),
+                  trend: issue.trend + 2,
+                }
+              : issue,
+          ),
+        );
+        setMergedId(existingId);
+        setSelectedId(existingId);
+      } else {
+        const newId = `GJK-${1050 + issues.length}`;
+        const newIssue: Issue = {
+          id: newId,
+          rank: issues.length + 1,
+          title: `${category.label} e raportuar`,
+          category: category.label,
+          categoryId: category.id,
+          location: place.label,
+          reports: 1,
+          priority: form.severityId === "critical" ? 76 : form.severityId === "blocking" ? 64 : 51,
+          trend: 4,
+          severity: form.severityId === "critical" ? "Kritike" : form.severityId === "blocking" ? "E lartë" : "Mesatare",
+          status: "Monitorim",
+          department: "Drejtoria e Shërbimeve Publike",
+          age: "tani",
+          impact: "1 sinjal i ri",
+          recommendation: `Inspektoni ${place.label} dhe konfirmoni ${category.label.toLowerCase()} para se të dërgohet ekipi.`,
+          reasons: [
+            { label: "Sinjal i ri", value: 18 },
+            { label: "Lokacioni", value: 16 },
+            { label: "Kategoria", value: 12 },
+            { label: "Kohëzgjatja", value: 6 },
+          ],
+          coords: place.coords,
+          color: "#65e4ff",
+        };
+        setIssues((current) => [newIssue, ...current].map((issue, index) => ({ ...issue, rank: index + 1 })));
+        setMergedId(newId);
+        setSelectedId(newId);
+      }
       setProcessing(false);
       setSubmitted(true);
-    }, 1700);
+    }, 1200);
+  }
+
+  function useMyLocation() {
+    setForm((current) => ({ ...current, placeId: "sheshi" }));
   }
 
   function resetReport() {
     setReportOpen(false);
     window.setTimeout(() => {
       setSubmitted(false);
-      setForm({ description: "", location: "" });
+      setForm({ categoryId: "", severityId: "", placeId: "", photo: false });
     }, 300);
   }
 
@@ -392,54 +488,28 @@ export default function SwarmDashboard() {
                 <p className="mt-1 text-[10px] text-white/35">Gjakovë · 42 probleme aktive</p>
               </div>
               <div className="flex rounded-lg border border-white/8 bg-[#0c1714]/80 p-1 backdrop-blur">
-                <button className="rounded-md bg-white/10 px-2.5 py-1 text-[10px]">Problemet</button>
-                <button className="px-2.5 py-1 text-[10px] text-white/40">Nxehtësia</button>
+                <button
+                  onClick={() => setMapStyle("streets")}
+                  className={`rounded-md px-2.5 py-1 text-[10px] ${mapStyle === "streets" ? "bg-white/10 text-white" : "text-white/40"}`}
+                >
+                  Rrugët
+                </button>
+                <button
+                  onClick={() => setMapStyle("satellite")}
+                  className={`rounded-md px-2.5 py-1 text-[10px] ${mapStyle === "satellite" ? "bg-white/10 text-white" : "text-white/40"}`}
+                >
+                  Sateliti
+                </button>
               </div>
             </div>
 
-            <div className="city-map absolute inset-0">
-              <svg className="absolute inset-0 size-full opacity-90" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice">
-                <path d="M-20 390 C130 320 230 440 390 340 S640 230 840 310" fill="none" stroke="#65e4ff" strokeOpacity=".13" strokeWidth="26" />
-                <path d="M-20 390 C130 320 230 440 390 340 S640 230 840 310" fill="none" stroke="#65e4ff" strokeOpacity=".28" strokeWidth="2" />
-                <path d="M120 -20 C180 120 260 180 210 340 S260 520 360 640" fill="none" stroke="white" strokeOpacity=".1" strokeWidth="11" />
-                <path d="M120 -20 C180 120 260 180 210 340 S260 520 360 640" fill="none" stroke="white" strokeOpacity=".2" strokeWidth="1.5" />
-                <path d="M650 -30 C570 130 640 240 520 350 S430 540 470 640" fill="none" stroke="white" strokeOpacity=".09" strokeWidth="9" />
-                <path d="M650 -30 C570 130 640 240 520 350 S430 540 470 640" fill="none" stroke="white" strokeOpacity=".18" strokeWidth="1.5" />
-                <path d="M40 130 L760 520" stroke="white" strokeOpacity=".07" strokeWidth="7" />
-                <path d="M20 530 L700 70" stroke="white" strokeOpacity=".06" strokeWidth="6" />
-                <path d="M300 -20 L760 440" stroke="white" strokeOpacity=".06" strokeWidth="5" />
-                <g fill="none" stroke="white" strokeOpacity=".045">
-                  <path d="M40 80h210v100H40zM300 55h160v130H300zM510 80h230v100H510z" />
-                  <path d="M40 230h150v115H40zM270 210h190v95H270zM540 220h180v100H540z" />
-                  <path d="M65 430h150v100H65zM295 420h180v110H295zM555 400h170v120H555z" />
-                </g>
-              </svg>
-
-              <span className="absolute left-[13%] top-[24%] text-[9px] tracking-widest text-white/17">ÇABRATI</span>
-              <span className="absolute left-[42%] top-[46%] text-[9px] tracking-widest text-white/17">QENDRA</span>
-              <span className="absolute left-[65%] top-[78%] text-[9px] tracking-widest text-white/17">URA E TERZIVE</span>
-              <span className="absolute left-[70%] top-[23%] text-[9px] tracking-widest text-white/17">SPITALI</span>
-
-              {issues.map((issue) => (
-                <button
-                  key={issue.id}
-                  aria-label={issue.title}
-                  onClick={() => setSelectedId(issue.id)}
-                  className="map-marker absolute z-10 -translate-x-1/2 -translate-y-1/2"
-                  style={{ left: `${issue.map.x}%`, top: `${issue.map.y}%` }}
-                >
-                  <span
-                    className={`absolute inset-0 rounded-full opacity-20 ${selectedId === issue.id ? "animate-ping" : ""}`}
-                    style={{ backgroundColor: issue.color }}
-                  />
-                  <span
-                    className="relative grid size-10 place-items-center rounded-full border-4 border-[#0a1512] text-[11px] font-bold text-[#07110f] shadow-2xl transition hover:scale-110"
-                    style={{ backgroundColor: issue.color }}
-                  >
-                    {issue.reports}
-                  </span>
-                </button>
-              ))}
+            <div className="absolute inset-0">
+              <GjakovaMap
+                issues={issues}
+                selectedId={selectedId}
+                style={mapStyle}
+                onSelect={setSelectedId}
+              />
 
               <div className="absolute bottom-4 left-4 right-4 z-20 rounded-2xl border border-white/9 bg-[#0a1512]/92 p-4 shadow-2xl backdrop-blur-xl">
                 <div className="flex items-start justify-between gap-4">
@@ -551,52 +621,96 @@ export default function SwarmDashboard() {
                 <div className="mb-3 flex size-10 items-center justify-center rounded-xl bg-[#d6f36a] text-[#07110f]">
                   <Navigation className="size-5" />
                 </div>
-                <DialogTitle className="text-xl tracking-[-0.03em]">Çfarë po ndodh?</DialogTitle>
+                <DialogTitle className="text-xl tracking-[-0.03em]">Shtyp, mos shkruaj</DialogTitle>
                 <p className="text-sm leading-5 text-white/45">
-                  Shkruaje siç do t&apos;ia tregoje një fqinji. Agjentët tanë e strukturojnë pjesën tjetër.
+                  Tre butona. Swarm-i e kupton problemin, lokacionin dhe sa lart duhet të ngjitet.
                 </p>
               </DialogHeader>
               <form onSubmit={submitReport} className="space-y-5 px-6 py-5">
                 <div>
-                  <label className="mb-2 block text-[10px] font-semibold uppercase tracking-[0.12em] text-white/45">
-                    Përshkrimi
-                  </label>
-                  <Textarea
-                    value={form.description}
-                    onChange={(event) => setForm({ ...form, description: event.target.value })}
-                    placeholder="p.sh. Është hapur një gropë e madhe para semaforit, dy vetura gati u aksidentuan..."
-                    className="min-h-28 resize-none border-white/10 bg-white/[0.035] text-sm placeholder:text-white/20 focus-visible:ring-[#d6f36a]/40"
-                    required
-                  />
+                  <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-white/45">Çfarë është?</p>
+                  <div className="grid grid-cols-3 gap-2">
+                    {categories.map((category) => (
+                      <button
+                        key={category.id}
+                        type="button"
+                        onClick={() => setForm({ ...form, categoryId: category.id })}
+                        className={`flex h-[72px] flex-col items-center justify-center rounded-xl border text-[11px] font-medium transition ${
+                          form.categoryId === category.id
+                            ? "border-[#d6f36a]/40 bg-[#d6f36a]/12 text-[#d6f36a]"
+                            : "border-white/10 bg-white/[0.03] text-white/65 hover:bg-white/[0.06]"
+                        }`}
+                      >
+                        <category.icon className="mb-1.5 size-4" />
+                        {category.label}
+                      </button>
+                    ))}
+                  </div>
                 </div>
                 <div>
-                  <label className="mb-2 block text-[10px] font-semibold uppercase tracking-[0.12em] text-white/45">
-                    Lokacioni
-                  </label>
-                  <div className="relative">
-                    <MapPin className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-[#65e4ff]" />
-                    <Input
-                      value={form.location}
-                      onChange={(event) => setForm({ ...form, location: event.target.value })}
-                      placeholder="Rr. Nënë Tereza, Gjakovë"
-                      className="border-white/10 bg-white/[0.035] pl-10 placeholder:text-white/20 focus-visible:ring-[#d6f36a]/40"
-                      required
-                    />
+                  <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-white/45">Sa serioze?</p>
+                  <div className="grid grid-cols-3 gap-2">
+                    {severities.map((severity) => (
+                      <button
+                        key={severity.id}
+                        type="button"
+                        onClick={() => setForm({ ...form, severityId: severity.id })}
+                        className={`rounded-xl border px-2 py-3 text-center transition ${
+                          form.severityId === severity.id
+                            ? "border-[#ff9f43]/40 bg-[#ff9f43]/12 text-[#ffcf9a]"
+                            : "border-white/10 bg-white/[0.03] text-white/65 hover:bg-white/[0.06]"
+                        }`}
+                      >
+                        <span className="block text-[12px] font-semibold">{severity.label}</span>
+                        <span className="mt-1 block text-[9px] text-white/35">{severity.hint}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-white/45">Ku ndodhet?</p>
+                  <div className="grid grid-cols-2 gap-2">
+                    {places.map((place) => (
+                      <button
+                        key={place.id}
+                        type="button"
+                        onClick={() => setForm({ ...form, placeId: place.id })}
+                        className={`flex items-center gap-2 rounded-xl border px-3 py-2.5 text-left text-[11px] transition ${
+                          form.placeId === place.id
+                            ? "border-[#65e4ff]/40 bg-[#65e4ff]/10 text-[#65e4ff]"
+                            : "border-white/10 bg-white/[0.03] text-white/65 hover:bg-white/[0.06]"
+                        }`}
+                      >
+                        <MapPin className="size-3.5 shrink-0" />
+                        {place.label}
+                      </button>
+                    ))}
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
-                  <label className="flex h-20 cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed border-white/15 bg-white/[0.025] text-white/40 transition hover:border-[#65e4ff]/40 hover:text-[#65e4ff]">
-                    <ImagePlus className="mb-1.5 size-5" />
-                    <span className="text-[10px]">Shto foto/video</span>
-                    <input type="file" accept="image/*,video/*" className="hidden" />
-                  </label>
-                  <button type="button" className="flex h-20 flex-col items-center justify-center rounded-xl border border-dashed border-white/15 bg-white/[0.025] text-white/40 transition hover:border-[#65e4ff]/40 hover:text-[#65e4ff]">
-                    <Crosshair className="mb-1.5 size-5" />
-                    <span className="text-[10px]">Përdor lokacionin tim</span>
+                  <button
+                    type="button"
+                    onClick={() => setForm({ ...form, photo: !form.photo })}
+                    className={`flex h-16 flex-col items-center justify-center rounded-xl border text-[10px] transition ${
+                      form.photo
+                        ? "border-[#d6f36a]/40 bg-[#d6f36a]/10 text-[#d6f36a]"
+                        : "border-dashed border-white/15 bg-white/[0.025] text-white/40 hover:text-[#65e4ff]"
+                    }`}
+                  >
+                    <ImagePlus className="mb-1 size-4" />
+                    {form.photo ? "Foto u shtua" : "Shto foto"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={useMyLocation}
+                    className="flex h-16 flex-col items-center justify-center rounded-xl border border-dashed border-white/15 bg-white/[0.025] text-[10px] text-white/40 transition hover:border-[#65e4ff]/40 hover:text-[#65e4ff]"
+                  >
+                    <Crosshair className="mb-1 size-4" />
+                    Përdor lokacionin tim
                   </button>
                 </div>
                 <Button
-                  disabled={processing}
+                  disabled={processing || !form.categoryId || !form.severityId || !form.placeId}
                   className="h-12 w-full rounded-xl bg-[#d6f36a] font-bold text-[#07110f] hover:bg-[#e6ff88]"
                 >
                   {processing ? (
@@ -607,9 +721,6 @@ export default function SwarmDashboard() {
                     <span className="flex items-center gap-2">Dërgo sinjalin <ArrowUpRight className="size-4" /></span>
                   )}
                 </Button>
-                <p className="text-center text-[9px] text-white/25">
-                  Nuk ke nevojë të zgjedhësh kategori apo departament — këtë e bën swarm-i.
-                </p>
               </form>
             </>
           ) : (
@@ -619,17 +730,17 @@ export default function SwarmDashboard() {
               </div>
               <div className="text-center">
                 <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#52d6a4]">Sinjali u përpunua</p>
-                <h3 className="mt-2 text-xl font-semibold">U lidh me rastin GJK-1031</h3>
+                <h3 className="mt-2 text-xl font-semibold">U lidh me rastin {mergedId}</h3>
                 <p className="mx-auto mt-2 max-w-sm text-sm leading-6 text-white/45">
-                  Agjenti i lokacionit gjeti një problem ekzistues 18 metra larg. Raporti yt e ngriti
-                  prioritetin nga 87 në 89.
+                  Protokolli e gjeti të njëjtin problem në listë. Sinjali yt e ngriti lart dhe
+                  swarm-i e qarkulloi te komuna.
                 </p>
               </div>
               <div className="my-6 grid grid-cols-3 gap-2">
                 {[
-                  ["Kategoria", "Infrastrukturë"],
-                  ["Raporte", "18 të lidhura"],
-                  ["Prioriteti", "89 · i lartë"],
+                  ["Kategoria", categories.find((item) => item.id === form.categoryId)?.label ?? "Problem"],
+                  ["Lokacioni", places.find((item) => item.id === form.placeId)?.label ?? "Gjakovë"],
+                  ["Rasti", mergedId],
                 ].map(([label, value]) => (
                   <div key={label} className="rounded-xl border border-white/7 bg-white/[0.03] p-3 text-center">
                     <p className="text-[8px] uppercase tracking-wider text-white/30">{label}</p>
