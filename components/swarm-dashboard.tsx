@@ -318,8 +318,14 @@ export default function SwarmDashboard() {
   }
 
   return (
-    <main className="min-h-screen bg-[#07110f] text-[#edf4ef]">
-      <header className="sticky top-0 z-40 border-b border-white/8 bg-[#07110f]/90 backdrop-blur-xl">
+    <main className="relative min-h-screen overflow-x-hidden text-[#edf4ef]">
+      <div className="cinema-bg" aria-hidden>
+        <img src="/gjakova-dusk.png" alt="" className="cinema-bg-photo" />
+        <div className="cinema-bg-shade" />
+        <div className="cinema-bg-grain" />
+      </div>
+
+      <header className="sticky top-0 z-40 border-b border-white/8 bg-[#07110f]/55 backdrop-blur-xl">
         <div className="mx-auto flex max-w-[1500px] items-center justify-between px-4 py-3.5 sm:px-6">
           <div className="flex items-center gap-3">
             <div className="relative grid size-9 place-items-center rounded-xl bg-[#d6f36a] text-[#07110f]">
@@ -371,7 +377,7 @@ export default function SwarmDashboard() {
         </div>
       </header>
 
-      <div className="mx-auto max-w-[1500px] px-4 py-6 sm:px-6">
+      <div className="relative z-10 mx-auto max-w-[1500px] px-4 py-6 sm:px-6">
         <section className="mb-6 flex flex-col justify-between gap-4 lg:flex-row lg:items-end">
           <div>
             <div className="mb-2 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#65e4ff]">
