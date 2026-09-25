@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import L from "leaflet";
-import "leaflet/dist/leaflet.css";
+import { APIProvider, Map, useMap } from "@vis.gl/react-google-maps";
 
 export type MapIssue = {
   id: string;
@@ -14,26 +13,65 @@ export type MapIssue = {
 
 type MapStyle = "streets" | "satellite";
 
-const TILES: Record<MapStyle, { url: string; attribution: string }> = {
-  streets: {
-    url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",
-    attribution: "Tiles &copy; Esri",
-  },
-  satellite: {
-    url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-    attribution: "Tiles &copy; Esri",
-  },
-};
+function pinSvg(color: string, count: number, selected: boolean) {
+  const ring = selected ? `<circle cx="21" cy="21" r="20" fill="none" stroke="${color}" stroke-width="3" opacity="0.45"/>` : "";
+  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`
+    <svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" viewBox="0 0 42 42">
+      ${ring}
+      <circle cx="21" cy="21" r="16" fill="${color}" stroke="white" stroke-width="4"/>
+      <text x="21" y="26" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="800" fill="#07110f">${count}</text>
+    </svg>
+  `)}`;
+}
 
-function markerIcon(color: string, count: number, selected: boolean) {
-  return L.divIcon({
-    className: "pulse-pin",
-    iconSize: [42, 42],
-    iconAnchor: [21, 21],
-    html: `<div class="pulse-pin-inner ${selected ? "is-selected" : ""}" style="--pin:${color}">
-      <span>${count}</span>
-    </div>`,
-  });
+function IssueMarkers({
+  issues,
+  selectedId,
+  onSelect,
+}: {
+  issues: MapIssue[];
+  selectedId: string;
+  onSelect: (id: string) => void;
+}) {
+  const map = useMap();
+  const onSelectRef = useRef(onSelect);
+
+  useEffect(() => {
+    onSelectRef.current = onSelect;
+  }, [onSelect]);
+
+  useEffect(() => {
+    if (!map) return;
+
+    const markers = issues.map((issue) => {
+      const marker = new google.maps.Marker({
+        map,
+        position: issue.coords,
+        title: issue.title,
+        zIndex: issue.id === selectedId ? 20 : 1,
+        icon: {
+          url: pinSvg(issue.color, issue.reports, issue.id === selectedId),
+          scaledSize: new google.maps.Size(42, 42),
+          anchor: new google.maps.Point(21, 21),
+        },
+      });
+
+      marker.addListener("click", () => onSelectRef.current(issue.id));
+      return marker;
+    });
+
+    const selected = issues.find((issue) => issue.id === selectedId) ?? issues[0];
+    if (selected) {
+      map.panTo(selected.coords);
+      map.setZoom(16);
+    }
+
+    return () => {
+      markers.forEach((marker) => marker.setMap(null));
+    };
+  }, [issues, map, selectedId]);
+
+  return null;
 }
 
 export default function GjakovaMap({
@@ -47,77 +85,36 @@ export default function GjakovaMap({
   style: MapStyle;
   onSelect: (id: string) => void;
 }) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const mapRef = useRef<L.Map | null>(null);
-  const tilesRef = useRef<L.TileLayer | null>(null);
-  const markersRef = useRef<L.LayerGroup | null>(null);
-  const onSelectRef = useRef(onSelect);
+  const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+  const selected = issues.find((issue) => issue.id === selectedId) ?? issues[0];
 
-  useEffect(() => {
-    onSelectRef.current = onSelect;
-  }, [onSelect]);
+  if (!apiKey) {
+    return (
+      <div className="absolute inset-0 grid place-items-center bg-[#e8eaed] text-sm text-[#5f6368]">
+        Shto NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
+      </div>
+    );
+  }
 
-  useEffect(() => {
-    const node = containerRef.current;
-    if (!node || mapRef.current) return;
-
-    const map = L.map(node, {
-      zoomControl: false,
-      attributionControl: false,
-      center: [42.3803, 20.4308],
-      zoom: 15,
-    });
-
-    const tiles = L.tileLayer(TILES.streets.url, {
-      attribution: TILES.streets.attribution,
-    }).addTo(map);
-
-    const markers = L.layerGroup().addTo(map);
-    mapRef.current = map;
-    tilesRef.current = tiles;
-    markersRef.current = markers;
-
-    const resize = window.setTimeout(() => map.invalidateSize(), 80);
-
-    return () => {
-      window.clearTimeout(resize);
-      map.remove();
-      mapRef.current = null;
-      tilesRef.current = null;
-      markersRef.current = null;
-    };
-  }, []);
-
-  useEffect(() => {
-    const map = mapRef.current;
-    if (!map) return;
-
-    tilesRef.current?.remove();
-    const tiles = L.tileLayer(TILES[style].url, {
-      attribution: TILES[style].attribution,
-    }).addTo(map);
-    tilesRef.current = tiles;
-  }, [style]);
-
-  useEffect(() => {
-    const map = mapRef.current;
-    const group = markersRef.current;
-    if (!map || !group) return;
-
-    group.clearLayers();
-    issues.forEach((issue) => {
-      L.marker([issue.coords.lat, issue.coords.lng], {
-        icon: markerIcon(issue.color, issue.reports, issue.id === selectedId),
-      })
-        .on("click", () => onSelectRef.current(issue.id))
-        .addTo(group);
-    });
-
-    const selected = issues.find((issue) => issue.id === selectedId) ?? issues[0];
-    if (selected) {
-      map.flyTo([selected.coords.lat, selected.coords.lng], 16, { duration: 0.7 });
-    }
-  }, [issues, selectedId]);
-
-  return <div ref={containerRef} className="absolute inset-0 z-0 h-full w-full" />;
+  return (
+    <APIProvider apiKey={apiKey}>
+      <Map
+        className="absolute inset-0 z-0 h-full w-full"
+        defaultCenter={selected.coords}
+        defaultZoom={15}
+        disableDefaultUI
+        clickableIcons={false}
+        gestureHandling="greedy"
+        mapTypeControl={false}
+        streetViewControl={false}
+        fullscreenControl={false}
+        mapTypeId={style === "satellite" ? "hybrid" : "roadmap"}
+        styles={[
+          { featureType: "poi", elementType: "labels", stylers: [{ visibility: "off" }] },
+        ]}
+      >
+        <IssueMarkers issues={issues} selectedId={selectedId} onSelect={onSelect} />
+      </Map>
+    </APIProvider>
+  );
 }
