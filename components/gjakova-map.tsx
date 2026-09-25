@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
-import { MapContainer, Marker, TileLayer, useMap } from "react-leaflet";
+import { useEffect, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
@@ -26,16 +25,6 @@ const TILES: Record<MapStyle, { url: string; attribution: string }> = {
   },
 };
 
-function Recenter({ lat, lng }: { lat: number; lng: number }) {
-  const map = useMap();
-
-  useEffect(() => {
-    map.flyTo([lat, lng], 16, { duration: 0.75 });
-  }, [lat, lng, map]);
-
-  return null;
-}
-
 function markerIcon(color: string, count: number, selected: boolean) {
   return L.divIcon({
     className: "pulse-pin",
@@ -58,37 +47,74 @@ export default function GjakovaMap({
   style: MapStyle;
   onSelect: (id: string) => void;
 }) {
-  const selected = issues.find((issue) => issue.id === selectedId) ?? issues[0];
-  const tiles = TILES[style];
-  const icons = useMemo(
-    () =>
-      Object.fromEntries(
-        issues.map((issue) => [
-          issue.id,
-          markerIcon(issue.color, issue.reports, issue.id === selectedId),
-        ]),
-      ),
-    [issues, selectedId],
-  );
+  const containerRef = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<L.Map | null>(null);
+  const tilesRef = useRef<L.TileLayer | null>(null);
+  const markersRef = useRef<L.LayerGroup | null>(null);
+  const onSelectRef = useRef(onSelect);
+  onSelectRef.current = onSelect;
 
-  return (
-    <MapContainer
-      center={[selected.coords.lat, selected.coords.lng]}
-      zoom={15}
-      className="absolute inset-0 z-0 h-full w-full"
-      zoomControl={false}
-      attributionControl={false}
-    >
-      <TileLayer url={tiles.url} attribution={tiles.attribution} />
-      <Recenter lat={selected.coords.lat} lng={selected.coords.lng} />
-      {issues.map((issue) => (
-        <Marker
-          key={`${issue.id}-${issue.reports}`}
-          position={[issue.coords.lat, issue.coords.lng]}
-          icon={icons[issue.id]}
-          eventHandlers={{ click: () => onSelect(issue.id) }}
-        />
-      ))}
-    </MapContainer>
-  );
+  useEffect(() => {
+    const node = containerRef.current;
+    if (!node || mapRef.current) return;
+
+    const map = L.map(node, {
+      zoomControl: false,
+      attributionControl: false,
+      center: [42.3803, 20.4308],
+      zoom: 15,
+    });
+
+    const tiles = L.tileLayer(TILES.streets.url, {
+      attribution: TILES.streets.attribution,
+    }).addTo(map);
+
+    const markers = L.layerGroup().addTo(map);
+    mapRef.current = map;
+    tilesRef.current = tiles;
+    markersRef.current = markers;
+
+    const resize = window.setTimeout(() => map.invalidateSize(), 80);
+
+    return () => {
+      window.clearTimeout(resize);
+      map.remove();
+      mapRef.current = null;
+      tilesRef.current = null;
+      markersRef.current = null;
+    };
+  }, []);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+
+    tilesRef.current?.remove();
+    const tiles = L.tileLayer(TILES[style].url, {
+      attribution: TILES[style].attribution,
+    }).addTo(map);
+    tilesRef.current = tiles;
+  }, [style]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    const group = markersRef.current;
+    if (!map || !group) return;
+
+    group.clearLayers();
+    issues.forEach((issue) => {
+      L.marker([issue.coords.lat, issue.coords.lng], {
+        icon: markerIcon(issue.color, issue.reports, issue.id === selectedId),
+      })
+        .on("click", () => onSelectRef.current(issue.id))
+        .addTo(group);
+    });
+
+    const selected = issues.find((issue) => issue.id === selectedId) ?? issues[0];
+    if (selected) {
+      map.flyTo([selected.coords.lat, selected.coords.lng], 16, { duration: 0.7 });
+    }
+  }, [issues, selectedId]);
+
+  return <div ref={containerRef} className="absolute inset-0 z-0 h-full w-full" />;
 }
