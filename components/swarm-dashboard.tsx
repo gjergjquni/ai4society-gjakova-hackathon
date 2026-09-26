@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import {
   Activity,
   ArrowUpRight,
@@ -238,6 +238,53 @@ export default function SwarmDashboard() {
     () => issues.find((issue) => issue.id === selectedId) ?? issues[0],
     [issues, selectedId],
   );
+  const totalReports = useMemo(
+    () => issues.reduce((sum, issue) => sum + issue.reports, 0),
+    [issues],
+  );
+  const cardRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  const skipCardSync = useRef(false);
+
+  useEffect(() => {
+    skipCardSync.current = true;
+    cardRefs.current[selectedId]?.scrollIntoView({
+      behavior: "smooth",
+      inline: "center",
+      block: "nearest",
+    });
+    const timer = window.setTimeout(() => {
+      skipCardSync.current = false;
+    }, 400);
+    return () => window.clearTimeout(timer);
+  }, [selectedId]);
+
+  useEffect(() => {
+    const root = scrollerRef.current;
+    if (!root) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (skipCardSync.current) return;
+        const best = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        const id = (best?.target as HTMLElement | undefined)?.dataset.issueId;
+        if (id) setSelectedId(id);
+      },
+      { root, threshold: 0.62 },
+    );
+
+    Object.values(cardRefs.current).forEach((node) => {
+      if (node) observer.observe(node);
+    });
+
+    return () => observer.disconnect();
+  }, [issues]);
+
+  function categoryIcon(categoryId: string) {
+    return categories.find((item) => item.id === categoryId)?.icon ?? TrafficCone;
+  }
 
   function submitReport(event: FormEvent) {
     event.preventDefault();
@@ -322,38 +369,41 @@ export default function SwarmDashboard() {
         <div className="cinema-bg-grain" />
       </div>
 
-      <header className="sticky top-0 z-40 border-b border-white/8 bg-[#07110f]/55 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-[1500px] items-center justify-between px-4 py-3.5 sm:px-6">
+      <header className="sticky top-0 z-40 border-b border-white/8 bg-[#07110f]/70 backdrop-blur-xl">
+        <div className="mx-auto flex max-w-[1500px] items-center justify-between px-4 py-3 sm:px-6">
           <div className="flex items-center gap-3">
             <div className="relative grid size-9 place-items-center rounded-xl bg-[#d6f36a] text-[#07110f]">
               <Waves className="size-5" strokeWidth={2.7} />
               <span className="absolute -right-1 -top-1 size-2.5 rounded-full border-2 border-[#07110f] bg-[#65e4ff]" />
             </div>
-            <span className="text-lg font-bold tracking-[-0.03em]">PULSI</span>
+            <div>
+              <span className="text-lg font-bold tracking-[-0.03em]">PULSI</span>
+              <p className="hidden text-[10px] text-white/40 sm:block">Gjakovë live</p>
+            </div>
           </div>
 
           <div className="flex items-center gap-2">
-            <div className="hidden items-center gap-2 rounded-full border border-[#52d6a4]/20 bg-[#52d6a4]/8 px-3 py-2 text-[11px] text-[#8cecc4] sm:flex">
+            <div className="flex items-center gap-2 rounded-full border border-[#52d6a4]/20 bg-[#52d6a4]/8 px-2.5 py-1.5 text-[10px] text-[#8cecc4] sm:px-3 sm:py-2 sm:text-[11px]">
               <span className="relative flex size-2">
                 <span className="absolute inline-flex size-full animate-ping rounded-full bg-[#52d6a4] opacity-60" />
                 <span className="relative inline-flex size-2 rounded-full bg-[#52d6a4]" />
               </span>
-              7 agjentë aktivë
+              <span className="sm:hidden">Live</span>
+              <span className="hidden sm:inline">7 agjentë aktivë</span>
             </div>
             <Button
               onClick={() => setReportOpen(true)}
-              className="h-9 rounded-full bg-[#d6f36a] px-4 text-xs font-bold text-[#0c1713] hover:bg-[#e6ff88]"
+              className="hidden h-9 rounded-full bg-[#d6f36a] px-4 text-xs font-bold text-[#0c1713] hover:bg-[#e6ff88] sm:inline-flex"
             >
-              <span className="hidden sm:inline">Raporto problem</span>
-              <span className="sm:hidden">Raporto</span>
+              Raporto problem
               <ArrowUpRight className="size-3.5" />
             </Button>
           </div>
         </div>
       </header>
 
-      <div className="relative z-10 mx-auto max-w-[1500px] px-4 py-6 sm:px-6">
-        <section className="mb-6 flex flex-col justify-between gap-4 lg:flex-row lg:items-end">
+      <div className="relative z-10 mx-auto max-w-[1500px] px-4 pb-28 pt-4 sm:px-6 sm:pb-6 sm:pt-6">
+        <section className="mb-4 hidden flex-col justify-between gap-4 lg:flex lg:flex-row lg:items-end">
           <div>
             <h1 className="max-w-2xl text-3xl font-semibold leading-[1.08] tracking-[-0.045em] sm:text-4xl">
               Një <span className="text-[#d6f36a]">sinjal</span> nga qytetari. Një hap për{" "}
@@ -367,7 +417,7 @@ export default function SwarmDashboard() {
         </section>
 
         <section className="grid gap-4 lg:grid-cols-[3fr_1fr]">
-          <div className="panel-clear min-w-0 overflow-hidden">
+          <div className="panel-clear hidden min-w-0 overflow-hidden lg:block">
             <div className="flex items-center justify-between border-b border-white/10 px-4 py-4">
               <div>
                 <div className="flex items-center gap-2">
@@ -433,25 +483,41 @@ export default function SwarmDashboard() {
             </div>
           </div>
 
-          <div className="panel relative min-h-[510px] overflow-hidden">
+          <div className="panel relative h-[calc(100dvh-9.25rem)] min-h-[360px] overflow-hidden sm:h-[min(70vh,640px)] lg:h-auto lg:min-h-[510px]">
             <div className="absolute inset-x-0 top-0 z-20 flex flex-col gap-2 p-3">
-              <div className="flex items-center gap-2">
-                <MapPin className="size-4 shrink-0 text-[#65e4ff]" />
-                <h2 className="truncate text-sm font-semibold">Harta</h2>
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2 rounded-full border border-white/10 bg-[#0c1714]/80 px-3 py-1.5 backdrop-blur">
+                  <MapPin className="size-3.5 shrink-0 text-[#65e4ff]" />
+                  <h2 className="truncate text-xs font-semibold sm:text-sm">Harta e Gjakovës</h2>
+                </div>
+                <div className="flex rounded-full border border-white/8 bg-[#0c1714]/80 p-1 backdrop-blur">
+                  <button
+                    onClick={() => setMapStyle("streets")}
+                    className={`rounded-full px-2.5 py-1 text-[10px] ${mapStyle === "streets" ? "bg-white/12 text-white" : "text-white/40"}`}
+                  >
+                    Rrugët
+                  </button>
+                  <button
+                    onClick={() => setMapStyle("satellite")}
+                    className={`rounded-full px-2.5 py-1 text-[10px] ${mapStyle === "satellite" ? "bg-white/12 text-white" : "text-white/40"}`}
+                  >
+                    Sateliti
+                  </button>
+                </div>
               </div>
-              <div className="flex self-start rounded-lg border border-white/8 bg-[#0c1714]/80 p-1 backdrop-blur">
-                <button
-                  onClick={() => setMapStyle("streets")}
-                  className={`rounded-md px-2 py-1 text-[10px] ${mapStyle === "streets" ? "bg-white/10 text-white" : "text-white/40"}`}
-                >
-                  Rrugët
-                </button>
-                <button
-                  onClick={() => setMapStyle("satellite")}
-                  className={`rounded-md px-2 py-1 text-[10px] ${mapStyle === "satellite" ? "bg-white/10 text-white" : "text-white/40"}`}
-                >
-                  Sateliti
-                </button>
+              <div className="flex gap-1.5 lg:hidden">
+                {[
+                  [String(issues.length), "raste"],
+                  [String(totalReports), "sinjale"],
+                  ["7", "AI"],
+                ].map(([value, label]) => (
+                  <div
+                    key={label}
+                    className="rounded-full border border-white/10 bg-[#0c1714]/78 px-2.5 py-1 text-[10px] text-white/70 backdrop-blur"
+                  >
+                    <span className="font-semibold text-white">{value}</span> {label}
+                  </div>
+                ))}
               </div>
             </div>
 
@@ -463,32 +529,122 @@ export default function SwarmDashboard() {
                 onSelect={setSelectedId}
               />
 
-              <div className="absolute bottom-3 left-3 right-3 z-20 rounded-xl border border-white/9 bg-[#0a1512]/92 p-3 shadow-2xl backdrop-blur-xl">
-                <div className="flex items-start justify-between gap-2">
-                  <div className="min-w-0">
-                    <div className="mb-1 flex items-center gap-1.5">
-                      <span className="text-[10px] font-bold text-white/35">#{selected.rank}</span>
-                      <span className="truncate text-[9px] text-white/30">{selected.id}</span>
+              <div className="absolute inset-x-0 bottom-0 z-20 hidden bg-gradient-to-t from-[#07110f] via-[#07110f]/55 to-transparent px-3 pb-3 pt-16 lg:block">
+                <div className="rounded-xl border border-white/9 bg-[#0a1512]/92 p-3 shadow-2xl backdrop-blur-xl">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="min-w-0">
+                      <div className="mb-1 flex items-center gap-1.5">
+                        <span className="text-[10px] font-bold text-white/35">#{selected.rank}</span>
+                        <span className="truncate text-[9px] text-white/30">{selected.id}</span>
+                      </div>
+                      <h3 className="truncate text-sm font-semibold">{selected.title}</h3>
                     </div>
-                    <h3 className="truncate text-sm font-semibold">{selected.title}</h3>
-                  </div>
-                  <div className="shrink-0 text-right">
-                    <div className="text-2xl font-semibold tracking-[-0.06em]" style={{ color: selected.color }}>
-                      {selected.priority}
+                    <div className="shrink-0 text-right">
+                      <div className="text-2xl font-semibold tracking-[-0.06em]" style={{ color: selected.color }}>
+                        {selected.priority}
+                      </div>
                     </div>
                   </div>
+                  <button
+                    onClick={() => setDetailsOpen(true)}
+                    className="mt-2 flex w-full items-center justify-between rounded-lg border border-white/7 bg-white/[0.035] px-2.5 py-1.5 text-[10px] text-white/60 transition hover:bg-white/[0.07] hover:text-white"
+                  >
+                    Detajet
+                    <ArrowUpRight className="size-3.5" />
+                  </button>
                 </div>
-                <button
-                  onClick={() => setDetailsOpen(true)}
-                  className="mt-2 flex w-full items-center justify-between rounded-lg border border-white/7 bg-white/[0.035] px-2.5 py-1.5 text-[10px] text-white/60 transition hover:bg-white/[0.07] hover:text-white"
-                >
-                  Detajet
-                  <ArrowUpRight className="size-3.5" />
-                </button>
+              </div>
+
+              <div className="absolute inset-x-0 bottom-0 z-20 bg-gradient-to-t from-[#07110f] via-[#07110f]/70 to-transparent pb-3 pt-10 lg:hidden">
+                <div className="mb-2 flex items-center justify-between px-4">
+                  <div className="flex items-center gap-2">
+                    <Activity className="size-3.5 text-[#d6f36a]" />
+                    <p className="text-[11px] font-semibold">Rrëshqit rastet</p>
+                  </div>
+                  <span className="text-[10px] text-white/40">{selected.rank}/{issues.length}</span>
+                </div>
+                <div ref={scrollerRef} className="snap-row px-4">
+                  {issues.map((issue) => {
+                    const Icon = categoryIcon(issue.categoryId);
+                    const active = selectedId === issue.id;
+                    return (
+                      <div
+                        key={issue.id}
+                        data-issue-id={issue.id}
+                        ref={(node) => {
+                          cardRefs.current[issue.id] = node;
+                        }}
+                        onClick={() => setSelectedId(issue.id)}
+                        className={`snap-card cursor-pointer rounded-2xl border p-3.5 text-left transition ${
+                          active
+                            ? "border-white/20 bg-[#0a1512]/95 shadow-2xl"
+                            : "border-white/8 bg-[#0a1512]/78"
+                        }`}
+                        style={active ? { boxShadow: `0 0 0 1px ${issue.color}55, 0 18px 40px rgb(0 0 0 / 0.35)` } : undefined}
+                      >
+                        <div className="mb-2 flex items-center justify-between gap-2">
+                          <div className="flex items-center gap-2">
+                            <span
+                              className="grid size-8 place-items-center rounded-xl text-[#07110f]"
+                              style={{ backgroundColor: issue.color }}
+                            >
+                              <Icon className="size-4" />
+                            </span>
+                            <div>
+                              <p className="text-[10px] font-bold text-white/40">#{issue.rank} · {issue.id}</p>
+                              <p className="text-[11px] font-semibold text-[#72e3ac]">↑{issue.trend} sot</p>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-2xl font-semibold tracking-[-0.06em]" style={{ color: issue.color }}>
+                              {issue.priority}
+                            </p>
+                            <p className="text-[9px] text-white/35">{issue.severity}</p>
+                          </div>
+                        </div>
+                        <h3 className="line-clamp-2 text-[15px] font-semibold leading-5">{issue.title}</h3>
+                        <p className="mt-1.5 flex items-center gap-1 text-[11px] text-white/48">
+                          <MapPin className="size-3 shrink-0" /> {issue.location}
+                        </p>
+                        <div className="mt-2.5 h-1 overflow-hidden rounded-full bg-white/8">
+                          <div
+                            className="h-full rounded-full"
+                            style={{ width: `${issue.priority}%`, backgroundColor: issue.color }}
+                          />
+                        </div>
+                        <div className="mt-2.5 flex items-center justify-between gap-2">
+                          <span className="text-[10px] text-white/45">{issue.reports} qytetarë · {issue.age}</span>
+                          <button
+                            type="button"
+                            className="inline-flex items-center gap-0.5 text-[10px] font-semibold text-white/80"
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              setSelectedId(issue.id);
+                              setDetailsOpen(true);
+                            }}
+                          >
+                            Detajet <ChevronRight className="size-3" />
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+                <div className="mt-2.5 flex justify-center gap-1.5">
+                  {issues.map((issue) => (
+                    <span
+                      key={issue.id}
+                      className="h-1.5 rounded-full transition-all"
+                      style={{
+                        width: selectedId === issue.id ? 18 : 6,
+                        backgroundColor: selectedId === issue.id ? issue.color : "rgb(255 255 255 / 0.22)",
+                      }}
+                    />
+                  ))}
+                </div>
               </div>
             </div>
           </div>
-
         </section>
 
         <section className="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -503,7 +659,21 @@ export default function SwarmDashboard() {
               </div>
               <p className="mt-1 text-[10px] text-white/35">Agjentë të koordinuar, jo një chatbot</p>
             </div>
-            <div className="grid grid-cols-2 gap-px bg-white/6">
+            <div className="snap-row gap-2 bg-transparent p-3 sm:hidden">
+              {agents.map((agent, index) => (
+                <div
+                  key={agent.name}
+                  className={`min-w-[42%] rounded-2xl border p-3 transition duration-500 ${
+                    activeAgent === index ? "border-white/16 bg-white/[0.07]" : "border-white/8 bg-white/[0.03]"
+                  }`}
+                >
+                  <agent.icon className="mb-2 size-4" style={{ color: agent.color }} />
+                  <p className="text-[12px] font-medium">{agent.name}</p>
+                  <p className="mt-0.5 text-[10px] text-white/38">{agent.detail}</p>
+                </div>
+              ))}
+            </div>
+            <div className="hidden grid-cols-2 gap-px bg-white/6 sm:grid">
               {agents.map((agent, index) => (
                 <div
                   key={agent.name}
@@ -557,6 +727,16 @@ export default function SwarmDashboard() {
             </p>
           </div>
         </section>
+      </div>
+
+      <div className="mobile-dock fixed inset-x-0 bottom-0 z-40 px-4 sm:hidden">
+        <button
+          onClick={() => setReportOpen(true)}
+          className="flex h-14 w-full items-center justify-center gap-2 rounded-2xl bg-[#d6f36a] text-sm font-bold text-[#07110f] shadow-[0_16px_40px_rgb(214_243_106/0.28)]"
+        >
+          <Navigation className="size-4" />
+          Raporto problem
+        </button>
       </div>
 
       <Dialog open={reportOpen} onOpenChange={(open) => !open && resetReport()}>
