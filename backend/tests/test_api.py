@@ -110,6 +110,28 @@ def test_empty_payload_rejected():
         assert response.status_code == 422
 
 
+def test_device_coordinates_are_stored():
+    with TestClient(app) as client:
+        response = client.post(
+            "/api/v1/reports",
+            json={
+                "category_id": "sidewalk",
+                "lat": 42.4,
+                "lon": 20.5,
+                "has_photo": True,
+            },
+        )
+        assert response.status_code == 201
+        data = response.json()
+        assert data["lat"] == 42.4
+        assert data["lon"] == 20.5
+        assert data["has_photo"] is True
+        assert data["location_text"] == "42.40000, 20.50000"
+        assert data["issue"]["coords"]["lat"] == 42.4
+        assert data["issue"]["coords"]["lng"] == 20.5
+        assert data["duplicate_decision"] == "NEW_CASE"
+
+
 def test_update_status():
     with TestClient(app) as client:
         response = client.patch(

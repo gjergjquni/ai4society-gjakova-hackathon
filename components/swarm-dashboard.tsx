@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -13,6 +13,7 @@ import {
   MapPin,
   PenLine,
   Phone,
+  X,
   TrafficCone,
   Trash2,
   Droplets,
@@ -22,28 +23,8 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { createReport, fetchProblems, type Issue } from "@/lib/api";
 import { DEFAULT_LOCALE, LOCALE_OPTIONS, getMessages, type Locale } from "@/lib/i18n";
-
-type Issue = {
-  id: string;
-  rank: number;
-  title: string;
-  category: string;
-  categoryId: string;
-  location: string;
-  reports: number;
-  priority: number;
-  trend: number;
-  severity: "Kritike" | "E lartë" | "Mesatare";
-  status: "Eskaluar" | "Në shqyrtim" | "Monitorim";
-  department: string;
-  age: string;
-  impact: string;
-  recommendation: string;
-  reasons: { label: string; value: number }[];
-  coords: { lat: number; lng: number };
-  color: string;
-};
 
 const categories = [
   { id: "pothole", label: "Gropë", icon: TrafficCone },
@@ -55,12 +36,12 @@ const categories = [
 ];
 
 const places = [
-  { id: "sheshi", label: "Sheshi i Gjakovës", coords: { lat: 42.3806, lng: 20.4312 }, merge: { pothole: "GJK-1031" } },
-  { id: "qender", label: "Rr. Nënë Tereza", coords: { lat: 42.3801, lng: 20.4304 }, merge: { pothole: "GJK-1031" } },
-  { id: "carshia", label: "Çarshia e Madhe", coords: { lat: 42.3809, lng: 20.4272 }, merge: { light: "GJK-1047" } },
-  { id: "spitali", label: "Pranë Spitalit", coords: { lat: 42.3854, lng: 20.4276 }, merge: { water: "GJK-1042" } },
-  { id: "ura", label: "Ura e Terzive", coords: { lat: 42.3724, lng: 20.4308 }, merge: { waste: "GJK-1019" } },
-  { id: "cabrati", label: "Çabrati", coords: { lat: 42.3878, lng: 20.4198 }, merge: {} },
+  { id: "sheshi", label: "Sheshi i Gjakovës", coords: { lat: 42.3806, lng: 20.4312 } },
+  { id: "qender", label: "Rr. Nënë Tereza", coords: { lat: 42.3801, lng: 20.4304 } },
+  { id: "carshia", label: "Çarshia e Madhe", coords: { lat: 42.3809, lng: 20.4272 } },
+  { id: "spitali", label: "Pranë Spitalit", coords: { lat: 42.3854, lng: 20.4276 } },
+  { id: "ura", label: "Ura e Terzive", coords: { lat: 42.3724, lng: 20.4308 } },
+  { id: "cabrati", label: "Çabrati", coords: { lat: 42.3878, lng: 20.4198 } },
 ];
 
 const seedIssues: Issue[] = [
@@ -180,12 +161,19 @@ export default function SwarmDashboard() {
   );
   const [submitted, setSubmitted] = useState(false);
   const [processing, setProcessing] = useState(false);
+  const [submitError, setSubmitError] = useState("");
   const [form, setForm] = useState({
     categoryId: "",
     placeId: "",
     photo: false,
     customRequest: "",
   });
+  const photoInputRef = useRef<HTMLInputElement>(null);
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+  const [photoName, setPhotoName] = useState("");
+  const [photoError, setPhotoError] = useState("");
+  const [gps, setGps] = useState<{ lat: number; lng: number; label: string } | null>(null);
+  const [locationStatus, setLocationStatus] = useState<"idle" | "loading" | "ready" | "denied" | "error">("idle");
   const [customRequestOpen, setCustomRequestOpen] = useState(false);
   const [mergedId, setMergedId] = useState("GJK-1031");
   const [submittedSummary, setSubmittedSummary] = useState({
@@ -200,7 +188,21 @@ export default function SwarmDashboard() {
     if (theme) theme.setAttribute("content", "#04408b");
   }, [locale, t.metaTitle]);
 
-  function submitReport(event: FormEvent) {
+  useEffect(() => {
+    let cancelled = false;
+    fetchProblems()
+      .then((data) => {
+        if (!cancelled && data.length) setIssues(data);
+      })
+      .catch(() => {
+        // Keep seeded demo cases if the API is offline.
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  async function submitReport(event: FormEvent) {
     event.preventDefault();
     const customText = form.customRequest.trim();
     if (!form.categoryId && !customText) return;
@@ -209,73 +211,101 @@ export default function SwarmDashboard() {
     const category = categories.find((item) => item.id === form.categoryId);
     if (form.categoryId && !category) return;
 
-    const locationLabel = place?.label ?? t.unspecifiedLocation;
-    const categoryLabel = category
-      ? (t.categories[category.id] ?? category.label)
-      : customText || t.customRequest;
-    const existingId =
-      place && form.categoryId
-        ? (place.merge as Record<string, string | undefined>)[form.categoryId]
-        : undefined;
     setProcessing(true);
+    setSubmitError("");
 
-    window.setTimeout(() => {
-      if (existingId) {
-        setIssues((current) =>
-          current.map((issue) =>
-            issue.id === existingId
-              ? {
-                  ...issue,
-                  reports: issue.reports + 1,
-                  priority: Math.min(99, issue.priority + 2),
-                  trend: issue.trend + 2,
-                }
-              : issue,
-          ),
-        );
-        setMergedId(existingId);
-      } else {
-        const newId = `GJK-${1050 + issues.length}`;
-        const issueCategoryLabel = category?.label ?? t.customRequest;
-        const title = customText || `${issueCategoryLabel} e raportuar`;
-        const newIssue: Issue = {
-          id: newId,
-          rank: issues.length + 1,
-          title,
-          category: issueCategoryLabel,
-          categoryId: category?.id ?? "custom",
-          location: locationLabel,
-          reports: 1,
-          priority: 64,
-          trend: 4,
-          severity: "Mesatare",
-          status: "Monitorim",
-          department: "Drejtoria e Shërbimeve Publike",
-          age: "tani",
-          impact: "1 sinjal i ri",
-          recommendation: `Inspektoni ${locationLabel} dhe konfirmoni ${title.toLowerCase()} para se të dërgohet ekipi.`,
-          reasons: [
-            { label: "Sinjal i ri", value: 18 },
-            { label: "Lokacioni", value: 16 },
-            { label: "Kategoria", value: 12 },
-            { label: "Kohëzgjatja", value: 6 },
-          ],
-          coords: place?.coords ?? { lat: 42.3806, lng: 20.4312 },
-          color: "#65e4ff",
-        };
-        setIssues((current) => [newIssue, ...current].map((issue, index) => ({ ...issue, rank: index + 1 })));
-        setMergedId(newId);
-      }
+    try {
+      const result = await createReport({
+        category_id: form.categoryId || null,
+        custom_text: customText,
+        place_id: form.placeId || null,
+        has_photo: form.photo,
+        lat: gps?.lat ?? null,
+        lon: gps?.lng ?? null,
+      });
+
+      const categoryLabel = category
+        ? (t.categories[category.id] ?? category.label)
+        : customText || t.customRequest;
+      const locationLabel =
+        gps?.label ||
+        (form.placeId && t.places[form.placeId]) ||
+        place?.label ||
+        result.location_text ||
+        t.unspecifiedLocation;
+
+      setIssues((current) => {
+        const without = current.filter((issue) => issue.id !== result.issue.id);
+        return [result.issue, ...without]
+          .sort((a, b) => b.priority - a.priority || b.reports - a.reports)
+          .map((issue, index) => ({ ...issue, rank: index + 1 }));
+      });
+      setMergedId(result.case_code);
       setSubmittedSummary({ category: categoryLabel, location: locationLabel });
-      setProcessing(false);
       setSubmitted(true);
       setCustomRequestOpen(false);
       setForm((current) => ({ ...current, customRequest: "" }));
-    }, 1200);
+    } catch {
+      setSubmitError(t.submitError);
+    } finally {
+      setProcessing(false);
+    }
+  }
+
+  function clearPhoto() {
+    setPhotoPreview((current) => {
+      if (current) URL.revokeObjectURL(current);
+      return null;
+    });
+    setPhotoName("");
+    setPhotoError("");
+    setForm((current) => ({ ...current, photo: false }));
+    if (photoInputRef.current) photoInputRef.current.value = "";
+  }
+
+  function onPhotoPicked(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      event.target.value = "";
+      return;
+    }
+    if (file.size > 8 * 1024 * 1024) {
+      setPhotoError(t.photoTooLarge);
+      event.target.value = "";
+      return;
+    }
+    const preview = URL.createObjectURL(file);
+    setPhotoPreview((current) => {
+      if (current) URL.revokeObjectURL(current);
+      return preview;
+    });
+    setPhotoName(file.name);
+    setPhotoError("");
+    setForm((current) => ({ ...current, photo: true }));
   }
 
   function useMyLocation() {
-    setForm((current) => ({ ...current, placeId: "sheshi" }));
+    if (locationStatus === "loading") return;
+    if (!navigator.geolocation) {
+      setGps(null);
+      setLocationStatus("error");
+      return;
+    }
+    setLocationStatus("loading");
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+        setGps({ lat, lng, label: `${lat.toFixed(5)}, ${lng.toFixed(5)}` });
+        setLocationStatus("ready");
+      },
+      (error) => {
+        setGps(null);
+        setLocationStatus(error.code === error.PERMISSION_DENIED ? "denied" : "error");
+      },
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 },
+    );
   }
 
   function resetReport() {
@@ -283,8 +313,18 @@ export default function SwarmDashboard() {
     window.setTimeout(() => {
       setSubmitted(false);
       setCustomRequestOpen(false);
+      setSubmitError("");
       setSubmittedSummary({ category: "", location: "" });
       setForm({ categoryId: "", placeId: "", photo: false, customRequest: "" });
+      setPhotoPreview((current) => {
+        if (current) URL.revokeObjectURL(current);
+        return null;
+      });
+      setPhotoName("");
+      setPhotoError("");
+      setGps(null);
+      setLocationStatus("idle");
+      if (photoInputRef.current) photoInputRef.current.value = "";
     }, 300);
   }
 
@@ -492,10 +532,18 @@ export default function SwarmDashboard() {
                 </div>
 
                 <div className="flex flex-col gap-3 sm:col-span-2">
+                  <input
+                    ref={photoInputRef}
+                    type="file"
+                    accept="image/*"
+                    className="sr-only"
+                    aria-label={t.addPhoto}
+                    onChange={onPhotoPicked}
+                  />
                   <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
                     <button
                       type="button"
-                      onClick={() => setForm({ ...form, photo: !form.photo })}
+                      onClick={() => photoInputRef.current?.click()}
                       className={`flex h-12 items-center justify-center gap-2 rounded-sm border px-3 text-sm font-medium transition ${
                         form.photo
                           ? "border-[#04408b]/40 bg-[#edf2f7] text-[#04408b]"
@@ -509,13 +557,15 @@ export default function SwarmDashboard() {
                       type="button"
                       onClick={useMyLocation}
                       className={`flex h-12 items-center justify-center gap-2 rounded-sm border px-3 text-sm font-medium transition ${
-                        form.placeId
+                        gps
                           ? "border-[#04408b]/40 bg-[#edf2f7] text-[#04408b]"
                           : "border-dashed border-[#cfd8e3] bg-[#f7f8fa] text-[#54595f] hover:border-[#04408b]/40 hover:text-[#04408b]"
                       }`}
                     >
-                      <Crosshair className="size-4 shrink-0" />
-                      <span className="truncate">{t.useMyLocation}</span>
+                      <Crosshair className={`size-4 shrink-0 ${locationStatus === "loading" ? "animate-pulse" : ""}`} />
+                      <span className="truncate">
+                        {locationStatus === "loading" ? t.locating : gps ? gps.label : t.useMyLocation}
+                      </span>
                     </button>
                     <button
                       type="button"
@@ -530,6 +580,30 @@ export default function SwarmDashboard() {
                       <span className="truncate">{t.customRequest}</span>
                     </button>
                   </div>
+                  {photoPreview ? (
+                    <div className="flex items-center gap-3 rounded-sm border border-[#e5e5e5] bg-[#f7f8fa] p-2">
+                      <img
+                        src={photoPreview}
+                        alt={photoName || t.photoAdded}
+                        className="size-16 shrink-0 rounded-sm object-cover"
+                      />
+                      <p className="min-w-0 flex-1 truncate text-sm text-[#161616]">{photoName}</p>
+                      <button
+                        type="button"
+                        onClick={clearPhoto}
+                        className="inline-flex shrink-0 items-center gap-1 rounded-sm px-2 py-1 text-xs font-medium text-[#54595f] hover:bg-white hover:text-[#04408b]"
+                      >
+                        <X className="size-3.5" />
+                        {t.removePhoto}
+                      </button>
+                    </div>
+                  ) : null}
+                  {photoError ? <p className="text-sm text-[#b42318]">{photoError}</p> : null}
+                  {locationStatus === "denied" || locationStatus === "error" ? (
+                    <p className="text-sm text-[#b42318]">
+                      {locationStatus === "denied" ? t.locationDenied : t.locationError}
+                    </p>
+                  ) : null}
                   {customRequestOpen && (
                     <textarea
                       value={form.customRequest}
@@ -556,6 +630,9 @@ export default function SwarmDashboard() {
                       </span>
                     )}
                   </Button>
+                  {submitError ? (
+                    <p className="text-center text-sm text-[#b42318]">{submitError}</p>
+                  ) : null}
                 </div>
               </form>
             </>

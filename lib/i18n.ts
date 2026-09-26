@@ -59,12 +59,18 @@ export type Messages = {
   whereIsIt: string;
   addPhoto: string;
   photoAdded: string;
+  photoTooLarge: string;
+  removePhoto: string;
   useMyLocation: string;
+  locating: string;
+  locationDenied: string;
+  locationError: string;
   customRequest: string;
   customRequestPlaceholder: string;
   unspecifiedLocation: string;
   sendSignal: string;
   agentsAnalyzing: string;
+  submitError: string;
   signalProcessed: string;
   linkedCase: string;
   processedLead: string;
@@ -167,12 +173,18 @@ export const messages: Record<Locale, Messages> = {
     whereIsIt: "Ku ndodhet?",
     addPhoto: "Shto foto (opsionale)",
     photoAdded: "Foto u shtua",
+    photoTooLarge: "Fotoja është shumë e madhe (maks. 8 MB).",
+    removePhoto: "Hiq foton",
     useMyLocation: "Përdor lokacionin tim (opsionale)",
+    locating: "Duke marrë lokacionin...",
+    locationDenied: "Lejo lokacionin te cilësimet e pajisjes",
+    locationError: "Lokacioni nuk u mor. Provo përsëri.",
     customRequest: "Kërkesë e personalizuar",
     customRequestPlaceholder: "Përshkruani kërkesën tuaj...",
     unspecifiedLocation: "Lokacion i pacaktuar",
     sendSignal: "Dërgo raportin",
     agentsAnalyzing: "Agjentët po e analizojnë...",
+    submitError: "Raporti nuk u dërgua. Provo përsëri.",
     signalProcessed: "Raporti u përpunua",
     linkedCase: "U lidh me rastin",
     processedLead: "Sistemi e gjeti të njëjtin problem në listë. Sinjali yt e ngriti lart dhe u qarkullua te komuna.",
@@ -366,12 +378,18 @@ export const messages: Record<Locale, Messages> = {
     whereIsIt: "Gde se nalazi?",
     addPhoto: "Dodaj fotografiju (opciono)",
     photoAdded: "Fotografija je dodata",
+    photoTooLarge: "Fotografija je prevelika (maks. 8 MB).",
+    removePhoto: "Ukloni fotografiju",
     useMyLocation: "Koristi moju lokaciju (opciono)",
+    locating: "Preuzimanje lokacije...",
+    locationDenied: "Dozvolite lokaciju u podešavanjima uređaja",
+    locationError: "Lokacija nije preuzeta. Pokušajte ponovo.",
     customRequest: "Prilagođeni zahtev",
     customRequestPlaceholder: "Opišite svoj zahtev...",
     unspecifiedLocation: "Lokacion i pacaktuar",
     sendSignal: "Pošalji prijavu",
     agentsAnalyzing: "Agenti analiziraju...",
+    submitError: "Prijava nije poslata. Pokušajte ponovo.",
     signalProcessed: "Prijava je obrađena",
     linkedCase: "Povezano sa slučajem",
     processedLead: "Sistem je pronašao isti problem na listi. Vaš signal ga je podigao i prosleđen je opštini.",
@@ -565,12 +583,18 @@ export const messages: Record<Locale, Messages> = {
     whereIsIt: "Where is it?",
     addPhoto: "Add photo (optional)",
     photoAdded: "Photo added",
+    photoTooLarge: "Photo is too large (max 8 MB).",
+    removePhoto: "Remove photo",
     useMyLocation: "Use my location (optional)",
+    locating: "Getting your location...",
+    locationDenied: "Allow location in your device settings",
+    locationError: "Location could not be read. Try again.",
     customRequest: "Custom request",
     customRequestPlaceholder: "Describe your request...",
     unspecifiedLocation: "Lokacion i pacaktuar",
     sendSignal: "Submit report",
     agentsAnalyzing: "Agents are analysing...",
+    submitError: "Report could not be sent. Please try again.",
     signalProcessed: "Report processed",
     linkedCase: "Linked to case",
     processedLead: "The system found the same problem on the list. Your signal raised it and it was circulated to the municipality.",

@@ -14,6 +14,8 @@ class ReportCreate(BaseModel):
     custom_text: str = Field(default="", max_length=1000)
     place_id: PlaceId | None = None
     has_photo: bool = False
+    lat: float | None = Field(default=None, ge=-90, le=90)
+    lon: float | None = Field(default=None, ge=-180, le=180)
 
     @model_validator(mode="after")
     def require_subject(self):

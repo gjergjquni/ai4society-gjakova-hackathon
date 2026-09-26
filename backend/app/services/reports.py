@@ -49,9 +49,14 @@ def create_report(db: Session, payload: ReportCreate) -> tuple[Report, Problem]:
         department_name = "Drejtoria e Shërbimeve Publike"
         color = NEW_ISSUE_COLOR
 
-    location_text = place.label if place else UNSPECIFIED_LOCATION
-    lat = place.lat if place else None
-    lon = place.lon if place else None
+    if payload.lat is not None and payload.lon is not None:
+        lat = payload.lat
+        lon = payload.lon
+        location_text = place.label if place else f"{lat:.5f}, {lon:.5f}"
+    else:
+        location_text = place.label if place else UNSPECIFIED_LOCATION
+        lat = place.lat if place else None
+        lon = place.lon if place else None
 
     candidate = type(
         "Candidate",
