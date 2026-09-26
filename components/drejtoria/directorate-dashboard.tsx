@@ -46,6 +46,7 @@ import SidebarProfile from "@/components/sidebar-profile";
 import {
   CATEGORIES,
   directorateTimelineIndex,
+  isAssignedToDirectorate,
   type ArkivistReport,
   type DirectorateNavId,
   type DirectorateReportStatus,
@@ -99,7 +100,7 @@ type Props = {
 
 export default function DirectorateDashboard({ directorate }: Props) {
   const { locale, setLocale, t } = useAdminLocale();
-  const [reports, { updateReport }] = useReports();
+  const [reports, { loading, error, refresh, accept, resolve }] = useReports();
   const [nav, setNav] = useState<DirectorateNavId>("paneli");
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -123,9 +124,8 @@ export default function DirectorateDashboard({ directorate }: Props) {
       reports.filter(
         (r) =>
           r.directorateId === directorate.id &&
-          (r.status === "DERGUAR_TE_DREJTORIA" ||
-            r.status === "APROVUAR") &&
-          r.directorateStatus,
+          isAssignedToDirectorate(r.status) &&
+          Boolean(r.directorateStatus),
       ),
     [reports, directorate.id],
   );
@@ -190,49 +190,31 @@ export default function DirectorateDashboard({ directorate }: Props) {
     reports.find((r) => r.id === selectedId) ??
     null;
 
-  function acceptReport(report: ArkivistReport) {
-    updateReport(report.id, {
-      directorateStatus: "IN_PROGRESS",
-      timeline: [
-        "Raportuar",
-        "Analizuar nga AI",
-        "Verifikuar nga Arkivisti",
-        "Dërguar te Drejtoria",
-        "Në proces",
-      ],
-    });
-    setSuccessMessage(t.successAccepted);
+  async function acceptReport(report: ArkivistReport) {
+    try {
+      await accept(report.id);
+      setSuccessMessage(t.successAccepted);
+    } catch {
+      setSuccessMessage(t.actionError);
+    }
   }
 
-  function submitResolution() {
+  async function submitResolution() {
     if (!selected || !workDescription.trim()) return;
-    const today = new Date().toISOString().slice(0, 10);
-    updateReport(selected.id, {
-      directorateStatus: "RESOLVED",
-      resolution: {
+    try {
+      await resolve(selected.id, {
         workDescription: workDescription.trim(),
-        photoBeforeUrl:
-          photoBefore.trim() ||
-          `https://picsum.photos/seed/${selected.id}before/600/400`,
-        photoAfterUrl:
-          photoAfter.trim() ||
-          `https://picsum.photos/seed/${selected.id}after/600/400`,
-        completedAt: today,
-      },
-      timeline: [
-        "Raportuar",
-        "Analizuar nga AI",
-        "Verifikuar nga Arkivisti",
-        "Dërguar te Drejtoria",
-        "Në proces",
-        "Zgjidhur",
-      ],
-    });
-    setResolveOpen(false);
-    setWorkDescription("");
-    setPhotoBefore("");
-    setPhotoAfter("");
-    setSuccessMessage(t.successResolved);
+        photoBeforeUrl: photoBefore.trim(),
+        photoAfterUrl: photoAfter.trim(),
+      });
+      setResolveOpen(false);
+      setWorkDescription("");
+      setPhotoBefore("");
+      setPhotoAfter("");
+      setSuccessMessage(t.successResolved);
+    } catch {
+      setSuccessMessage(t.actionError);
+    }
   }
 
   const pageTitle = navLabel(nav, t);
@@ -383,6 +365,23 @@ export default function DirectorateDashboard({ directorate }: Props) {
           className="flex-1 p-4 sm:p-6"
           onClick={() => setNotifOpen(false)}
         >
+          {loading && !selected ? (
+            <p className="mb-4 text-[13px] text-[var(--color-ark-faint)]">
+              Duke u ngarkuar...
+            </p>
+          ) : null}
+          {error ? (
+            <div className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-[var(--color-ark-danger-soft)] bg-[var(--color-ark-danger-soft)] px-4 py-3">
+              <p className="text-[13px] text-[var(--color-ark-crit)]">{t.loadError}</p>
+              <button
+                type="button"
+                onClick={() => void refresh()}
+                className="text-[13px] font-medium text-[var(--color-ark-brand)]"
+              >
+                {t.loadRetry}
+              </button>
+            </div>
+          ) : null}
           {selected ? (
             <ReportDetail
               t={t}

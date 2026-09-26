@@ -96,6 +96,9 @@ export type AdminMessages = {
   emptyDefaultDesc: string;
   emptyDirectorateTitle: string;
   emptyDirectorateDesc: string;
+  loadError: string;
+  loadRetry: string;
+  actionError: string;
 
   backToList: string;
   citizenDescription: string;
@@ -238,31 +241,55 @@ const directorateNamesSr: Record<DirectorateId, string> = {
 const statusSq: Record<ReportStatus, string> = {
   SUBMITTED: "Raportuar",
   AI_ANALYZED: "Analizuar nga AI",
+  PENDING_REVIEW: "Në shqyrtim",
   NE_SHQYRTIM: "Në shqyrtim",
+  APPROVED: "Aprovuar",
   APROVUAR: "Aprovuar",
+  ASSIGNED: "Te drejtoria",
   DERGUAR_TE_DREJTORIA: "Te drejtoria",
+  REJECTED: "Refuzuar",
   REFUZUAR: "Refuzuar",
   BASHKUAR: "Bashkuar",
+  IN_PROGRESS: "Në proces",
+  RESOLVED: "Zgjidhur",
+  VERIFIED: "Verifikuar",
+  CLOSED: "Mbyllur",
 };
 
 const statusEn: Record<ReportStatus, string> = {
   SUBMITTED: "Submitted",
   AI_ANALYZED: "AI analyzed",
+  PENDING_REVIEW: "Under review",
   NE_SHQYRTIM: "Under review",
+  APPROVED: "Approved",
   APROVUAR: "Approved",
+  ASSIGNED: "Sent to directorate",
   DERGUAR_TE_DREJTORIA: "Sent to directorate",
+  REJECTED: "Rejected",
   REFUZUAR: "Rejected",
   BASHKUAR: "Merged",
+  IN_PROGRESS: "In progress",
+  RESOLVED: "Resolved",
+  VERIFIED: "Verified",
+  CLOSED: "Closed",
 };
 
 const statusSr: Record<ReportStatus, string> = {
   SUBMITTED: "Prijavljeno",
   AI_ANALYZED: "Analizirano AI",
+  PENDING_REVIEW: "Na razmatranju",
   NE_SHQYRTIM: "Na razmatranju",
+  APPROVED: "Odobreno",
   APROVUAR: "Odobreno",
+  ASSIGNED: "Kod direktorijata",
   DERGUAR_TE_DREJTORIA: "Kod direktorijata",
+  REJECTED: "Odbijeno",
   REFUZUAR: "Odbijeno",
   BASHKUAR: "Spojeno",
+  IN_PROGRESS: "U toku",
+  RESOLVED: "Rešeno",
+  VERIFIED: "Verifikovano",
+  CLOSED: "Zatvoreno",
 };
 
 const dirStatusSq: Record<DirectorateReportStatus, string> = {
@@ -401,6 +428,9 @@ const sq: AdminMessages = {
   emptyDefaultDesc: "Nuk ka raporte për t'u shfaqur në këtë pamje.",
   emptyDirectorateTitle: "Nuk ka raporte për këtë drejtori",
   emptyDirectorateDesc: "Raportet e dërguara te kjo drejtori do të shfaqen këtu.",
+  loadError: "Raportet nuk u ngarkuan nga serveri.",
+  loadRetry: "Provo përsëri",
+  actionError: "Veprimi nuk u krye. Provoni përsëri.",
 
   backToList: "Kthehu te lista",
   citizenDescription: "Përshkrimi i qytetarit",
@@ -603,6 +633,9 @@ const en: AdminMessages = {
   emptyDirectorateTitle: "No reports for this directorate",
   emptyDirectorateDesc:
     "Reports sent to this directorate will appear here.",
+  loadError: "Reports could not be loaded from the server.",
+  loadRetry: "Try again",
+  actionError: "The action could not be completed. Please try again.",
 
   backToList: "Back to list",
   citizenDescription: "Citizen description",
@@ -805,6 +838,9 @@ const sr: AdminMessages = {
   emptyDirectorateTitle: "Nema prijava za ovaj direktorijat",
   emptyDirectorateDesc:
     "Prijave poslate ovom direktorijatu pojaviće se ovde.",
+  loadError: "Prijave nisu učitane sa servera.",
+  loadRetry: "Pokušajte ponovo",
+  actionError: "Radnja nije izvršena. Pokušajte ponovo.",
 
   backToList: "Nazad na listu",
   citizenDescription: "Opis građanina",

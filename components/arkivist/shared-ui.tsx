@@ -19,11 +19,19 @@ export function StatusBadge({
   const tone: Record<ReportStatus, string> = {
     SUBMITTED: "text-[var(--color-ark-muted)] bg-[var(--color-ark-subtle)]",
     AI_ANALYZED: "text-[var(--color-ark-brand)] bg-[var(--color-ark-brand-soft)]",
+    PENDING_REVIEW: "text-[#8a6a08] bg-[var(--color-ark-warn-soft)]",
     NE_SHQYRTIM: "text-[#8a6a08] bg-[var(--color-ark-warn-soft)]",
+    APPROVED: "text-[var(--color-ark-ok)] bg-[var(--color-ark-ok-soft)]",
     APROVUAR: "text-[var(--color-ark-ok)] bg-[var(--color-ark-ok-soft)]",
+    ASSIGNED: "text-[var(--color-ark-ok)] bg-[var(--color-ark-ok-soft)]",
     DERGUAR_TE_DREJTORIA: "text-[var(--color-ark-ok)] bg-[var(--color-ark-ok-soft)]",
+    REJECTED: "text-[var(--color-ark-crit)] bg-[var(--color-ark-danger-soft)]",
     REFUZUAR: "text-[var(--color-ark-crit)] bg-[var(--color-ark-danger-soft)]",
     BASHKUAR: "text-[var(--color-ark-muted)] bg-[var(--color-ark-subtle)]",
+    IN_PROGRESS: "text-[#8a6a08] bg-[var(--color-ark-warn-soft)]",
+    RESOLVED: "text-[var(--color-ark-ok)] bg-[var(--color-ark-ok-soft)]",
+    VERIFIED: "text-[var(--color-ark-ok)] bg-[var(--color-ark-ok-soft)]",
+    CLOSED: "text-[var(--color-ark-muted)] bg-[var(--color-ark-subtle)]",
   };
 
   return (

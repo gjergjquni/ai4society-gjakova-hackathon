@@ -47,6 +47,9 @@ import {
   PRIORITIES,
   SECTORS,
   arkivistTimelineIndex,
+  isApprovedStatus,
+  isPendingReview,
+  isRejectedStatus,
   type ArkivistNavId,
   type ArkivistReport,
   type PriorityLevel,
@@ -125,7 +128,8 @@ function navLabel(id: ArkivistNavId, t: AdminMessages): string {
 
 export default function ArkivistApp() {
   const { locale, setLocale, t } = useAdminLocale();
-  const [reports, { updateReport }] = useReports();
+  const [reports, { loading, error, refresh, approve, edit, reject, merge }] =
+    useReports();
   const [nav, setNav] = useState<ArkivistNavId>("dashboard");
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -159,29 +163,21 @@ export default function ArkivistApp() {
   const stats = useMemo(() => {
     const today = todayIso();
     const teReja = reports.filter((r) => r.date === today).length;
-    const shqyrtim = reports.filter(
-      (r) =>
-        r.status === "SUBMITTED" ||
-        r.status === "AI_ANALYZED" ||
-        r.status === "NE_SHQYRTIM",
-    ).length;
-    const aprovuara = reports.filter(
-      (r) =>
-        r.status === "APROVUAR" || r.status === "DERGUAR_TE_DREJTORIA",
-    ).length;
+    const shqyrtim = reports.filter((r) => isPendingReview(r.status)).length;
+    const aprovuara = reports.filter((r) => isApprovedStatus(r.status)).length;
     const prioritet = reports.filter(
       (r) =>
         (r.priority === "Kritike" || r.priority === "E lartë") &&
-        r.status !== "REFUZUAR" &&
-        r.status !== "BASHKUAR" &&
-        r.status !== "DERGUAR_TE_DREJTORIA",
+        !isRejectedStatus(r.status) &&
+        r.status !== "DERGUAR_TE_DREJTORIA" &&
+        r.status !== "ASSIGNED",
     ).length;
     return {
       teReja,
       shqyrtim,
       aprovuara,
       prioritet,
-      refuzuara: reports.filter((r) => r.status === "REFUZUAR").length,
+      refuzuara: reports.filter((r) => isRejectedStatus(r.status)).length,
       total: reports.length,
     };
   }, [reports]);
@@ -189,21 +185,11 @@ export default function ArkivistApp() {
   const filtered = useMemo(() => {
     let list = [...reports];
     if (nav === "ne-shqyrtim") {
-      list = list.filter(
-        (r) =>
-          r.status === "NE_SHQYRTIM" ||
-          r.status === "AI_ANALYZED" ||
-          r.status === "SUBMITTED",
-      );
+      list = list.filter((r) => isPendingReview(r.status));
     } else if (nav === "te-aprovuara") {
-      list = list.filter(
-        (r) =>
-          r.status === "APROVUAR" || r.status === "DERGUAR_TE_DREJTORIA",
-      );
+      list = list.filter((r) => isApprovedStatus(r.status));
     } else if (nav === "te-refuzuara") {
-      list = list.filter(
-        (r) => r.status === "REFUZUAR" || r.status === "BASHKUAR",
-      );
+      list = list.filter((r) => isRejectedStatus(r.status));
     }
 
     if (search.trim()) {
@@ -225,13 +211,7 @@ export default function ArkivistApp() {
   }, [reports, nav, search, filterStatus, filterPriority, filterCategory]);
 
   const reviewQueue = useMemo(
-    () =>
-      reports.filter(
-        (r) =>
-          r.status === "NE_SHQYRTIM" ||
-          r.status === "AI_ANALYZED" ||
-          r.status === "SUBMITTED",
-      ),
+    () => reports.filter((r) => isPendingReview(r.status)),
     [reports],
   );
 
@@ -259,57 +239,50 @@ export default function ArkivistApp() {
     });
   }
 
-  function confirmApprove() {
+  async function confirmApprove() {
     if (!selected) return;
-    updateReport(selected.id, {
-      category: draft.category,
-      sector: draft.sector,
-      directorateId: draft.directorateId,
-      priority: draft.priority,
-      status: "DERGUAR_TE_DREJTORIA",
-      directorateStatus: "NEW",
-      verifiedBy: ARKIVIST_PROFILE.name,
-      timeline: [
-        "Raportuar",
-        "Analizuar nga AI",
-        "Verifikuar nga Arkivisti",
-        "Dërguar te Drejtoria",
-      ],
-    });
-    setApproveOpen(false);
-    setSuccessMessage(t.successApproved);
+    try {
+      await approve(selected.id, draft);
+      setApproveOpen(false);
+      setSuccessMessage(t.successApproved);
+    } catch {
+      setSuccessMessage(t.actionError);
+    }
   }
 
-  function saveEdit() {
+  async function saveEdit() {
     if (!selected) return;
-    updateReport(selected.id, {
-      ...draft,
-      status: "NE_SHQYRTIM",
-    });
-    setEditOpen(false);
-    setSuccessMessage(t.successClassification);
+    try {
+      await edit(selected.id, draft);
+      setEditOpen(false);
+      setSuccessMessage(t.successClassification);
+    } catch {
+      setSuccessMessage(t.actionError);
+    }
   }
 
-  function confirmReject() {
+  async function confirmReject() {
     if (!selected || !rejectReason.trim()) return;
-    updateReport(selected.id, {
-      status: "REFUZUAR",
-      rejectionReason: rejectReason.trim(),
-    });
-    setRejectOpen(false);
-    setRejectReason("");
-    setSuccessMessage(t.successRejected);
+    try {
+      await reject(selected.id, rejectReason.trim());
+      setRejectOpen(false);
+      setRejectReason("");
+      setSuccessMessage(t.successRejected);
+    } catch {
+      setSuccessMessage(t.actionError);
+    }
   }
 
-  function confirmMerge() {
+  async function confirmMerge() {
     if (!selected || !mergeTargetId) return;
-    updateReport(selected.id, {
-      status: "BASHKUAR",
-      mergedWithId: mergeTargetId,
-    });
-    setMergeOpen(false);
-    setMergeTargetId("");
-    setSuccessMessage(t.successMerged(mergeTargetId));
+    try {
+      await merge(selected.id, mergeTargetId);
+      setMergeOpen(false);
+      setSuccessMessage(t.successMerged(mergeTargetId));
+      setMergeTargetId("");
+    } catch {
+      setSuccessMessage(t.actionError);
+    }
   }
 
   const meta = pageMetaFor(nav, t);
@@ -479,6 +452,23 @@ export default function ArkivistApp() {
           className="flex-1 px-4 py-6 sm:px-8 sm:py-8"
           onClick={() => setNotifOpen(false)}
         >
+          {loading && !liveSelected ? (
+            <p className="px-1 text-[13px] text-[var(--color-ark-faint)]">
+              Duke u ngarkuar...
+            </p>
+          ) : null}
+          {error ? (
+            <div className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-[var(--color-ark-danger-soft)] bg-[var(--color-ark-danger-soft)] px-4 py-3">
+              <p className="text-[13px] text-[var(--color-ark-crit)]">{t.loadError}</p>
+              <button
+                type="button"
+                onClick={() => void refresh()}
+                className="text-[13px] font-medium text-[var(--color-ark-brand)]"
+              >
+                {t.loadRetry}
+              </button>
+            </div>
+          ) : null}
           {liveSelected ? (
             <ReportDetail
               t={t}
@@ -792,8 +782,7 @@ function WorkflowTimeline({
   report: ArkivistReport;
   t: AdminMessages;
 }) {
-  const rejected =
-    report.status === "REFUZUAR" || report.status === "BASHKUAR";
+  const rejected = isRejectedStatus(report.status);
   let active = arkivistTimelineIndex(report.status);
   if (
     report.directorateStatus === "IN_PROGRESS" ||
@@ -1178,10 +1167,9 @@ function ReportDetail({
   onZoomPhoto: () => void;
 }) {
   const canAct =
-    report.status === "NE_SHQYRTIM" ||
-    report.status === "AI_ANALYZED" ||
-    report.status === "SUBMITTED" ||
-    report.status === "APROVUAR";
+    isPendingReview(report.status) ||
+    report.status === "APROVUAR" ||
+    report.status === "APPROVED";
 
   return (
     <div className="mx-auto max-w-[1100px] space-y-6">
@@ -1212,7 +1200,8 @@ function ReportDetail({
             <p className="text-[13px] font-medium text-[var(--color-ark-ok)]">
               {successMessage}
             </p>
-            {report.status === "DERGUAR_TE_DREJTORIA" && (
+            {(report.status === "DERGUAR_TE_DREJTORIA" ||
+              report.status === "ASSIGNED") && (
               <p className="mt-0.5 text-[12px] text-[var(--color-ark-ok)]/80">
                 {t.directorateNames[report.directorateId] ??
                   getDirectorateById(report.directorateId)?.name}
