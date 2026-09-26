@@ -11,6 +11,7 @@ import {
   ImagePlus,
   Mail,
   MapPin,
+  PenLine,
   Phone,
   TrafficCone,
   Trash2,
@@ -183,8 +184,14 @@ export default function SwarmDashboard() {
     categoryId: "",
     placeId: "",
     photo: false,
+    customRequest: "",
   });
+  const [customRequestOpen, setCustomRequestOpen] = useState(false);
   const [mergedId, setMergedId] = useState("GJK-1031");
+  const [submittedSummary, setSubmittedSummary] = useState({
+    category: "",
+    location: "",
+  });
 
   useEffect(() => {
     document.documentElement.lang = locale;
@@ -195,13 +202,21 @@ export default function SwarmDashboard() {
 
   function submitReport(event: FormEvent) {
     event.preventDefault();
-    if (!form.categoryId || !form.placeId) return;
+    const customText = form.customRequest.trim();
+    if (!form.categoryId && !customText) return;
 
     const place = places.find((item) => item.id === form.placeId);
     const category = categories.find((item) => item.id === form.categoryId);
-    if (!place || !category) return;
+    if (form.categoryId && !category) return;
 
-    const existingId = (place.merge as Record<string, string | undefined>)[form.categoryId];
+    const locationLabel = place?.label ?? t.unspecifiedLocation;
+    const categoryLabel = category
+      ? (t.categories[category.id] ?? category.label)
+      : customText || t.customRequest;
+    const existingId =
+      place && form.categoryId
+        ? (place.merge as Record<string, string | undefined>)[form.categoryId]
+        : undefined;
     setProcessing(true);
 
     window.setTimeout(() => {
@@ -221,13 +236,15 @@ export default function SwarmDashboard() {
         setMergedId(existingId);
       } else {
         const newId = `GJK-${1050 + issues.length}`;
+        const issueCategoryLabel = category?.label ?? t.customRequest;
+        const title = customText || `${issueCategoryLabel} e raportuar`;
         const newIssue: Issue = {
           id: newId,
           rank: issues.length + 1,
-          title: `${category.label} e raportuar`,
-          category: category.label,
-          categoryId: category.id,
-          location: place.label,
+          title,
+          category: issueCategoryLabel,
+          categoryId: category?.id ?? "custom",
+          location: locationLabel,
           reports: 1,
           priority: 64,
           trend: 4,
@@ -236,21 +253,24 @@ export default function SwarmDashboard() {
           department: "Drejtoria e Shërbimeve Publike",
           age: "tani",
           impact: "1 sinjal i ri",
-          recommendation: `Inspektoni ${place.label} dhe konfirmoni ${category.label.toLowerCase()} para se të dërgohet ekipi.`,
+          recommendation: `Inspektoni ${locationLabel} dhe konfirmoni ${title.toLowerCase()} para se të dërgohet ekipi.`,
           reasons: [
             { label: "Sinjal i ri", value: 18 },
             { label: "Lokacioni", value: 16 },
             { label: "Kategoria", value: 12 },
             { label: "Kohëzgjatja", value: 6 },
           ],
-          coords: place.coords,
+          coords: place?.coords ?? { lat: 42.3806, lng: 20.4312 },
           color: "#65e4ff",
         };
         setIssues((current) => [newIssue, ...current].map((issue, index) => ({ ...issue, rank: index + 1 })));
         setMergedId(newId);
       }
+      setSubmittedSummary({ category: categoryLabel, location: locationLabel });
       setProcessing(false);
       setSubmitted(true);
+      setCustomRequestOpen(false);
+      setForm((current) => ({ ...current, customRequest: "" }));
     }, 1200);
   }
 
@@ -262,9 +282,13 @@ export default function SwarmDashboard() {
     setReportOpen(false);
     window.setTimeout(() => {
       setSubmitted(false);
-      setForm({ categoryId: "", placeId: "", photo: false });
+      setCustomRequestOpen(false);
+      setSubmittedSummary({ category: "", location: "" });
+      setForm({ categoryId: "", placeId: "", photo: false, customRequest: "" });
     }, 300);
   }
+
+  const canSubmit = Boolean(form.categoryId || form.customRequest.trim());
 
   const navItems = [
     { href: "#ballina", label: t.navHome, key: "home" },
@@ -468,7 +492,7 @@ export default function SwarmDashboard() {
                 </div>
 
                 <div className="flex flex-col gap-3 sm:col-span-2">
-                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
                     <button
                       type="button"
                       onClick={() => setForm({ ...form, photo: !form.photo })}
@@ -484,15 +508,42 @@ export default function SwarmDashboard() {
                     <button
                       type="button"
                       onClick={useMyLocation}
-                      className="flex h-12 items-center justify-center gap-2 rounded-sm border border-dashed border-[#cfd8e3] bg-[#f7f8fa] px-3 text-sm font-medium text-[#54595f] transition hover:border-[#04408b]/40 hover:text-[#04408b]"
+                      className={`flex h-12 items-center justify-center gap-2 rounded-sm border px-3 text-sm font-medium transition ${
+                        form.placeId
+                          ? "border-[#04408b]/40 bg-[#edf2f7] text-[#04408b]"
+                          : "border-dashed border-[#cfd8e3] bg-[#f7f8fa] text-[#54595f] hover:border-[#04408b]/40 hover:text-[#04408b]"
+                      }`}
                     >
                       <Crosshair className="size-4 shrink-0" />
                       <span className="truncate">{t.useMyLocation}</span>
                     </button>
+                    <button
+                      type="button"
+                      onClick={() => setCustomRequestOpen((open) => !open)}
+                      className={`flex h-12 items-center justify-center gap-2 rounded-sm border px-3 text-sm font-medium transition ${
+                        customRequestOpen || form.customRequest.trim()
+                          ? "border-[#04408b]/40 bg-[#edf2f7] text-[#04408b]"
+                          : "border-dashed border-[#cfd8e3] bg-[#f7f8fa] text-[#54595f] hover:border-[#04408b]/40 hover:text-[#04408b]"
+                      }`}
+                    >
+                      <PenLine className="size-4 shrink-0" />
+                      <span className="truncate">{t.customRequest}</span>
+                    </button>
                   </div>
+                  {customRequestOpen && (
+                    <textarea
+                      value={form.customRequest}
+                      onChange={(event) =>
+                        setForm({ ...form, customRequest: event.target.value })
+                      }
+                      placeholder={t.customRequestPlaceholder}
+                      rows={3}
+                      className="w-full resize-y rounded-sm border border-[#e5e5e5] bg-[#f7f8fa] px-3 py-2.5 text-sm text-[#161616] outline-none transition placeholder:text-[#54595f]/70 focus:border-[#04408b]/40 focus:bg-white"
+                    />
+                  )}
                   <Button
                     type="submit"
-                    disabled={processing || !form.categoryId || !form.placeId}
+                    disabled={processing || !canSubmit}
                     className="h-12 w-full rounded-sm bg-[#04408b] text-base font-bold text-white hover:bg-[#03346f] disabled:bg-[#04408b]/45 disabled:opacity-100"
                   >
                     {processing ? (
@@ -522,8 +573,8 @@ export default function SwarmDashboard() {
               </div>
               <div className="my-6 grid grid-cols-3 gap-2">
                 {[
-                  [t.fieldCategory, t.categories[form.categoryId] ?? ""],
-                  [t.fieldLocation, t.places[form.placeId] ?? ""],
+                  [t.fieldCategory, submittedSummary.category],
+                  [t.fieldLocation, submittedSummary.location],
                   [t.fieldCase, mergedId],
                 ].map(([label, value]) => (
                   <div key={label} className="rounded-sm border border-[#e5e5e5] bg-[#f7f8fa] p-3 text-center">

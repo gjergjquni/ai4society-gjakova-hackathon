@@ -60,6 +60,9 @@ export type Messages = {
   addPhoto: string;
   photoAdded: string;
   useMyLocation: string;
+  customRequest: string;
+  customRequestPlaceholder: string;
+  unspecifiedLocation: string;
   sendSignal: string;
   agentsAnalyzing: string;
   signalProcessed: string;
@@ -162,9 +165,12 @@ export const messages: Record<Locale, Messages> = {
     whatIsIt: "Çfarë është?",
     howSerious: "Sa serioze?",
     whereIsIt: "Ku ndodhet?",
-    addPhoto: "Shto foto",
+    addPhoto: "Shto foto (opsionale)",
     photoAdded: "Foto u shtua",
-    useMyLocation: "Përdor lokacionin tim",
+    useMyLocation: "Përdor lokacionin tim (opsionale)",
+    customRequest: "Kërkesë e personalizuar",
+    customRequestPlaceholder: "Përshkruani kërkesën tuaj...",
+    unspecifiedLocation: "Lokacion i pacaktuar",
     sendSignal: "Dërgo raportin",
     agentsAnalyzing: "Agjentët po e analizojnë...",
     signalProcessed: "Raporti u përpunua",
@@ -358,9 +364,12 @@ export const messages: Record<Locale, Messages> = {
     whatIsIt: "Šta je?",
     howSerious: "Koliko je ozbiljno?",
     whereIsIt: "Gde se nalazi?",
-    addPhoto: "Dodaj fotografiju",
+    addPhoto: "Dodaj fotografiju (opciono)",
     photoAdded: "Fotografija je dodata",
-    useMyLocation: "Koristi moju lokaciju",
+    useMyLocation: "Koristi moju lokaciju (opciono)",
+    customRequest: "Prilagođeni zahtev",
+    customRequestPlaceholder: "Opišite svoj zahtev...",
+    unspecifiedLocation: "Lokacion i pacaktuar",
     sendSignal: "Pošalji prijavu",
     agentsAnalyzing: "Agenti analiziraju...",
     signalProcessed: "Prijava je obrađena",
@@ -554,9 +563,12 @@ export const messages: Record<Locale, Messages> = {
     whatIsIt: "What is it?",
     howSerious: "How serious?",
     whereIsIt: "Where is it?",
-    addPhoto: "Add photo",
+    addPhoto: "Add photo (optional)",
     photoAdded: "Photo added",
-    useMyLocation: "Use my location",
+    useMyLocation: "Use my location (optional)",
+    customRequest: "Custom request",
+    customRequestPlaceholder: "Describe your request...",
+    unspecifiedLocation: "Lokacion i pacaktuar",
     sendSignal: "Submit report",
     agentsAnalyzing: "Agents are analysing...",
     signalProcessed: "Report processed",
