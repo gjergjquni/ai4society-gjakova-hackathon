@@ -1,0 +1,162 @@
+{
+  "id": "ZHE",
+  "official_name": "Drejtoria për Zhvillim Ekonomik",
+  "short_name": "Zhvillim Ekonomik",
+  "neni": "Neni 8",
+  "mission": "Të kontribuojë në zhvillimin e qëndrueshëm ekonomik dhe përmirësimin e kushteve të jetesës, duke ofruar mbështetje për bizneset, punësimin dhe turizmin.",
+  "sectors": [
+    "Sektori për Ekonomi dhe Turizëm",
+    "Sektori për Regjistrimin e Bizneseve"
+  ],
+  "responsibilities": [
+    {
+      "id": "ZHE-R-001",
+      "text": "Hartimi, implementimi dhe monitorimi i politikave dhe strategjive për zhvillimin ekonomik dhe turistik në nivel lokal dhe rajonal si dhe zbatimi i rregullores për taksa në firmë duke përfshirë edhe mbledhjen e taksave në fushëveprim të DZHE.",
+      "source_url": "https://gjakova.rks-gov.net/wp-content/uploads/2025/05/Rregullore-per-Organizimin-e-Brendshem-ne-Komunen-e-Gjakoves.pdf",
+      "source_title": "Rregullore për Organizimin e Brendshëm, Sistematizimin dhe Klasifikimin e Vendeve të Punës në Komunën e Gjakovës (nr. 01-011/01-16155, miratuar 27.03.2025) — Neni 16",
+      "retrieved_at": "2026-09-26T12:25:30+00:00",
+      "excerpt": "t për Ekonomi dhe Turizëm janë: \n2.1.1. Hartimi, implementimi dhe monitorimi i politikave dhe strategjive për \nzhvillimin ekonomik dhe turistik në nivel lokal dhe rajonal si dhe zbatimi i \nrregullores për taksa në firmë duke përfshirë edhe",
+      "source_status": "ok"
+    },
+    {
+      "id": "ZHE-R-002",
+      "text": "Inkurajimi i investimeve të huaja dhe vendase, ofrimi i shërbimeve për mbështetje të ndërmarrësve dhe bizneseve të reja.",
+      "source_url": "https://gjakova.rks-gov.net/wp-content/uploads/2025/05/Rregullore-per-Organizimin-e-Brendshem-ne-Komunen-e-Gjakoves.pdf",
+      "source_title": "Rregullore për Organizimin e Brendshëm, Sistematizimin dhe Klasifikimin e Vendeve të Punës në Komunën e Gjakovës (nr. 01-011/01-16155, miratuar 27.03.2025) — Neni 16",
+      "retrieved_at": "2026-09-26T12:25:30+00:00",
+      "excerpt": "aksave në \nfushëveprim të DZHE. \n2.1.2. Inkurajimi i investimeve të huaja dhe vendase, ofrimi i shërbimeve për \nmbështetje të ndërmarrësve dhe bizneseve të reja, dhe ndihma në zhvillimin e \nkapaciteteve të biznesit. \n2.1.3. Planifikimi dhe",
+      "source_status": "ok"
+    },
+    {
+      "id": "ZHE-R-003",
+      "text": "Planifikimi dhe implementimi i aktiviteteve për promovimin e turizmit dhe zhvillimi i destinacioneve turistike.",
+      "source_url": "https://gjakova.rks-gov.net/wp-content/uploads/2025/05/Rregullore-per-Organizimin-e-Brendshem-ne-Komunen-e-Gjakoves.pdf",
+      "source_title": "Rregullore për Organizimin e Brendshëm, Sistematizimin dhe Klasifikimin e Vendeve të Punës në Komunën e Gjakovës (nr. 01-011/01-16155, miratuar 27.03.2025) — Neni 16",
+      "retrieved_at": "2026-09-26T12:25:30+00:00",
+      "excerpt": "in e \nkapaciteteve të biznesit. \n2.1.3. Planifikimi dhe implementimi i aktiviteteve për promovimin e turizmit, \nzhvillimi i destinacioneve turistike dhe organizimi i ngjarjeve dhe aktiviteteve \nqë tërheqin turistët. \n2.1.4. Grumbullimi dhe",
+      "source_status": "ok"
+    },
+    {
+      "id": "ZHE-R-004",
+      "text": "Sigurimi i regjistrimit të plotë dhe të saktë të bizneseve të reja, përfshirë individët që regjistrojnë aktivitete tregtare.",
+      "source_url": "https://gjakova.rks-gov.net/wp-content/uploads/2025/05/Rregullore-per-Organizimin-e-Brendshem-ne-Komunen-e-Gjakoves.pdf",
+      "source_title": "Rregullore për Organizimin e Brendshëm, Sistematizimin dhe Klasifikimin e Vendeve të Punës në Komunën e Gjakovës (nr. 01-011/01-16155, miratuar 27.03.2025) — Neni 16",
+      "retrieved_at": "2026-09-26T12:25:30+00:00",
+      "excerpt": "neseve të Kosovës si më poshtë: \n3.1.1. Sigurimi i regjistrimit të plotë dhe të saktë të bizneseve të reja, përfshirë individët \nqë regjistrojnë aktivitete tregtare, shoqëritë tregtare dhe forma të tjera të \norganizatave të biznesit. \n3.1.2",
+      "source_status": "ok"
+    },
+    {
+      "id": "ZHE-R-005",
+      "text": "Lëshimi i certifikatave të regjistrimit për bizneset që janë regjistruar dhe përmbushin të gjitha kërkesat ligjore.",
+      "source_url": "https://gjakova.rks-gov.net/wp-content/uploads/2025/05/Rregullore-per-Organizimin-e-Brendshem-ne-Komunen-e-Gjakoves.pdf",
+      "source_title": "Rregullore për Organizimin e Brendshëm, Sistematizimin dhe Klasifikimin e Vendeve të Punës në Komunën e Gjakovës (nr. 01-011/01-16155, miratuar 27.03.2025) — Neni 16",
+      "retrieved_at": "2026-09-26T12:25:30+00:00",
+      "excerpt": "administrative për \nregjistrim. \n3.1.5. Lëshimi i certifikatave të regjistrimit për bizneset që janë regjistruar dhe \npërmbushin të gjitha kërkesat ligjore si dhe sigurimi që bizneset e regjistruara të \nrespektojnë kërkesat ligjore dhe rreg",
+      "source_status": "ok"
+    },
+    {
+      "id": "ZHE-R-006",
+      "text": "Regjistrimin e bizneseve të reja dhe pajisja me certifikata të biznesit. Evidentimin e ndryshimeve në certifikatat e biznesit. Evidentimin e shuarjes së biznesit. Dhënien e lejes për zgjatje të orarit të punës për subjektet afariste.",
+      "source_url": "https://gjakova.rks-gov.net/staff/drejtoria-per-zhvillim-ekonomik/",
+      "source_title": "Drejtoria për Zhvillim Ekonomik — Komuna e Gjakovës",
+      "retrieved_at": "2026-09-26T12:25:37+00:00",
+      "excerpt": "Drejtoria për Zhvillim Ekonomik - Komuna e Gjakovës Skip to content SQ EN SR Generic selectors Vetem tekstet e njejta Kërkoni në titull Kërkoni në përmbajtje Post Type Selectors Postimet post Faqe Lajme Ngjarje Thirrjet publike Si mund të ?",
+      "source_status": "ok"
+    },
+    {
+      "id": "ZHE-R-007",
+      "text": "Evidentimin e të gjithë obliguesve të taksës në firmë ndaj Komunës dhe arkëtimin e të hyrave përkatëse. Pranimi i ankesave nga bizneset dhe shqyrtimi i lëndëve nga komisioni pranë drejtorisë.",
+      "source_url": "https://gjakova.rks-gov.net/staff/drejtoria-per-zhvillim-ekonomik/",
+      "source_title": "Drejtoria për Zhvillim Ekonomik — Komuna e Gjakovës",
+      "retrieved_at": "2026-09-26T12:25:37+00:00",
+      "excerpt": "es në fuqi. Nga Zyra e Taksës në Firmë: Evidentimin e të gjithë obliguesve të taksës në firmë ndaj Komunës dhe arkëtimin e të hyrave përkatëse, Vizitat ne teren nga Zyrtarët e DZHE se për gjendjen në të cilën gjenden bizneset,dhënjen e kësh",
+      "source_status": "ok"
+    }
+  ],
+  "procedures": [
+    {
+      "id": "ZHE-01",
+      "name": "Regjistrim biznesi / certifikatë biznesi",
+      "description": "Regjistrim i biznesit të ri dhe pajisje me certifikatë.",
+      "source_url": "https://gjakova.rks-gov.net/staff/drejtoria-per-zhvillim-ekonomik/",
+      "source_title": "Staff ZHE",
+      "retrieved_at": "2026-09-26T12:25:37+00:00",
+      "source_status": "ok"
+    },
+    {
+      "id": "ZHE-02",
+      "name": "Ndryshim / shuarje e biznesit",
+      "description": "Evidentim i ndryshimeve ose shuarjes së biznesit.",
+      "source_url": "https://gjakova.rks-gov.net/staff/drejtoria-per-zhvillim-ekonomik/",
+      "source_title": "Staff ZHE",
+      "retrieved_at": "2026-09-26T12:25:37+00:00",
+      "source_status": "ok"
+    },
+    {
+      "id": "ZHE-03",
+      "name": "Taksë në firmë",
+      "description": "Evidentim i obliguesve dhe arkëtim i taksës në firmë.",
+      "source_url": "https://gjakova.rks-gov.net/wp-content/uploads/2025/05/Rregullore-per-Organizimin-e-Brendshem-ne-Komunen-e-Gjakoves.pdf",
+      "source_title": "Rregullore për Organizimin e Brendshëm, Sistematizimin dhe Klasifikimin e Vendeve të Punës në Komunën e Gjakovës (nr. 01-011/01-16155, miratuar 27.03.2025)",
+      "retrieved_at": "2026-09-26T12:25:30+00:00",
+      "source_status": "ok"
+    },
+    {
+      "id": "ZHE-04",
+      "name": "Leje për zgjatje orari pune",
+      "description": "Leje për zgjatje të orarit të punës për subjekte afariste dhe OJQ.",
+      "source_url": "https://gjakova.rks-gov.net/staff/drejtoria-per-zhvillim-ekonomik/",
+      "source_title": "Staff ZHE",
+      "retrieved_at": "2026-09-26T12:25:37+00:00",
+      "source_status": "ok"
+    },
+    {
+      "id": "ZHE-05",
+      "name": "Mbështetje për biznes të ri / investime",
+      "description": "Këshillim dhe mbështetje për ndërmarrës dhe investime.",
+      "source_url": "https://gjakova.rks-gov.net/wp-content/uploads/2025/05/Rregullore-per-Organizimin-e-Brendshem-ne-Komunen-e-Gjakoves.pdf",
+      "source_title": "Rregullore për Organizimin e Brendshëm, Sistematizimin dhe Klasifikimin e Vendeve të Punës në Komunën e Gjakovës (nr. 01-011/01-16155, miratuar 27.03.2025)",
+      "retrieved_at": "2026-09-26T12:25:30+00:00",
+      "source_status": "ok"
+    },
+    {
+      "id": "ZHE-06",
+      "name": "Promovim turizmi / pako turistike",
+      "description": "Aktivitete për promovimin e turizmit lokal.",
+      "source_url": "https://gjakova.rks-gov.net/staff/drejtoria-per-zhvillim-ekonomik/",
+      "source_title": "Staff ZHE",
+      "retrieved_at": "2026-09-26T12:25:37+00:00",
+      "source_status": "ok"
+    },
+    {
+      "id": "ZHE-07",
+      "name": "Ankesë biznesi pranë DZHE",
+      "description": "Pranim dhe shqyrtim i ankesave të bizneseve në komisionin e drejtorisë.",
+      "source_url": "https://gjakova.rks-gov.net/staff/drejtoria-per-zhvillim-ekonomik/",
+      "source_title": "Staff ZHE",
+      "retrieved_at": "2026-09-26T12:25:37+00:00",
+      "source_status": "ok"
+    }
+  ],
+  "services": [],
+  "hard_negatives": [
+    {
+      "confused_with": "INS",
+      "rule": "Regjistrim biznesi / taksë firme → ZHE. Kioskë pa leje / gjobë tregu / mall i palejuar → INS."
+    },
+    {
+      "confused_with": "URB",
+      "rule": "Certifikatë biznesi → ZHE. Pëlqim për kioskë në hapësirë publike → URB."
+    }
+  ],
+  "example_requests": [
+    "Dua të regjistroj një biznes të ri.",
+    "Dua leje për zgjatje të orarit të lokalit."
+  ],
+  "example_complaints": [
+    "Nuk po ma lëshojnë certifikatën e biznesit.",
+    "Më kanë ngarkuar taksë në firmë padrejtësisht."
+  ],
+  "staff_url": "https://gjakova.rks-gov.net/staff/drejtoria-per-zhvillim-ekonomik/",
+  "kb_version": "1.0.0"
+}

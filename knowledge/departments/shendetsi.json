@@ -1,0 +1,178 @@
+{
+  "id": "SHS",
+  "official_name": "Drejtoria për Shëndetësi dhe Mirëqenie Sociale",
+  "short_name": "Shëndetësi",
+  "neni": "Neni 13",
+  "mission": "Planifikimi dhe orientimi i strategjive për të ofruar shërbime gjithëpërfshirëse të kujdesit parësor shëndetësor, shërbimeve sociale, asistencës sociale dhe mirëqenies sociale.",
+  "sectors": [
+    "Sektori për Shëndetësi",
+    "Sektori për Mirëqenie Sociale",
+    "Qendra për Punë Sociale",
+    "Qendra Kryesore e Mjekësisë Familjare"
+  ],
+  "responsibilities": [
+    {
+      "id": "SHS-R-001",
+      "text": "Planifikimi dhe orientimi i strategjisë së Kujdesit Parësor Shëndetësor.",
+      "source_url": "https://gjakova.rks-gov.net/wp-content/uploads/2025/05/Rregullore-per-Organizimin-e-Brendshem-ne-Komunen-e-Gjakoves.pdf",
+      "source_title": "Rregullore për Organizimin e Brendshëm, Sistematizimin dhe Klasifikimin e Vendeve të Punës në Komunën e Gjakovës (nr. 01-011/01-16155, miratuar 27.03.2025) — Neni 13",
+      "retrieved_at": "2026-09-26T12:25:30+00:00",
+      "excerpt": "e Sektorit për Shëndetësi janë: \n2.1.1. Planifikimi dhe orientimi i strategjisë se Kujdesit Parësor Shëndetësor. \n2.1.2. Vlerësimin e nevojave lokale për shëndetësi parësore si dhe vendosjen e \nobjektivave lokale për KPSH. \n2.1.3. Vendosjen",
+      "source_status": "ok"
+    },
+    {
+      "id": "SHS-R-002",
+      "text": "Vlerësimin e nevojave lokale për shëndetësi parësore si dhe vendosjen e objektivave lokale për KPSH.",
+      "source_url": "https://gjakova.rks-gov.net/wp-content/uploads/2025/05/Rregullore-per-Organizimin-e-Brendshem-ne-Komunen-e-Gjakoves.pdf",
+      "source_title": "Rregullore për Organizimin e Brendshëm, Sistematizimin dhe Klasifikimin e Vendeve të Punës në Komunën e Gjakovës (nr. 01-011/01-16155, miratuar 27.03.2025) — Neni 13",
+      "retrieved_at": "2026-09-26T12:25:30+00:00",
+      "excerpt": "e Kujdesit Parësor Shëndetësor. \n2.1.2. Vlerësimin e nevojave lokale për shëndetësi parësore si dhe vendosjen e \nobjektivave lokale për KPSH. \n2.1.3. Vendosjen dhe mbledhjen e bashkë pagesave brenda kornizës së caktuar nga \nMSH. \n2.1.4. Mbi",
+      "source_status": "ok"
+    },
+    {
+      "id": "SHS-R-003",
+      "text": "Vendosjen dhe mbledhjen e bashkë pagesave brenda kornizës së caktuar nga MSH.",
+      "source_url": "https://gjakova.rks-gov.net/wp-content/uploads/2025/05/Rregullore-per-Organizimin-e-Brendshem-ne-Komunen-e-Gjakoves.pdf",
+      "source_title": "Rregullore për Organizimin e Brendshëm, Sistematizimin dhe Klasifikimin e Vendeve të Punës në Komunën e Gjakovës (nr. 01-011/01-16155, miratuar 27.03.2025) — Neni 13",
+      "retrieved_at": "2026-09-26T12:25:30+00:00",
+      "excerpt": "e \nobjektivave lokale për KPSH. \n2.1.3. Vendosjen dhe mbledhjen e bashkë pagesave brenda kornizës së caktuar nga \nMSH. \n2.1.4. Mbikëqyrjen e situatës epidemiologjike në nivel komunal. \n2.1.5. Zbatimin e normave dhe standardeve të infrastruk",
+      "source_status": "ok"
+    },
+    {
+      "id": "SHS-R-004",
+      "text": "Mbikëqyrjen e situatës epidemiologjike në nivel komunal.",
+      "source_url": "https://gjakova.rks-gov.net/wp-content/uploads/2025/05/Rregullore-per-Organizimin-e-Brendshem-ne-Komunen-e-Gjakoves.pdf",
+      "source_title": "Rregullore për Organizimin e Brendshëm, Sistematizimin dhe Klasifikimin e Vendeve të Punës në Komunën e Gjakovës (nr. 01-011/01-16155, miratuar 27.03.2025) — Neni 13",
+      "retrieved_at": "2026-09-26T12:25:30+00:00",
+      "excerpt": "a kornizës së caktuar nga \nMSH. \n2.1.4. Mbikëqyrjen e situatës epidemiologjike në nivel komunal. \n2.1.5. Zbatimin e normave dhe standardeve të infrastrukturës në shëndetësinë primare. \n2.1.6. Raportimin mbi ofrimin e shërbimeve dhe të arrit",
+      "source_status": "ok"
+    },
+    {
+      "id": "SHS-R-005",
+      "text": "Planifikimi dhe shpërndarja e subvencioneve shëndetësore Komunale.",
+      "source_url": "https://gjakova.rks-gov.net/wp-content/uploads/2025/05/Rregullore-per-Organizimin-e-Brendshem-ne-Komunen-e-Gjakoves.pdf",
+      "source_title": "Rregullore për Organizimin e Brendshëm, Sistematizimin dhe Klasifikimin e Vendeve të Punës në Komunën e Gjakovës (nr. 01-011/01-16155, miratuar 27.03.2025) — Neni 13",
+      "retrieved_at": "2026-09-26T12:25:30+00:00",
+      "excerpt": "lëmin e \nshëndetësisë primare. \n2.1.7. Planifikimi dhe shpërndarja e subvencioneve shëndetësore Komunale. \n2.2.Udhëheqësi i Sektorit për Shëndetësi raporton tek Drejtori i Drejtorisë për Shëndetësi \ndhe Mirëqenie Sociale.  \n2.3.Numri i të",
+      "source_status": "ok"
+    },
+    {
+      "id": "SHS-R-006",
+      "text": "Menaxhimi i programeve të strehimit social për individët dhe familjet pa kulm mbi kokë.",
+      "source_url": "https://gjakova.rks-gov.net/wp-content/uploads/2025/05/Rregullore-per-Organizimin-e-Brendshem-ne-Komunen-e-Gjakoves.pdf",
+      "source_title": "Rregullore për Organizimin e Brendshëm, Sistematizimin dhe Klasifikimin e Vendeve të Punës në Komunën e Gjakovës (nr. 01-011/01-16155, miratuar 27.03.2025) — Neni 13",
+      "retrieved_at": "2026-09-26T12:25:30+00:00",
+      "excerpt": "Faqe 1 nga 42 \n \n \n \nREPUBLIKA E KOSOVËS \nREPUBLIKA KOSOVA/ REPUBLIC OF KOSOVO \nKOMUNA E GJAKOVËS \nOPŠTINA DJAKOVICA/MUNICIPALITY OF GJAKOVA \n_____________________________________________________________________________ \n \n \n \n \n \n \n \n \n \n ",
+      "source_status": "ok"
+    },
+    {
+      "id": "SHS-R-007",
+      "text": "Organizon dhe ofron drejtpërdrejtë shërbimet sociale, vlerëson nevojat e përfituesve dhe planifikon ofrimin e shërbimeve.",
+      "source_url": "https://gjakova.rks-gov.net/wp-content/uploads/2025/05/Rregullore-per-Organizimin-e-Brendshem-ne-Komunen-e-Gjakoves.pdf",
+      "source_title": "Rregullore për Organizimin e Brendshëm, Sistematizimin dhe Klasifikimin e Vendeve të Punës në Komunën e Gjakovës (nr. 01-011/01-16155, miratuar 27.03.2025) — Neni 13",
+      "retrieved_at": "2026-09-26T12:25:30+00:00",
+      "excerpt": "Qendrës për Punë Sociale janë: \n4.1.1. Organizon dhe ofron drejtpërdrejtë shërbimet sociale, vlerëson nevojat e \npërfituesve dhe planifikon ofrimin e shërbimeve.  \n4.1.2. Identifikon në fazë të hershme, përcjell dhe analizon problemet e pë",
+      "source_status": "ok"
+    },
+    {
+      "id": "SHS-R-008",
+      "text": "Përkujdeset për masat e mbrojtjes shëndetësore që kanë të bëjnë me: sigurimin e ujit të sigurt dhe higjienës, sigurimin e ushqimit të sigurt dhe nutricionit, aktivitetet e dezinfektimit, dezinsektimit, dhe deratizimit.",
+      "source_url": "https://gjakova.rks-gov.net/staff/drejtoria-per-shendetesi-dhe-mireqenje-sociale/",
+      "source_title": "Drejtoria për Shëndetësi dhe Mirëqenie Sociale — Komuna e Gjakovës",
+      "retrieved_at": "2026-09-26T12:25:36+00:00",
+      "excerpt": "dhe përdorimin efektiv të burimeve, m) përkujdeset për masat e mbrojtjes shëndetësore që kanë të bëjnë me: – sigurimin e ujit të sigurt dhe higjienës, – sigurimin e ushqimit të sigurt dhe nutricionit, – aktivitetet e dezinfektimit, dezinse",
+      "source_status": "ok"
+    },
+    {
+      "id": "SHS-R-009",
+      "text": "Bashkërenditjen dhe mbikëqyrjen e punëve me QKMF, QMF dhe me Ambulanca.",
+      "source_url": "https://gjakova.rks-gov.net/staff/drejtoria-per-shendetesi-dhe-mireqenje-sociale/",
+      "source_title": "Drejtoria për Shëndetësi dhe Mirëqenie Sociale — Komuna e Gjakovës",
+      "retrieved_at": "2026-09-26T12:25:36+00:00",
+      "excerpt": "mit, dezinsektimit, dhe deratizimit, n) bashkërenditjen dhe mbikëqyrjen e punëve me QKMF, QMF dhe me Ambulanca, h) zbatimin e Rregulloreve që lëshohen nga Departamenti i Shëndetësisë, MSH dhe MPMS, i) ndërmarrjen e fushatave sensibilizuese",
+      "source_status": "ok"
+    }
+  ],
+  "procedures": [
+    {
+      "id": "SHS-01",
+      "name": "Kujdes parësor shëndetësor / QKMF",
+      "description": "Ofrim dhe mbikëqyrje e shërbimeve të kujdesit parësor, QKMF, QMF dhe ambulancave.",
+      "source_url": "https://gjakova.rks-gov.net/staff/drejtoria-per-shendetesi-dhe-mireqenje-sociale/",
+      "source_title": "Staff SHS",
+      "retrieved_at": "2026-09-26T12:25:36+00:00",
+      "source_status": "ok"
+    },
+    {
+      "id": "SHS-02",
+      "name": "Subvencion shëndetësor komunal",
+      "description": "Planifikim dhe shpërndarje e subvencioneve shëndetësore komunale.",
+      "source_url": "https://gjakova.rks-gov.net/wp-content/uploads/2025/05/Rregullore-per-Organizimin-e-Brendshem-ne-Komunen-e-Gjakoves.pdf",
+      "source_title": "Rregullore për Organizimin e Brendshëm, Sistematizimin dhe Klasifikimin e Vendeve të Punës në Komunën e Gjakovës (nr. 01-011/01-16155, miratuar 27.03.2025)",
+      "retrieved_at": "2026-09-26T12:25:30+00:00",
+      "source_status": "ok"
+    },
+    {
+      "id": "SHS-03",
+      "name": "Strehimi social",
+      "description": "Programe të strehimit social për familjet pa kulm mbi kokë.",
+      "source_url": "https://gjakova.rks-gov.net/wp-content/uploads/2025/05/Rregullore-per-Organizimin-e-Brendshem-ne-Komunen-e-Gjakoves.pdf",
+      "source_title": "Rregullore për Organizimin e Brendshëm, Sistematizimin dhe Klasifikimin e Vendeve të Punës në Komunën e Gjakovës (nr. 01-011/01-16155, miratuar 27.03.2025)",
+      "retrieved_at": "2026-09-26T12:25:30+00:00",
+      "source_status": "ok"
+    },
+    {
+      "id": "SHS-04",
+      "name": "Shërbime sociale / Qendra për Punë Sociale",
+      "description": "Vlerësim nevojash dhe ofrim i shërbimeve sociale.",
+      "source_url": "https://gjakova.rks-gov.net/wp-content/uploads/2025/05/Rregullore-per-Organizimin-e-Brendshem-ne-Komunen-e-Gjakoves.pdf",
+      "source_title": "Rregullore për Organizimin e Brendshëm, Sistematizimin dhe Klasifikimin e Vendeve të Punës në Komunën e Gjakovës (nr. 01-011/01-16155, miratuar 27.03.2025)",
+      "retrieved_at": "2026-09-26T12:25:30+00:00",
+      "source_status": "ok"
+    },
+    {
+      "id": "SHS-05",
+      "name": "Mbrojtje shëndetësore e ujit dhe higjienës",
+      "description": "Masa për sigurimin e ujit të sigurt, higjienës, ushqimit të sigurt, dezinfektim/dezinsektim/deratizim.",
+      "source_url": "https://gjakova.rks-gov.net/staff/drejtoria-per-shendetesi-dhe-mireqenje-sociale/",
+      "source_title": "Staff SHS",
+      "retrieved_at": "2026-09-26T12:25:36+00:00",
+      "source_status": "ok"
+    },
+    {
+      "id": "SHS-06",
+      "name": "Mbikëqyrje epidemiologjike",
+      "description": "Mbikëqyrje e situatës epidemiologjike në nivel komunal.",
+      "source_url": "https://gjakova.rks-gov.net/wp-content/uploads/2025/05/Rregullore-per-Organizimin-e-Brendshem-ne-Komunen-e-Gjakoves.pdf",
+      "source_title": "Rregullore për Organizimin e Brendshëm, Sistematizimin dhe Klasifikimin e Vendeve të Punës në Komunën e Gjakovës (nr. 01-011/01-16155, miratuar 27.03.2025)",
+      "retrieved_at": "2026-09-26T12:25:30+00:00",
+      "source_status": "ok"
+    },
+    {
+      "id": "SHS-07",
+      "name": "Bashkëpagesa shëndetësore",
+      "description": "Vendosje dhe mbledhje e bashkëpagesave sipas kornizës së MSH.",
+      "source_url": "https://gjakova.rks-gov.net/wp-content/uploads/2025/05/Rregullore-per-Organizimin-e-Brendshem-ne-Komunen-e-Gjakoves.pdf",
+      "source_title": "Rregullore për Organizimin e Brendshëm, Sistematizimin dhe Klasifikimin e Vendeve të Punës në Komunën e Gjakovës (nr. 01-011/01-16155, miratuar 27.03.2025)",
+      "retrieved_at": "2026-09-26T12:25:30+00:00",
+      "source_status": "ok"
+    }
+  ],
+  "services": [],
+  "hard_negatives": [
+    {
+      "confused_with": "SHP",
+      "rule": "Ujë i pijshëm / epidemi / QKMF → SHS. Kanalizim / mbeturina → SHP."
+    }
+  ],
+  "example_requests": [
+    "Dua të aplikoj për strehim social.",
+    "Dua të aplikoj për subvencion shëndetësor komunal."
+  ],
+  "example_complaints": [
+    "Nuk kemi ujë të pastër në lagje.",
+    "Ambulanca e lagjes nuk po punon."
+  ],
+  "staff_url": "https://gjakova.rks-gov.net/staff/drejtoria-per-shendetesi-dhe-mireqenje-sociale/",
+  "kb_version": "1.0.0"
+}
