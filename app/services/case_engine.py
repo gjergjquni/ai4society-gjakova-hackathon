@@ -26,6 +26,7 @@ from app.services.embeddings import embed_query
 from app.services.intent import IntentClassifier
 from app.services.location import normalize_location
 from app.services.preprocess import normalize_albanian
+from app.services.structured import structured_fields
 
 
 def _new_id(prefix: str) -> str:
@@ -166,6 +167,15 @@ class CaseEngine:
         session.add(report)
         session.flush()
 
+        fields = structured_fields(
+            title=problem.title,
+            text=text,
+            department_id=dept.department_id,
+            procedure=dept.procedure,
+            confidence=dept.confidence,
+            has_photo=payload.has_photo,
+            evidence_text=evidence[0].text if evidence else dept.procedure,
+        )
         return ClassifyResponse(
             report_id=report.id,
             type=intent.label,  # type: ignore[arg-type]
@@ -174,6 +184,12 @@ class CaseEngine:
             department_id=dept.department_id,
             department=dept.department,
             confidence=round(dept.confidence, 4),
+            title=fields["title"],
+            category=fields["category"],
+            directorateId=fields["directorateId"],
+            sector=fields["sector"],
+            priority=fields["priority"],
+            summary=fields["summary"],
             evidence=evidence,
             duplicate=DuplicateOut(
                 decision=decision.decision,  # type: ignore[arg-type]
