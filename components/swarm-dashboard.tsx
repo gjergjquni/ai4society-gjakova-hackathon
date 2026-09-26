@@ -355,6 +355,9 @@ export default function SwarmDashboard() {
                 <span className="block truncate text-base font-semibold leading-tight text-[#161616] sm:text-[20px]">
                   {t.municipality}
                 </span>
+                <span className="mt-0.5 block truncate text-[13px] font-semibold leading-tight tracking-tight text-[#04408b] sm:text-sm">
+                  ReagoGjakove
+                </span>
               </span>
             </a>
             <div className="lang-switch shrink-0" role="navigation" aria-label="Language Switcher">
