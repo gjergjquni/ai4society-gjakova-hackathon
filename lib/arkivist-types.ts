@@ -3,11 +3,19 @@ import type { DirectorateId } from "./directorates";
 export type ReportStatus =
   | "SUBMITTED"
   | "AI_ANALYZED"
+  | "PENDING_REVIEW"
   | "NE_SHQYRTIM"
+  | "APPROVED"
   | "APROVUAR"
+  | "ASSIGNED"
   | "DERGUAR_TE_DREJTORIA"
+  | "REJECTED"
   | "REFUZUAR"
-  | "BASHKUAR";
+  | "BASHKUAR"
+  | "IN_PROGRESS"
+  | "RESOLVED"
+  | "VERIFIED"
+  | "CLOSED";
 
 export type DirectorateReportStatus =
   | "NEW"
@@ -43,6 +51,8 @@ export type ResolutionRecord = {
 
 export type ArkivistReport = {
   id: string;
+  reportId?: string;
+  workflowStatus?: string;
   title: string;
   description: string;
   citizenNotes?: string;
@@ -94,11 +104,19 @@ export const ARKIVIST_TIMELINE = [
 export const STATUS_LABELS: Record<ReportStatus, string> = {
   SUBMITTED: "Raportuar",
   AI_ANALYZED: "Analizuar nga AI",
+  PENDING_REVIEW: "Në shqyrtim",
   NE_SHQYRTIM: "Në shqyrtim",
+  APPROVED: "Aprovuar",
   APROVUAR: "Aprovuar",
+  ASSIGNED: "Te drejtoria",
   DERGUAR_TE_DREJTORIA: "Te drejtoria",
+  REJECTED: "Refuzuar",
   REFUZUAR: "Refuzuar",
   BASHKUAR: "Bashkuar",
+  IN_PROGRESS: "Në proces",
+  RESOLVED: "Zgjidhur",
+  VERIFIED: "Verifikuar",
+  CLOSED: "Mbyllur",
 };
 
 export const DIRECTORATE_STATUS_LABELS: Record<
@@ -163,11 +181,19 @@ export function arkivistTimelineIndex(status: ReportStatus): number {
       return 0;
     case "AI_ANALYZED":
       return 1;
+    case "PENDING_REVIEW":
     case "NE_SHQYRTIM":
       return 2;
+    case "APPROVED":
     case "APROVUAR":
+    case "ASSIGNED":
     case "DERGUAR_TE_DREJTORIA":
+    case "IN_PROGRESS":
+    case "RESOLVED":
+    case "VERIFIED":
+    case "CLOSED":
       return 3;
+    case "REJECTED":
     case "REFUZUAR":
     case "BASHKUAR":
       return 2;
@@ -176,12 +202,56 @@ export function arkivistTimelineIndex(status: ReportStatus): number {
   }
 }
 
+export function isPendingReview(status: ReportStatus | string): boolean {
+  return (
+    status === "SUBMITTED" ||
+    status === "AI_ANALYZED" ||
+    status === "NE_SHQYRTIM" ||
+    status === "PENDING_REVIEW"
+  );
+}
+
+export function isApprovedStatus(status: ReportStatus | string): boolean {
+  return (
+    status === "APROVUAR" ||
+    status === "APPROVED" ||
+    status === "DERGUAR_TE_DREJTORIA" ||
+    status === "ASSIGNED" ||
+    status === "IN_PROGRESS" ||
+    status === "RESOLVED" ||
+    status === "VERIFIED" ||
+    status === "CLOSED"
+  );
+}
+
+export function isRejectedStatus(status: ReportStatus | string): boolean {
+  return (
+    status === "REFUZUAR" ||
+    status === "REJECTED" ||
+    status === "BASHKUAR"
+  );
+}
+
+export function isAssignedToDirectorate(status: ReportStatus | string): boolean {
+  return (
+    status === "DERGUAR_TE_DREJTORIA" ||
+    status === "ASSIGNED" ||
+    status === "APROVUAR" ||
+    status === "APPROVED"
+  );
+}
+
 export function directorateTimelineIndex(
   status: ReportStatus,
   dirStatus?: DirectorateReportStatus,
 ): number {
   if (status === "REFUZUAR" || status === "BASHKUAR") return 2;
-  if (status !== "DERGUAR_TE_DREJTORIA" && status !== "APROVUAR") {
+  if (
+    status !== "DERGUAR_TE_DREJTORIA" &&
+    status !== "APROVUAR" &&
+    status !== "ASSIGNED" &&
+    status !== "APPROVED"
+  ) {
     return arkivistTimelineIndex(status);
   }
   switch (dirStatus) {

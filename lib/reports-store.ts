@@ -1,40 +1,28 @@
 "use client";
 
 import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
-import { mockReports } from "./arkivist-mock-data";
-import type { ArkivistReport } from "./arkivist-types";
-
-const STORAGE_KEY = "reagigjakove-reports-v1";
+import {
+  approveCase,
+  fetchCases,
+  mergeCase,
+  rejectCase,
+  resolveCase,
+  updateCaseClassification,
+  updateDirectorateStatus,
+  type ClassificationPayload,
+} from "./api";
+import type { ArkivistReport, ResolutionRecord } from "./arkivist-types";
+import type { DirectorateId } from "./directorates";
 
 type Listener = () => void;
 
-let memoryReports: ArkivistReport[] = structuredClone(mockReports);
+let memoryReports: ArkivistReport[] = [];
+let memoryLoading = true;
+let memoryError: string | null = null;
 const listeners = new Set<Listener>();
 
 function emit() {
-  listeners.forEach((l) => l());
-}
-
-function readFromStorage(): ArkivistReport[] | null {
-  if (typeof window === "undefined") return null;
-  try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
-    if (!raw) return null;
-    const parsed = JSON.parse(raw) as ArkivistReport[];
-    if (!Array.isArray(parsed) || parsed.length === 0) return null;
-    return parsed;
-  } catch {
-    return null;
-  }
-}
-
-function writeToStorage(reports: ArkivistReport[]) {
-  if (typeof window === "undefined") return;
-  try {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(reports));
-  } catch {
-    /* ignore quota */
-  }
+  listeners.forEach((listener) => listener());
 }
 
 function getSnapshot(): ArkivistReport[] {
@@ -42,7 +30,7 @@ function getSnapshot(): ArkivistReport[] {
 }
 
 function getServerSnapshot(): ArkivistReport[] {
-  return mockReports;
+  return memoryReports;
 }
 
 function subscribe(listener: Listener) {
@@ -50,57 +38,112 @@ function subscribe(listener: Listener) {
   return () => listeners.delete(listener);
 }
 
-export function hydrateReportsStore() {
-  const stored = readFromStorage();
-  if (stored) {
-    memoryReports = stored;
+function upsertReport(next: ArkivistReport) {
+  const exists = memoryReports.some(
+    (report) => report.id === next.id || (next.reportId && report.reportId === next.reportId),
+  );
+  memoryReports = exists
+    ? memoryReports.map((report) =>
+        report.id === next.id || report.id === next.reportId ? next : report,
+      )
+    : [next, ...memoryReports];
+  emit();
+}
+
+export async function refreshReports(directorateId?: DirectorateId) {
+  memoryLoading = true;
+  memoryError = null;
+  emit();
+  try {
+    memoryReports = await fetchCases(
+      directorateId ? { directorateId } : undefined,
+    );
+  } catch (error) {
+    memoryError =
+      error instanceof Error ? error.message : "Raportet nuk u ngarkuan.";
+    memoryReports = [];
+  } finally {
+    memoryLoading = false;
     emit();
   }
 }
 
-export function setReports(next: ArkivistReport[] | ((prev: ArkivistReport[]) => ArkivistReport[])) {
-  memoryReports =
-    typeof next === "function" ? next(memoryReports) : next;
-  writeToStorage(memoryReports);
-  emit();
-}
-
-export function updateReport(id: string, patch: Partial<ArkivistReport>) {
-  setReports((prev) =>
-    prev.map((r) => (r.id === id ? { ...r, ...patch } : r)),
-  );
-}
-
-export function useReports(): [
+export function useReports(directorateId?: DirectorateId): [
   ArkivistReport[],
   {
-    setReports: typeof setReports;
-    updateReport: typeof updateReport;
-    resetReports: () => void;
+    loading: boolean;
+    error: string | null;
+    refresh: () => Promise<void>;
+    approve: (id: string, payload: ClassificationPayload) => Promise<ArkivistReport>;
+    edit: (id: string, payload: ClassificationPayload) => Promise<ArkivistReport>;
+    reject: (id: string, reason: string) => Promise<ArkivistReport>;
+    merge: (id: string, targetId: string) => Promise<ArkivistReport>;
+    accept: (id: string) => Promise<ArkivistReport>;
+    resolve: (
+      id: string,
+      resolution: Omit<ResolutionRecord, "completedAt">,
+    ) => Promise<ArkivistReport>;
   },
 ] {
   const [hydrated, setHydrated] = useState(false);
+  const reports = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  const [loading, setLoading] = useState(memoryLoading);
+  const [error, setError] = useState<string | null>(memoryError);
 
   useEffect(() => {
-    hydrateReportsStore();
-    setHydrated(true);
+    const unsubscribe = subscribe(() => {
+      setLoading(memoryLoading);
+      setError(memoryError);
+    });
+    refreshReports(directorateId).finally(() => setHydrated(true));
+    return () => {
+      unsubscribe();
+    };
+  }, [directorateId]);
+
+  const refresh = useCallback(() => refreshReports(directorateId), [directorateId]);
+
+  const approve = useCallback(async (id: string, payload: ClassificationPayload) => {
+    const next = await approveCase(id, payload);
+    upsertReport(next);
+    return next;
   }, []);
 
-  const reports = useSyncExternalStore(
-    subscribe,
-    getSnapshot,
-    getServerSnapshot,
+  const edit = useCallback(async (id: string, payload: ClassificationPayload) => {
+    const next = await updateCaseClassification(id, payload);
+    upsertReport(next);
+    return next;
+  }, []);
+
+  const reject = useCallback(async (id: string, reason: string) => {
+    const next = await rejectCase(id, reason);
+    upsertReport(next);
+    return next;
+  }, []);
+
+  const merge = useCallback(async (id: string, targetId: string) => {
+    const next = await mergeCase(id, targetId);
+    upsertReport(next);
+    return next;
+  }, []);
+
+  const accept = useCallback(async (id: string) => {
+    const next = await updateDirectorateStatus(id, "IN_PROGRESS");
+    upsertReport(next);
+    return next;
+  }, []);
+
+  const resolve = useCallback(
+    async (id: string, resolution: Omit<ResolutionRecord, "completedAt">) => {
+      const next = await resolveCase(id, resolution);
+      upsertReport(next);
+      return next;
+    },
+    [],
   );
 
-  const resetReports = useCallback(() => {
-    memoryReports = structuredClone(mockReports);
-    writeToStorage(memoryReports);
-    emit();
-  }, []);
-
-  // Avoid hydration mismatch: show mock until client hydrates from localStorage
   return [
-    hydrated ? reports : mockReports,
-    { setReports, updateReport, resetReports },
+    hydrated ? reports : memoryReports,
+    { loading, error, refresh, approve, edit, reject, merge, accept, resolve },
   ];
 }
