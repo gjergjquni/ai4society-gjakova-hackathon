@@ -1,0 +1,171 @@
+{
+  "id": "BUJ",
+  "official_name": "Drejtoria për Bujqësi, Pylltari dhe Zhvillim Rural",
+  "short_name": "Bujqësi",
+  "neni": "Neni 18",
+  "mission": "Zhvillimi i sektorit të bujqësisë i harmonizuar sipas standardeve dhe praktikave të BE-së, i mbështetur nga fondet zhvillimore lokale, qeveritare dhe ndërkombëtare.",
+  "sectors": [
+    "Sektori për Bujqësi dhe Zhvillim Rural"
+  ],
+  "responsibilities": [
+    {
+      "id": "BUJ-R-001",
+      "text": "Hartimi, implementimi dhe monitorimi i politikave zhvillimore dhe strategjive për zhvillimin e bujqësisë.",
+      "source_url": "https://gjakova.rks-gov.net/wp-content/uploads/2025/05/Rregullore-per-Organizimin-e-Brendshem-ne-Komunen-e-Gjakoves.pdf",
+      "source_title": "Rregullore për Organizimin e Brendshëm, Sistematizimin dhe Klasifikimin e Vendeve të Punës në Komunën e Gjakovës (nr. 01-011/01-16155, miratuar 27.03.2025) — Neni 18",
+      "retrieved_at": "2026-09-26T12:25:30+00:00",
+      "excerpt": "t për Ekonomi dhe Turizëm janë: \n2.1.1. Hartimi, implementimi dhe monitorimi i politikave dhe strategjive për \nzhvillimin ekonomik dhe turistik në nivel lokal dhe rajonal si dhe zbatimi i \nrregullores për taksa në firmë duke përfshirë edhe",
+      "source_status": "ok"
+    },
+    {
+      "id": "BUJ-R-002",
+      "text": "Analiza dhe menaxhimi i buxhetit të investimeve kapitale dhe subvencioneve.",
+      "source_url": "https://gjakova.rks-gov.net/wp-content/uploads/2025/05/Rregullore-per-Organizimin-e-Brendshem-ne-Komunen-e-Gjakoves.pdf",
+      "source_title": "Rregullore për Organizimin e Brendshëm, Sistematizimin dhe Klasifikimin e Vendeve të Punës në Komunën e Gjakovës (nr. 01-011/01-16155, miratuar 27.03.2025) — Neni 18",
+      "retrieved_at": "2026-09-26T12:25:30+00:00",
+      "excerpt": "bledhjen e të mirave bujqësore. \n2.1.3. Analiza dhe menaxhimi i buxhetit të investimeve kapitale dhe subvencioneve, \nme orientim të qartë sipas strategjisë dhe planit të punës të miratuar. \n2.1.4. Monitorimi dhe verifikimi i gjithë subvenci",
+      "source_status": "ok"
+    },
+    {
+      "id": "BUJ-R-003",
+      "text": "Monitorimi dhe verifikimi i gjithë subvencioneve të ndara gjatë vitit të kaluar.",
+      "source_url": "https://gjakova.rks-gov.net/wp-content/uploads/2025/05/Rregullore-per-Organizimin-e-Brendshem-ne-Komunen-e-Gjakoves.pdf",
+      "source_title": "Rregullore për Organizimin e Brendshëm, Sistematizimin dhe Klasifikimin e Vendeve të Punës në Komunën e Gjakovës (nr. 01-011/01-16155, miratuar 27.03.2025) — Neni 18",
+      "retrieved_at": "2026-09-26T12:25:30+00:00",
+      "excerpt": "he planit të punës të miratuar. \n2.1.4. Monitorimi dhe verifikimi i gjithë subvencioneve të ndara gjatë vitit të kaluar, \npër të siguruar përdorimin e drejtë dhe efikas të tyre. \n2.1.5. Hartimi dhe implementimi i politikave për sigurinë ush",
+      "source_status": "ok"
+    },
+    {
+      "id": "BUJ-R-004",
+      "text": "Hartimi dhe implementimi i politikave për sigurinë ushqimore dhe cilësinë e produkteve ushqimore.",
+      "source_url": "https://gjakova.rks-gov.net/wp-content/uploads/2025/05/Rregullore-per-Organizimin-e-Brendshem-ne-Komunen-e-Gjakoves.pdf",
+      "source_title": "Rregullore për Organizimin e Brendshëm, Sistematizimin dhe Klasifikimin e Vendeve të Punës në Komunën e Gjakovës (nr. 01-011/01-16155, miratuar 27.03.2025) — Neni 18",
+      "retrieved_at": "2026-09-26T12:25:30+00:00",
+      "excerpt": "in e drejtë dhe efikas të tyre. \n2.1.5. Hartimi dhe implementimi i politikave për sigurinë ushqimore dhe cilësinë e \nprodukteve ushqimore, duke përfshirë të gjithë zinxhirin ushqimor nga ferma në \ntavolinë. \n2.1.6. Bashkëpunimi dhe shkëmbim",
+      "source_status": "ok"
+    },
+    {
+      "id": "BUJ-R-005",
+      "text": "Ruajtjen e tokave bujqësore nga degradimet fizike dhe kimike; mbikëqyrjen e veprimtarisë në lëmin e pylltarisë; hartimin e programeve për mirëmbajtjen e sistemeve të vjetra që nuk përfshihen me Hidrosistemin “Radoniqi”.",
+      "source_url": "https://gjakova.rks-gov.net/staff/drejtoria-per-bujqesi-pylltari-dhe-zhvillim-rural/",
+      "source_title": "Drejtoria për Bujqësi, Pylltari dhe Zhvillim Rural — Komuna e Gjakovës",
+      "retrieved_at": "2026-09-26T12:25:38+00:00",
+      "excerpt": "t Ky Drejtorat është përgjegjës për: a) ruajtjen e tokave bujqësore nga degradimet fizike dhe kimike, b) hartimin e programeve për zhvillimin e të gjitha degëve të bujqësisë, c) hartimin e programeve për industrinë përpunuese të produkteve",
+      "source_status": "ok"
+    }
+  ],
+  "procedures": [
+    {
+      "id": "BUJ-01",
+      "name": "Shëndërrim i tokës bujqësore në jo-bujqësore",
+      "description": "Pëlqim komunal (klasa V–VIII) për ndërrimin e destinimit të tokës bujqësore. Klasa I–IV shkon në MBPZHR.",
+      "source_url": "https://gjakova.rks-gov.net/sherbimet-2/",
+      "source_title": "Shërbimet – Bujqësi",
+      "retrieved_at": "2026-09-26T12:25:35+00:00",
+      "source_status": "ok"
+    },
+    {
+      "id": "BUJ-02",
+      "name": "Subvencion për kultura bujqësore dhe blegtori",
+      "description": "Aplikime për pagesa direkte që i publikon MBPZHR: grurë, misër, vreshta, pemë, perime dhe blegtori.",
+      "source_url": "https://gjakova.rks-gov.net/sherbimet-2/",
+      "source_title": "Shërbimet – Bujqësi",
+      "retrieved_at": "2026-09-26T12:25:35+00:00",
+      "source_status": "ok"
+    },
+    {
+      "id": "BUJ-03",
+      "name": "Ndërtim pendash dhe kanalesh ujitjeje",
+      "description": "Ndërtim i pendave dhe kanaleve për ujitjen e tokave bujqësore.",
+      "source_url": "https://gjakova.rks-gov.net/sherbimet-2/",
+      "source_title": "Shërbimet – Bujqësi",
+      "retrieved_at": "2026-09-26T12:25:35+00:00",
+      "source_status": "ok"
+    },
+    {
+      "id": "BUJ-04",
+      "name": "Vlerësim dëmesh nga fatkeqësi natyrore në fermë",
+      "description": "Vlerësim i dëmeve në prodhimtari bujqësore, blegtorale, pyje nga vërshime, borë, erëra.",
+      "source_url": "https://gjakova.rks-gov.net/sherbimet-2/",
+      "source_title": "Shërbimet – Bujqësi",
+      "retrieved_at": "2026-09-26T12:25:35+00:00",
+      "source_status": "ok"
+    },
+    {
+      "id": "BUJ-05",
+      "name": "Regjistrim elektronik i fermerëve (NIF)",
+      "description": "Regjistrim i fermerit dhe lëshim i numrit unik identifikues.",
+      "source_url": "https://gjakova.rks-gov.net/sherbimet-2/",
+      "source_title": "Shërbimet – Bujqësi",
+      "retrieved_at": "2026-09-26T12:25:35+00:00",
+      "source_status": "ok"
+    },
+    {
+      "id": "BUJ-06",
+      "name": "Aplikim për gjueti të përbashkëta",
+      "description": "Aplikim i shoqatave të gjuetarëve për shfrytëzim të vend-gjuetisë.",
+      "source_url": "https://gjakova.rks-gov.net/sherbimet-2/",
+      "source_title": "Shërbimet – Bujqësi",
+      "retrieved_at": "2026-09-26T12:25:35+00:00",
+      "source_status": "ok"
+    },
+    {
+      "id": "BUJ-07",
+      "name": "Kërkesë për prerje të pyjeve vetanake",
+      "description": "Kërkesë e pronarit për prerje të pyllit; leja lëshohet në bashkëpunim me APK.",
+      "source_url": "https://gjakova.rks-gov.net/sherbimet-2/",
+      "source_title": "Shërbimet – Bujqësi",
+      "retrieved_at": "2026-09-26T12:25:35+00:00",
+      "source_status": "ok"
+    },
+    {
+      "id": "BUJ-08",
+      "name": "Kërkesë për pyllëzim",
+      "description": "Kërkesë për pyllëzim të një sipërfaqeje (minimum 10 ari).",
+      "source_url": "https://gjakova.rks-gov.net/sherbimet-2/",
+      "source_title": "Shërbimet – Bujqësi",
+      "retrieved_at": "2026-09-26T12:25:35+00:00",
+      "source_status": "ok"
+    },
+    {
+      "id": "BUJ-09",
+      "name": "Shfrytëzim tokash pyjore",
+      "description": "Kërkesë për shfrytëzim të tokave pyjore në pronësi të shtetit.",
+      "source_url": "https://gjakova.rks-gov.net/sherbimet-2/",
+      "source_title": "Shërbimet – Bujqësi",
+      "retrieved_at": "2026-09-26T12:25:35+00:00",
+      "source_status": "ok"
+    },
+    {
+      "id": "BUJ-10",
+      "name": "Transport i masës drunore",
+      "description": "Fletë-përcjellëse për transport të masës së prerë drunore.",
+      "source_url": "https://gjakova.rks-gov.net/sherbimet-2/",
+      "source_title": "Shërbimet – Bujqësi",
+      "retrieved_at": "2026-09-26T12:25:35+00:00",
+      "source_status": "ok"
+    }
+  ],
+  "services": [
+    {
+      "url": "https://gjakova.rks-gov.net/sherbimet-2/",
+      "source_status": "ok"
+    }
+  ],
+  "hard_negatives": [
+    {
+      "confused_with": "URB",
+      "rule": "Pëlqim për shëndërrim toke bujqësore → BUJ. Leje ndërtimi pas ndërrimit të destinimit → URB."
+    }
+  ],
+  "example_requests": [
+    "Dua të aplikoj për subvencion për bujqësi.",
+    "Dua të regjistrohem si fermer me NIF."
+  ],
+  "example_complaints": [
+    "Kam aplikuar për subvencion por ende nuk kam marrë përgjigje.",
+    "Dëmet e vërshimit në tokën time nuk janë vlerësuar."
+  ],
+  "staff_url": "https://gjakova.rks-gov.net/staff/drejtoria-per-bujqesi-pylltari-dhe-zhvillim-rural/",
+  "kb_version": "1.0.0"
+}

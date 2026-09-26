@@ -1,0 +1,17 @@
+id,split,text_a,loc_a,lat_a,lon_a,text_b,loc_b,lat_b,lon_b,dept_a,dept_b,days_apart,label
+dup-1,test,Ka një gropë të madhe në rrugën e Pejës.,Rruga e Pejës,42.3805,20.4308,Rruga e Pejës është dëmtuar dhe ka një gropë.,"Rruga e Pejës, Gjakovë",42.3806,20.4309,INF,INF,2,1
+dup-2,test,Ka gropë në rrugën e Pejës.,Rruga e Pejës,42.3805,20.4308,Ka gropë në rrugën e Prizrenit.,Rruga e Prizrenit,42.376,20.435,INF,INF,1,0
+dup-3,test,Ju lutem rregulloni gropën te rruga e Pejës.,Rruga e Pejës,42.3805,20.4308,Ka një gropë të madhe në rrugën e Pejës.,Rruga e Pejës,42.38055,20.43085,INF,INF,5,1
+dup-4,test,Ndriçimi publik nuk punon në Lagjen e Re.,Lagjja e Re,42.385,20.428,Llamba e ndriçimit publik është e fikur në Lagjen e Re.,Lagjja e Re,42.3851,20.4281,SHP,SHP,3,1
+dup-5,test,Ndriçimi publik nuk punon në Lagjen e Re.,Lagjja e Re,42.385,20.428,Ndriçimi publik nuk punon te Çabrati.,Çabrati,42.37,20.42,SHP,SHP,1,0
+dup-gps-close,test,Ka gropë këtu.,,42.3805,20.4308,Rruga është dëmtuar keq.,,42.38055,20.43088,INF,INF,0,1
+dup-gps-far,test,Ka gropë këtu.,,42.3805,20.4308,Ka gropë këtu.,,42.39,20.45,INF,INF,0,0
+dup-protocol,train,Ankesë për lëndën prot. 01-011/44521.,Gjakovë,,,"Vazhdim i rastit prot. 01-011/44521, ende pa përgjigje.",Gjakovë,,,URB,URB,10,1
+dup-train-same-0,train,Ka gropë në Rruga e Pejës.,Rruga e Pejës,42.3805,20.4308,Ju lutem rregulloni gropën te Rruga e Pejës.,Rruga e Pejës,42.38055,20.430850000000003,INF,INF,2,1
+dup-train-diff-0,val,Ka gropë në Rruga e Pejës.,Rruga e Pejës,42.3805,20.4308,Ka gropë në Rruga Ismail Qemali.,Rruga Ismail Qemali,42.3812,20.429,INF,INF,1,0
+dup-train-same-1,train,Ka gropë në Rruga Ismail Qemali.,Rruga Ismail Qemali,42.3812,20.429,Ju lutem rregulloni gropën te Rruga Ismail Qemali.,Rruga Ismail Qemali,42.38125,20.42905,INF,INF,2,1
+dup-train-diff-1,train,Ka gropë në Rruga Ismail Qemali.,Rruga Ismail Qemali,42.3812,20.429,Ka gropë në te spitali.,te spitali,42.378,20.433,INF,INF,1,0
+dup-train-same-2,train,Ka gropë në te spitali.,te spitali,42.378,20.433,Ju lutem rregulloni gropën te te spitali.,te spitali,42.37805,20.43305,INF,INF,2,1
+dup-train-diff-2,train,Ka gropë në te spitali.,te spitali,42.378,20.433,Ka gropë në te stadiumi.,te stadiumi,42.382,20.425,INF,INF,1,0
+dup-train-same-3,val,Ka gropë në te stadiumi.,te stadiumi,42.382,20.425,Ju lutem rregulloni gropën te te stadiumi.,te stadiumi,42.38205,20.425050000000002,INF,INF,2,1
+dup-train-diff-3,train,Ka gropë në te stadiumi.,te stadiumi,42.382,20.425,Ka gropë në Rruga e Pejës.,Rruga e Pejës,42.3805,20.4308,INF,INF,1,0

@@ -1,0 +1,23 @@
+{
+  "merge_threshold": 0.72,
+  "window_days": 30,
+  "geo_radius_m": 100.0,
+  "weights": {
+    "text": 0.28,
+    "location": 0.34,
+    "department": 0.16,
+    "time": 0.1,
+    "entities": 0.12
+  },
+  "train_metrics": {
+    "threshold": 0.55,
+    "precision": 1.0,
+    "recall": 1.0,
+    "fp": 0,
+    "fn": 0,
+    "tp": 5,
+    "tn": 4,
+    "cost": 0.0
+  },
+  "note": "False merge is worse than missed merge. Location incompatibility blocks merge."
+}

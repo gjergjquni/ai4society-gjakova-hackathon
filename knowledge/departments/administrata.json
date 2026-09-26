@@ -1,0 +1,245 @@
+{
+  "id": "ADM",
+  "official_name": "Drejtoria e Administratës",
+  "short_name": "Administrata",
+  "neni": "Neni 9",
+  "mission": "Ofrimi i shërbimeve të gjendjes civile, administrimit të dokumenteve, teknologjisë informative dhe logjistikës për qytetarët dhe institucionin.",
+  "sectors": [
+    "Sektori për Gjendje Civile",
+    "Sektori për Administrimin e Dokumenteve",
+    "Sektori për Teknologji Informative dhe Logjistikë"
+  ],
+  "responsibilities": [
+    {
+      "id": "ADM-R-001",
+      "text": "Mbajtja dhe ruajtja e librave amëz te të lindurve, martuarve dhe vdekurve.",
+      "source_url": "https://gjakova.rks-gov.net/wp-content/uploads/2025/05/Rregullore-per-Organizimin-e-Brendshem-ne-Komunen-e-Gjakoves.pdf",
+      "source_title": "Rregullore për Organizimin e Brendshëm, Sistematizimin dhe Klasifikimin e Vendeve të Punës në Komunën e Gjakovës (nr. 01-011/01-16155, miratuar 27.03.2025) — Neni 9",
+      "retrieved_at": "2026-09-26T12:25:30+00:00",
+      "excerpt": "ktorit për Gjendje Civile janë: \n2.1.1. Mbajtja dhe ruajtja e librave amëz te të lindurve, martuarve dhe vdekurve. \n2.1.2. Regjistrimi i të porsalindurve në LAL. \n2.1.3.  Regjistrimi i të vdekurve në LAV. \n2.1.4.  Kurorëzimi i martesave bre",
+      "source_status": "ok"
+    },
+    {
+      "id": "ADM-R-002",
+      "text": "Regjistrimi i të porsalindurve në LAL.",
+      "source_url": "https://gjakova.rks-gov.net/wp-content/uploads/2025/05/Rregullore-per-Organizimin-e-Brendshem-ne-Komunen-e-Gjakoves.pdf",
+      "source_title": "Rregullore për Organizimin e Brendshëm, Sistematizimin dhe Klasifikimin e Vendeve të Punës në Komunën e Gjakovës (nr. 01-011/01-16155, miratuar 27.03.2025) — Neni 9",
+      "retrieved_at": "2026-09-26T12:25:30+00:00",
+      "excerpt": "ndurve, martuarve dhe vdekurve. \n2.1.2. Regjistrimi i të porsalindurve në LAL. \n2.1.3.  Regjistrimi i të vdekurve në LAV. \n2.1.4.  Kurorëzimi i martesave brenda dhe jashtë Komunës dhe regjistrimi në LAM. \n2.1.5. Ndryshimi dhe përmirësimi i",
+      "source_status": "ok"
+    },
+    {
+      "id": "ADM-R-003",
+      "text": "Regjistrimi i të vdekurve në LAV.",
+      "source_url": "https://gjakova.rks-gov.net/wp-content/uploads/2025/05/Rregullore-per-Organizimin-e-Brendshem-ne-Komunen-e-Gjakoves.pdf",
+      "source_title": "Rregullore për Organizimin e Brendshëm, Sistematizimin dhe Klasifikimin e Vendeve të Punës në Komunën e Gjakovës (nr. 01-011/01-16155, miratuar 27.03.2025) — Neni 9",
+      "retrieved_at": "2026-09-26T12:25:30+00:00",
+      "excerpt": "imi i të porsalindurve në LAL. \n2.1.3.  Regjistrimi i të vdekurve në LAV. \n2.1.4.  Kurorëzimi i martesave brenda dhe jashtë Komunës dhe regjistrimi në LAM. \n2.1.5. Ndryshimi dhe përmirësimi i emrit personal sipas kërkesës së palës. \n2.1.6.",
+      "source_status": "ok"
+    },
+    {
+      "id": "ADM-R-004",
+      "text": "Kurorëzimi i martesave brenda dhe jashtë Komunës dhe regjistrimi në LAM.",
+      "source_url": "https://gjakova.rks-gov.net/wp-content/uploads/2025/05/Rregullore-per-Organizimin-e-Brendshem-ne-Komunen-e-Gjakoves.pdf",
+      "source_title": "Rregullore për Organizimin e Brendshëm, Sistematizimin dhe Klasifikimin e Vendeve të Punës në Komunën e Gjakovës (nr. 01-011/01-16155, miratuar 27.03.2025) — Neni 9",
+      "retrieved_at": "2026-09-26T12:25:30+00:00",
+      "excerpt": "jistrimi i të vdekurve në LAV. \n2.1.4.  Kurorëzimi i martesave brenda dhe jashtë Komunës dhe regjistrimi në LAM. \n2.1.5. Ndryshimi dhe përmirësimi i emrit personal sipas kërkesës së palës. \n2.1.6. Lëshon certifikatat (për faktet që mbajnë e",
+      "source_status": "ok"
+    },
+    {
+      "id": "ADM-R-005",
+      "text": "Ndryshimi dhe përmirësimi i emrit personal sipas kërkesës së palës.",
+      "source_url": "https://gjakova.rks-gov.net/wp-content/uploads/2025/05/Rregullore-per-Organizimin-e-Brendshem-ne-Komunen-e-Gjakoves.pdf",
+      "source_title": "Rregullore për Organizimin e Brendshëm, Sistematizimin dhe Klasifikimin e Vendeve të Punës në Komunën e Gjakovës (nr. 01-011/01-16155, miratuar 27.03.2025) — Neni 9",
+      "retrieved_at": "2026-09-26T12:25:30+00:00",
+      "excerpt": "Komunës dhe regjistrimi në LAM. \n2.1.5. Ndryshimi dhe përmirësimi i emrit personal sipas kërkesës së palës. \n2.1.6. Lëshon certifikatat (për faktet që mbajnë evidencë sipas detyrës zyrtare): \ncertifikatat e lindjeve, statusit martesor, mart",
+      "source_status": "ok"
+    },
+    {
+      "id": "ADM-R-006",
+      "text": "Lëshon certifikatat: certifikatat e lindjeve, statusit martesor, martesës, vendbanimit, vdekjes, bashkësisë familjare, shtetësisë, të qenit gjallë dhe deklaratën për mbajtjen e familjes.",
+      "source_url": "https://gjakova.rks-gov.net/wp-content/uploads/2025/05/Rregullore-per-Organizimin-e-Brendshem-ne-Komunen-e-Gjakoves.pdf",
+      "source_title": "Rregullore për Organizimin e Brendshëm, Sistematizimin dhe Klasifikimin e Vendeve të Punës në Komunën e Gjakovës (nr. 01-011/01-16155, miratuar 27.03.2025) — Neni 9",
+      "retrieved_at": "2026-09-26T12:25:30+00:00",
+      "excerpt": "Faqe 1 nga 42 \n \n \n \nREPUBLIKA E KOSOVËS \nREPUBLIKA KOSOVA/ REPUBLIC OF KOSOVO \nKOMUNA E GJAKOVËS \nOPŠTINA DJAKOVICA/MUNICIPALITY OF GJAKOVA \n_____________________________________________________________________________ \n \n \n \n \n \n \n \n \n \n ",
+      "source_status": "ok"
+    },
+    {
+      "id": "ADM-R-007",
+      "text": "Zhvillon procedurën për fitimin dhe humbjen e shtetësisë.",
+      "source_url": "https://gjakova.rks-gov.net/wp-content/uploads/2025/05/Rregullore-per-Organizimin-e-Brendshem-ne-Komunen-e-Gjakoves.pdf",
+      "source_title": "Rregullore për Organizimin e Brendshëm, Sistematizimin dhe Klasifikimin e Vendeve të Punës në Komunën e Gjakovës (nr. 01-011/01-16155, miratuar 27.03.2025) — Neni 9",
+      "retrieved_at": "2026-09-26T12:25:30+00:00",
+      "excerpt": "e për pjesëtaret e diasporës.   \n2.1.8. Zhvillon procedurën për fitimin dhe humbjen e shtetësisë. \n2.1.9. Të gjitha punët e tjera të përcaktuara sipas legjislacionit në fuqi dhe kompetencat \ne deleguara nga pushteti qendror. \n2.2.Udhëheqësi",
+      "source_status": "ok"
+    },
+    {
+      "id": "ADM-R-008",
+      "text": "Zbaton procedurat për menaxhimin dhe administrimin e dokumenteve, informon mbi procedurat administrative si dhe pranon, kontrollon, klasifikon dhe evidenton dokumentet.",
+      "source_url": "https://gjakova.rks-gov.net/wp-content/uploads/2025/05/Rregullore-per-Organizimin-e-Brendshem-ne-Komunen-e-Gjakoves.pdf",
+      "source_title": "Rregullore për Organizimin e Brendshëm, Sistematizimin dhe Klasifikimin e Vendeve të Punës në Komunën e Gjakovës (nr. 01-011/01-16155, miratuar 27.03.2025) — Neni 9",
+      "retrieved_at": "2026-09-26T12:25:30+00:00",
+      "excerpt": "menteve janë: \nFaqe 13 nga 42 \n \n3.1.1. Zbaton procedurat për menaxhimin dhe administrimin e dokumenteve, informon \nmbi procedurat administrative si dhe pranon, kontrollon, klasifikon dhe \nevidenton dokumentet. \n3.1.2. Përpunon dhe administ",
+      "source_status": "ok"
+    },
+    {
+      "id": "ADM-R-009",
+      "text": "Administron klasifikimin e lëndëve dhe akteve si dhe menaxhon Arkivin e Komunës.",
+      "source_url": "https://gjakova.rks-gov.net/wp-content/uploads/2025/05/Rregullore-per-Organizimin-e-Brendshem-ne-Komunen-e-Gjakoves.pdf",
+      "source_title": "Rregullore për Organizimin e Brendshëm, Sistematizimin dhe Klasifikimin e Vendeve të Punës në Komunën e Gjakovës (nr. 01-011/01-16155, miratuar 27.03.2025) — Neni 9",
+      "retrieved_at": "2026-09-26T12:25:30+00:00",
+      "excerpt": "arkivit kompetent të \nKomunës. \n3.1.6. Administron klasifikimin e lëndëve dhe akteve (shkresave) si dhe menaxhon \nArkivin e Komunës, sipas legjislacionit në fuqi. \n3.1.7. Ndërsa në recepsion iu përgjigjet thirrjeve telefonike, përcakton që",
+      "source_status": "ok"
+    },
+    {
+      "id": "ADM-R-010",
+      "text": "Përgjigjet pyetjeve lidhur me institucionin, orienton palët për realizimin e kërkesave të tyre, jep informacionet e duhura dhe mirëpret vizitorët në institucion.",
+      "source_url": "https://gjakova.rks-gov.net/wp-content/uploads/2025/05/Rregullore-per-Organizimin-e-Brendshem-ne-Komunen-e-Gjakoves.pdf",
+      "source_title": "Rregullore për Organizimin e Brendshëm, Sistematizimin dhe Klasifikimin e Vendeve të Punës në Komunën e Gjakovës (nr. 01-011/01-16155, miratuar 27.03.2025) — Neni 9",
+      "retrieved_at": "2026-09-26T12:25:30+00:00",
+      "excerpt": "njësitë organizative përkatëse. \n3.1.8. Përgjigjet pyetjeve lidhur me institucionin, orienton palët për realizimin e \nkërkesave të tyre, jep informacionet e duhura dhe mirëpret vizitorët në \ninstitucion, përcakton qëllimin e vizitës së vizi",
+      "source_status": "ok"
+    },
+    {
+      "id": "ADM-R-011",
+      "text": "Shërbimi i Ofiqarisë ofron lëshimin e certifikatës së gjendjes civile, regjistrimet e lindjeve, certifikatën e lindjes, certifikatën e kurorëzimit, certifikatën e vdekjes, certifikatën e vendbanimit, certifikatën e gjendjes familjare, certifikatën mbi statusin martesor, vërtetimin për vendqëndrim, ndërrimin e emrit personal.",
+      "source_url": "https://gjakova.rks-gov.net/staff/drejtoria-per-pune-te-pergjithshme-administrative/",
+      "source_title": "Drejtoria për punë të përgjithshme administrative — Komuna e Gjakovës",
+      "retrieved_at": "2026-09-26T12:25:36+00:00",
+      "excerpt": "Drejtoria për punë të përgjithshme administrative - Komuna e Gjakovës Skip to content SQ EN SR Generic selectors Vetem tekstet e njejta Kërkoni në titull Kërkoni në përmbajtje Post Type Selectors Postimet post Faqe Lajme Ngjarje Thirrjet pu",
+      "source_status": "ok"
+    }
+  ],
+  "procedures": [
+    {
+      "id": "ADM-01",
+      "name": "Certifikatë lindjeje",
+      "description": "Pajisje e palës me certifikatë lindjeje nga librat amëz.",
+      "source_url": "https://gjakova.rks-gov.net/sherbimet-6/",
+      "source_title": "Shërbimet Administrata",
+      "retrieved_at": "2026-09-26T12:25:35+00:00",
+      "source_status": "ok"
+    },
+    {
+      "id": "ADM-02",
+      "name": "Certifikatë kurorëzimi",
+      "description": "Pajisje me certifikatë kurorëzimi.",
+      "source_url": "https://gjakova.rks-gov.net/sherbimet-6/",
+      "source_title": "Shërbimet Administrata",
+      "retrieved_at": "2026-09-26T12:25:35+00:00",
+      "source_status": "ok"
+    },
+    {
+      "id": "ADM-03",
+      "name": "Certifikatë statusi martesor",
+      "description": "Lëshimi i certifikatës së statusit martesor.",
+      "source_url": "https://gjakova.rks-gov.net/sherbimet-6/",
+      "source_title": "Shërbimet Administrata",
+      "retrieved_at": "2026-09-26T12:25:35+00:00",
+      "source_status": "ok"
+    },
+    {
+      "id": "ADM-04",
+      "name": "Certifikatë shtetësie",
+      "description": "Lëshimi i certifikatës së shtetësisë.",
+      "source_url": "https://gjakova.rks-gov.net/sherbimet-6/",
+      "source_title": "Shërbimet Administrata",
+      "retrieved_at": "2026-09-26T12:25:35+00:00",
+      "source_status": "ok"
+    },
+    {
+      "id": "ADM-05",
+      "name": "Certifikatë bashkësie familjare",
+      "description": "Lëshimi i certifikatës së bashkësisë familjare.",
+      "source_url": "https://gjakova.rks-gov.net/sherbimet-6/",
+      "source_title": "Shërbimet Administrata",
+      "retrieved_at": "2026-09-26T12:25:35+00:00",
+      "source_status": "ok"
+    },
+    {
+      "id": "ADM-06",
+      "name": "Certifikatë vendbanimi",
+      "description": "Lëshimi i certifikatës së vendbanimit.",
+      "source_url": "https://gjakova.rks-gov.net/sherbimet-6/",
+      "source_title": "Shërbimet Administrata",
+      "retrieved_at": "2026-09-26T12:25:35+00:00",
+      "source_status": "ok"
+    },
+    {
+      "id": "ADM-07",
+      "name": "Vërtetim vend-qëndrimi",
+      "description": "Lëshimi i vërtetimit për vend-qëndrim.",
+      "source_url": "https://gjakova.rks-gov.net/sherbimet-6/",
+      "source_title": "Shërbimet Administrata",
+      "retrieved_at": "2026-09-26T12:25:35+00:00",
+      "source_status": "ok"
+    },
+    {
+      "id": "ADM-08",
+      "name": "Dëshmi vdekjeje",
+      "description": "Lëshimi i dëshmisë së vdekjes.",
+      "source_url": "https://gjakova.rks-gov.net/sherbimet-6/",
+      "source_title": "Shërbimet Administrata",
+      "retrieved_at": "2026-09-26T12:25:35+00:00",
+      "source_status": "ok"
+    },
+    {
+      "id": "ADM-09",
+      "name": "Korrigjim apo ndërrim emri/mbiemri",
+      "description": "Procedura për ndërrimin ose korrigjimin e emrit personal.",
+      "source_url": "https://gjakova.rks-gov.net/sherbimet-6/",
+      "source_title": "Shërbimet Administrata",
+      "retrieved_at": "2026-09-26T12:25:35+00:00",
+      "source_status": "ok"
+    },
+    {
+      "id": "ADM-10",
+      "name": "Regjistrim lindjeje",
+      "description": "Regjistrim i rregullt ose i mëvonshëm i lindjes në librat amëz.",
+      "source_url": "https://gjakova.rks-gov.net/sherbimet-6/",
+      "source_title": "Shërbimet Administrata",
+      "retrieved_at": "2026-09-26T12:25:35+00:00",
+      "source_status": "ok"
+    },
+    {
+      "id": "ADM-11",
+      "name": "Kurorëzim / lidhje martese",
+      "description": "Kurorëzim brenda lokaleve të Komunës ose me shtetas të huaj.",
+      "source_url": "https://gjakova.rks-gov.net/sherbimet-6/",
+      "source_title": "Shërbimet Administrata",
+      "retrieved_at": "2026-09-26T12:25:35+00:00",
+      "source_status": "ok"
+    },
+    {
+      "id": "ADM-12",
+      "name": "Regjistrim vdekjeje",
+      "description": "Regjistrim i rregullt ose i mëvonshëm i vdekjes.",
+      "source_url": "https://gjakova.rks-gov.net/sherbimet-6/",
+      "source_title": "Shërbimet Administrata",
+      "retrieved_at": "2026-09-26T12:25:35+00:00",
+      "source_status": "ok"
+    }
+  ],
+  "services": [
+    {
+      "url": "https://gjakova.rks-gov.net/sherbimet-6/",
+      "source_status": "ok"
+    }
+  ],
+  "hard_negatives": [
+    {
+      "confused_with": "FIN",
+      "rule": "Certifikatë civile / emër / martesë → ADM. Tatim në pronë → FIN."
+    }
+  ],
+  "example_requests": [
+    "Dua të pajisem me certifikatë lindjeje.",
+    "Dua të regjistroj martesën në gjendjen civile."
+  ],
+  "example_complaints": [
+    "Nuk po më lëshojnë certifikatën e lindjes edhe pse e kam kërkuar para dy javësh.",
+    "Emri im në certifikatë është i gabuar dhe askush nuk po e korrigjon."
+  ],
+  "staff_url": "https://gjakova.rks-gov.net/staff/drejtoria-per-pune-te-pergjithshme-administrative/",
+  "kb_version": "1.0.0"
+}

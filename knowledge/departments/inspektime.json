@@ -1,0 +1,186 @@
+{
+  "id": "INS",
+  "official_name": "Drejtoria për Inspektime",
+  "short_name": "Inspektime",
+  "neni": "Neni 21",
+  "mission": "Mbikëqyrja inspektuese në fushën e inspektoratit të shërbimeve publike, inspektoratit të mjedisit, inspektoratit të ndërtimit dhe inspektoratit të tregut.",
+  "sectors": [
+    "Sektori i Inspektoratit të Shërbimeve Publike",
+    "Sektori i Inspektoratit të Ndërtimit",
+    "Sektori i Inspektoratit të Tregut"
+  ],
+  "responsibilities": [
+    {
+      "id": "INS-R-001",
+      "text": "Mbikëqyrjen inspektuese me qëllim të mbrojtjes së rrugëve publike komunale, pronës së paluajtshme, aseteve, instalimeve publike, trotuareve, shesheve, parqeve, varrezave dhe hapësirave tjera publike nga uzurpimet, dëmtimet, keqpërdorimet dhe shfrytëzimet pa pëlqime.",
+      "source_url": "https://gjakova.rks-gov.net/wp-content/uploads/2025/05/Rregullore-per-Organizimin-e-Brendshem-ne-Komunen-e-Gjakoves.pdf",
+      "source_title": "Rregullore për Organizimin e Brendshëm, Sistematizimin dhe Klasifikimin e Vendeve të Punës në Komunën e Gjakovës (nr. 01-011/01-16155, miratuar 27.03.2025) — Neni 21",
+      "retrieved_at": "2026-09-26T12:25:30+00:00",
+      "excerpt": "tit të Shërbimeve Publike janë: \n2.1.1. Mbikëqyrjen inspektuese me qëllim të mbrojtjes së rrugëve publike komunale, \npronës së paluajtshme, aseteve, instalimeve publike komunale, trotuareve, \nshesheve, parqeve, varrezave, shëtitoreve, sipër",
+      "source_status": "ok"
+    },
+    {
+      "id": "INS-R-002",
+      "text": "Mbikëqyrjen inspektuese të përputhjes së ndërtimit me dokumentacionin ndërtimor dhe kodin e aplikuar ndërtimor.",
+      "source_url": "https://gjakova.rks-gov.net/wp-content/uploads/2025/05/Rregullore-per-Organizimin-e-Brendshem-ne-Komunen-e-Gjakoves.pdf",
+      "source_title": "Rregullore për Organizimin e Brendshëm, Sistematizimin dhe Klasifikimin e Vendeve të Punës në Komunën e Gjakovës (nr. 01-011/01-16155, miratuar 27.03.2025) — Neni 21",
+      "retrieved_at": "2026-09-26T12:25:30+00:00",
+      "excerpt": "nspektoratit të Ndërtimit janë: \n3.1.1. Mbikëqyrjen inspektuese të përputhjes së ndërtimit me dokumentacionin \nndërtimor dhe kodin e aplikuar ndërtimor. \n3.1.2. Mbikëqyrjen inspektuese të instalimeve, renovimin dhe zgjerimin e ndërtesave \ns",
+      "source_status": "ok"
+    },
+    {
+      "id": "INS-R-003",
+      "text": "Mbikëqyrjen inspektuese të ndërrimit të destinimit dhe rrënimin e çfarëdo ndërtese apo strukture pa leje përkatëse.",
+      "source_url": "https://gjakova.rks-gov.net/wp-content/uploads/2025/05/Rregullore-per-Organizimin-e-Brendshem-ne-Komunen-e-Gjakoves.pdf",
+      "source_title": "Rregullore për Organizimin e Brendshëm, Sistematizimin dhe Klasifikimin e Vendeve të Punës në Komunën e Gjakovës (nr. 01-011/01-16155, miratuar 27.03.2025) — Neni 21",
+      "retrieved_at": "2026-09-26T12:25:30+00:00",
+      "excerpt": "sipas dokumentacionin përkatës. \n3.1.3. Mbikëqyrjen inspektuese të ndërrimit të destinimit dhe rrënimin e çfarëdo \nndërtese apo strukture pa leje përkatëse. \n3.1.4. Nxjerrjen e akteve administrative për mënjanimin e parregullsive, për mbyll",
+      "source_status": "ok"
+    },
+    {
+      "id": "INS-R-004",
+      "text": "Nxjerrjen e akteve administrative për mënjanimin e parregullsive, për mbylljen e vend ndërtimit, për ndalimin e punimeve e deri në rrënim të objekteve.",
+      "source_url": "https://gjakova.rks-gov.net/wp-content/uploads/2025/05/Rregullore-per-Organizimin-e-Brendshem-ne-Komunen-e-Gjakoves.pdf",
+      "source_title": "Rregullore për Organizimin e Brendshëm, Sistematizimin dhe Klasifikimin e Vendeve të Punës në Komunën e Gjakovës (nr. 01-011/01-16155, miratuar 27.03.2025) — Neni 21",
+      "retrieved_at": "2026-09-26T12:25:30+00:00",
+      "excerpt": "po strukture pa leje përkatëse. \n3.1.4. Nxjerrjen e akteve administrative për mënjanimin e parregullsive, për mbylljen \ne vend ndërtimit, për ndalimin e punimeve e deri në rrënim të objekteve. \n3.1.5. Mbikëqyrjen inspektuese të çdo objekti",
+      "source_status": "ok"
+    },
+    {
+      "id": "INS-R-005",
+      "text": "Mbikëqyrjen inspektuese me qëllim të mbrojtjes së të drejtave të konsumatorëve, produkteve, metrologjisë, veprimtarive turistike, hoteliere dhe zejtare.",
+      "source_url": "https://gjakova.rks-gov.net/wp-content/uploads/2025/05/Rregullore-per-Organizimin-e-Brendshem-ne-Komunen-e-Gjakoves.pdf",
+      "source_title": "Rregullore për Organizimin e Brendshëm, Sistematizimin dhe Klasifikimin e Vendeve të Punës në Komunën e Gjakovës (nr. 01-011/01-16155, miratuar 27.03.2025) — Neni 21",
+      "retrieved_at": "2026-09-26T12:25:30+00:00",
+      "excerpt": "tit të Shërbimeve Publike janë: \n2.1.1. Mbikëqyrjen inspektuese me qëllim të mbrojtjes së rrugëve publike komunale, \npronës së paluajtshme, aseteve, instalimeve publike komunale, trotuareve, \nshesheve, parqeve, varrezave, shëtitoreve, sipër",
+      "source_status": "ok"
+    },
+    {
+      "id": "INS-R-006",
+      "text": "Mbikëqyrjen dhe lëshimin e pëlqimeve për lokale afariste, kushtet për të bërë biznes të cilat janë të përcaktuara me legjislacionin në fuqi.",
+      "source_url": "https://gjakova.rks-gov.net/staff/drejtoria-per-pune-inspektuese/",
+      "source_title": "Drejtoria për Inspektime — Komuna e Gjakovës",
+      "retrieved_at": "2026-09-26T12:25:39+00:00",
+      "excerpt": "mimeve,pagesën dhe dhënien e faturave). Mbikëqyrjen dhe lëshimin e pëlqimeve për lokale afariste, kushtet për të bërë biznes të cilat janë të përcaktuara me legjislacionin në fuqi. Punë të tjera të përcaktuara me ligj dhe akte nen ligjore t",
+      "source_status": "ok"
+    },
+    {
+      "id": "INS-R-007",
+      "text": "Personat fizik apo juridik të cilët kanë ankesa dhe kërkesa për fushëveprimtarinë e inspektorëve mund të drejtohen në arkivin e komunës dhe të mbushin formularin e ankesës apo kërkesës. Inspektimi kryhet nëse ankesa paralajmëron shkelje të dyshuara.",
+      "source_url": "https://gjakova.rks-gov.net/staff/drejtoria-per-pune-inspektuese/",
+      "source_title": "Drejtoria për Inspektime — Komuna e Gjakovës",
+      "retrieved_at": "2026-09-26T12:25:39+00:00",
+      "excerpt": "Drejtoria për Inspektime - Komuna e Gjakovës Skip to content SQ EN SR Generic selectors Vetem tekstet e njejta Kërkoni në titull Kërkoni në përmbajtje Post Type Selectors Postimet post Faqe Lajme Ngjarje Thirrjet publike Si mund të ? SQ EN ",
+      "source_status": "ok"
+    }
+  ],
+  "procedures": [
+    {
+      "id": "INS-01",
+      "name": "Ankesë / kërkesë për inspektim",
+      "description": "Formular ankesë/kërkesë në Arkivën e komunës; përcillet te inspektori kompetent brenda 24 orëve.",
+      "source_url": "https://gjakova.rks-gov.net/staff/drejtoria-per-pune-inspektuese/",
+      "source_title": "Staff INS",
+      "retrieved_at": "2026-09-26T12:25:39+00:00",
+      "source_status": "ok"
+    },
+    {
+      "id": "INS-02",
+      "name": "Inspektim ndërtimi pa leje",
+      "description": "Mbikëqyrje e ndërtimit pa leje, ndalim punimesh, mbyllje vendndërtimi, deri në rrënim.",
+      "source_url": "https://gjakova.rks-gov.net/wp-content/uploads/2025/05/Rregullore-per-Organizimin-e-Brendshem-ne-Komunen-e-Gjakoves.pdf",
+      "source_title": "Rregullore për Organizimin e Brendshëm, Sistematizimin dhe Klasifikimin e Vendeve të Punës në Komunën e Gjakovës (nr. 01-011/01-16155, miratuar 27.03.2025)",
+      "retrieved_at": "2026-09-26T12:25:30+00:00",
+      "source_status": "ok"
+    },
+    {
+      "id": "INS-03",
+      "name": "Inspektim përputhjeje me lejen e ndërtimit",
+      "description": "Mbikëqyrje e përputhjes së ndërtimit me dokumentacionin dhe kodin ndërtimor.",
+      "source_url": "https://gjakova.rks-gov.net/wp-content/uploads/2025/05/Rregullore-per-Organizimin-e-Brendshem-ne-Komunen-e-Gjakoves.pdf",
+      "source_title": "Rregullore për Organizimin e Brendshëm, Sistematizimin dhe Klasifikimin e Vendeve të Punës në Komunën e Gjakovës (nr. 01-011/01-16155, miratuar 27.03.2025)",
+      "retrieved_at": "2026-09-26T12:25:30+00:00",
+      "source_status": "ok"
+    },
+    {
+      "id": "INS-04",
+      "name": "Inspektim tregu / konsumator",
+      "description": "Mbikëqyrje e tregut, të drejtave të konsumatorit, çmimeve, reklamimit.",
+      "source_url": "https://gjakova.rks-gov.net/wp-content/uploads/2025/05/Rregullore-per-Organizimin-e-Brendshem-ne-Komunen-e-Gjakoves.pdf",
+      "source_title": "Rregullore për Organizimin e Brendshëm, Sistematizimin dhe Klasifikimin e Vendeve të Punës në Komunën e Gjakovës (nr. 01-011/01-16155, miratuar 27.03.2025)",
+      "retrieved_at": "2026-09-26T12:25:30+00:00",
+      "source_status": "ok"
+    },
+    {
+      "id": "INS-05",
+      "name": "Pëlqim për lokal afariste",
+      "description": "Lëshim pëlqimi për lokale afariste dhe kushte për të bërë biznes.",
+      "source_url": "https://gjakova.rks-gov.net/staff/drejtoria-per-pune-inspektuese/",
+      "source_title": "Staff INS",
+      "retrieved_at": "2026-09-26T12:25:39+00:00",
+      "source_status": "ok"
+    },
+    {
+      "id": "INS-06",
+      "name": "Inspektim i shfrytëzimit të hapësirës publike pa pëlqim",
+      "description": "Inspektim i uzurpimeve, dëmtimeve dhe shfrytëzimeve pa pëlqim të hapësirës publike.",
+      "source_url": "https://gjakova.rks-gov.net/wp-content/uploads/2025/05/Rregullore-per-Organizimin-e-Brendshem-ne-Komunen-e-Gjakoves.pdf",
+      "source_title": "Rregullore për Organizimin e Brendshëm, Sistematizimin dhe Klasifikimin e Vendeve të Punës në Komunën e Gjakovës (nr. 01-011/01-16155, miratuar 27.03.2025)",
+      "retrieved_at": "2026-09-26T12:25:30+00:00",
+      "source_status": "ok"
+    },
+    {
+      "id": "INS-07",
+      "name": "Inspektim mjedisor",
+      "description": "Inspektim i aktiviteteve me ndikim në mjedis.",
+      "source_url": "https://gjakova.rks-gov.net/wp-content/uploads/2025/05/Rregullore-per-Organizimin-e-Brendshem-ne-Komunen-e-Gjakoves.pdf",
+      "source_title": "Rregullore për Organizimin e Brendshëm, Sistematizimin dhe Klasifikimin e Vendeve të Punës në Komunën e Gjakovës (nr. 01-011/01-16155, miratuar 27.03.2025)",
+      "retrieved_at": "2026-09-26T12:25:30+00:00",
+      "source_status": "ok"
+    },
+    {
+      "id": "INS-08",
+      "name": "Inspektim transporti / taksi",
+      "description": "Mbikëqyrje inspektuese e transportit të udhëtarëve dhe taksive.",
+      "source_url": "https://gjakova.rks-gov.net/wp-content/uploads/2025/05/Rregullore-per-Organizimin-e-Brendshem-ne-Komunen-e-Gjakoves.pdf",
+      "source_title": "Rregullore për Organizimin e Brendshëm, Sistematizimin dhe Klasifikimin e Vendeve të Punës në Komunën e Gjakovës (nr. 01-011/01-16155, miratuar 27.03.2025)",
+      "retrieved_at": "2026-09-26T12:25:30+00:00",
+      "source_status": "ok"
+    },
+    {
+      "id": "INS-09",
+      "name": "Gjobë / masë administrative e inspektimit",
+      "description": "Akte administrative për mënjanimin e parregullsive.",
+      "source_url": "https://gjakova.rks-gov.net/wp-content/uploads/2025/05/Rregullore-per-Organizimin-e-Brendshem-ne-Komunen-e-Gjakoves.pdf",
+      "source_title": "Rregullore për Organizimin e Brendshëm, Sistematizimin dhe Klasifikimin e Vendeve të Punës në Komunën e Gjakovës (nr. 01-011/01-16155, miratuar 27.03.2025)",
+      "retrieved_at": "2026-09-26T12:25:30+00:00",
+      "source_status": "ok"
+    }
+  ],
+  "services": [
+    {
+      "url": "https://gjakova.rks-gov.net/sherbimet-9/",
+      "source_status": "ok"
+    }
+  ],
+  "hard_negatives": [
+    {
+      "confused_with": "URB",
+      "rule": "Denoncim i ndërtimit të huaj pa leje → INS. Kërkesë për leje ose legalizim → URB."
+    },
+    {
+      "confused_with": "MSH",
+      "rule": "Inspektim pa rrezik jete → INS. Zjarr/emergjencë → MSH."
+    }
+  ],
+  "example_requests": [
+    "Dua pëlqim sanitar / pëlqim për lokal afariste.",
+    "Dua të paraqes kërkesë për inspektim të një lokali."
+  ],
+  "example_complaints": [
+    "Fqinji po ndërton pa leje ndërtimi.",
+    "Më kanë vënë gjobë të padrejtë në treg."
+  ],
+  "staff_url": "https://gjakova.rks-gov.net/staff/drejtoria-per-pune-inspektuese/",
+  "kb_version": "1.0.0"
+}

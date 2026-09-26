@@ -1,0 +1,417 @@
+{
+  "version": "1.0",
+  "kb_version": "1.0.0",
+  "title": "Gjakova Municipal Taxonomy v1.0",
+  "authority": "Rregullore për Organizimin e Brendshëm, Sistematizimin dhe Klasifikimin e Vendeve të Punës në Komunën e Gjakovës (nr. 01-011/01-16155, miratuar 27.03.2025)",
+  "note": "Older municipal pages mention 12 directorates. The regulation approved on 27.03.2025 lists 13, including Drejtoria për Inspektime.",
+  "directorates": [
+    {
+      "id": "ADM",
+      "official_name": "Drejtoria e Administratës",
+      "short_name": "Administrata",
+      "neni": "Neni 9",
+      "file": "administrata.json",
+      "procedure_count": 12,
+      "responsibility_count": 11
+    },
+    {
+      "id": "FIN",
+      "official_name": "Drejtoria për Buxhet dhe Financa",
+      "short_name": "Buxhet dhe Financa",
+      "neni": "Neni 10",
+      "file": "buxhet_financa.json",
+      "procedure_count": 5,
+      "responsibility_count": 11
+    },
+    {
+      "id": "SHP",
+      "official_name": "Drejtoria për Shërbime Publike",
+      "short_name": "Shërbime Publike",
+      "neni": "Neni 11",
+      "file": "sherbime_publike.json",
+      "procedure_count": 11,
+      "responsibility_count": 10
+    },
+    {
+      "id": "INF",
+      "official_name": "Drejtoria për Infrastrukturë",
+      "short_name": "Infrastrukturë",
+      "neni": "Neni 12",
+      "file": "infrastrukture.json",
+      "procedure_count": 8,
+      "responsibility_count": 9
+    },
+    {
+      "id": "SHS",
+      "official_name": "Drejtoria për Shëndetësi dhe Mirëqenie Sociale",
+      "short_name": "Shëndetësi",
+      "neni": "Neni 13",
+      "file": "shendetsi.json",
+      "procedure_count": 7,
+      "responsibility_count": 9
+    },
+    {
+      "id": "ARS",
+      "official_name": "Drejtoria për Arsim",
+      "short_name": "Arsim",
+      "neni": "Neni 14",
+      "file": "arsim.json",
+      "procedure_count": 7,
+      "responsibility_count": 6
+    },
+    {
+      "id": "KRS",
+      "official_name": "Drejtoria për Kulturë, Rini dhe Sport",
+      "short_name": "Kulturë",
+      "neni": "Neni 15",
+      "file": "kulture.json",
+      "procedure_count": 6,
+      "responsibility_count": 7
+    },
+    {
+      "id": "ZHE",
+      "official_name": "Drejtoria për Zhvillim Ekonomik",
+      "short_name": "Zhvillim Ekonomik",
+      "neni": "Neni 8",
+      "file": "zhvillim_ekonomik.json",
+      "procedure_count": 7,
+      "responsibility_count": 7
+    },
+    {
+      "id": "URB",
+      "official_name": "Drejtoria për Urbanizëm dhe Mbrojtje të Mjedisit",
+      "short_name": "Urbanizëm",
+      "neni": "Neni 17",
+      "file": "urbanizem.json",
+      "procedure_count": 20,
+      "responsibility_count": 7
+    },
+    {
+      "id": "BUJ",
+      "official_name": "Drejtoria për Bujqësi, Pylltari dhe Zhvillim Rural",
+      "short_name": "Bujqësi",
+      "neni": "Neni 18",
+      "file": "bujqesi.json",
+      "procedure_count": 10,
+      "responsibility_count": 5
+    },
+    {
+      "id": "KAD",
+      "official_name": "Drejtoria për Gjeodezi, Kadastër dhe Pronë",
+      "short_name": "Kadastër",
+      "neni": "Neni 19",
+      "file": "kadaster.json",
+      "procedure_count": 8,
+      "responsibility_count": 8
+    },
+    {
+      "id": "MSH",
+      "official_name": "Drejtoria për Mbrojtje dhe Shpëtim",
+      "short_name": "Mbrojtje dhe Shpëtim",
+      "neni": "Neni 20",
+      "file": "mbrojtje_shpetim.json",
+      "procedure_count": 6,
+      "responsibility_count": 8
+    },
+    {
+      "id": "INS",
+      "official_name": "Drejtoria për Inspektime",
+      "short_name": "Inspektime",
+      "neni": "Neni 21",
+      "file": "inspektime.json",
+      "procedure_count": 9,
+      "responsibility_count": 7
+    }
+  ],
+  "hard_negative_rules": [
+    {
+      "pair": "URB/INS",
+      "rule": "Kërkesë për leje ndërtimi, kushte ndërtimore, pëlqim parcelimi, ose legalizim sipas procedurës urbane 'Ndërtime pa leje' → URB. Denoncim i ndërtimit të huaj pa leje / kërkesë për inspektim, ndalim punimesh ose rrënim → INS (Inspektorati i Ndërtimit, Neni 21)."
+    },
+    {
+      "pair": "URB/KAD",
+      "rule": "Regjistrim prone, parcelë kadastrale, hipotekë, kufij, fletëposedim → KAD. Pëlqim urbanistik për parcelim për të ndërtuar, leje ndërtimi → URB. Ndarje fizike kadastrale pa qëllim urbanistik → KAD."
+    },
+    {
+      "pair": "INF/SHP",
+      "rule": "Rregullorja 27.03.2025, Neni 12: rrugë, trotuare, ura, gropa, mirëmbajtje rrugore, sinjalizim, leje transporti → INF. Neni 11: parqe, gjelbërim, tregje, varreza, ndriçim publik, mbeturina, pastrim rrugësh, kafshë endacake → SHP. Faqja e stafit INF/SHP përsërit tekstin e vjetër të përbashkët; kompetenca vendoset nga rregullorja, jo nga ajo kopje."
+    },
+    {
+      "pair": "SHP/SHS",
+      "rule": "Mungesë uji të pijshëm / higjienë / epidemi si masë shëndetësore → SHS (Neni 13 dhe faqja e stafit: sigurimi i ujit të sigurt). Kanalizim, ujëra të zeza, mbeturina, kontejnerë → SHP. Leje për ndërtim ujësjellësi → URB."
+    },
+    {
+      "pair": "FIN/KAD",
+      "rule": "Tatim në pronë, faturë tatimi, ankesë për vlerën e faturës → FIN (Sektori për Tatimin në Pronë, Neni 10). Regjistër kadastral, hipotekë, fletëposedim → KAD."
+    },
+    {
+      "pair": "ARS/INF",
+      "rule": "Bursë, regjistrim shkolle, çati/oborr shkolle, mirëmbajtje objekti arsimor → ARS (Neni 14: mirëmbajtja e ndërtesave të institucioneve arsimore). Rrugë komunale pranë shkollës, jo objekti shkollor → INF."
+    },
+    {
+      "pair": "MSH/INS",
+      "rule": "Zjarr, emergjencë, vërshim, 112, zjarrfikës → MSH (Neni 20). Inspektim tregu/ndërtimi/shërbimesh pa rrezik jete → INS."
+    },
+    {
+      "pair": "URB/ZHE/INS",
+      "rule": "Regjistrim biznesi, certifikatë biznesi, taksë në firmë → ZHE. Pëlqim për kioskë / objekt të përkohshëm në hapësirë publike → URB. Kioskë pa leje / gjobë tregu / mall i palejuar → INS (Inspektorati i Tregut)."
+    }
+  ],
+  "mapping_rule": "Classifier 2 matches a procedure_id or responsibility_id, then maps deterministically to exactly one directorate. Never return two departments.",
+  "confidence_note": "confidence is a calibrated reliability estimate on the validation set. It is not accuracy and not raw cosine similarity.",
+  "sources": [
+    {
+      "url": "https://gjakova.rks-gov.net/wp-content/uploads/2025/05/Rregullore-per-Organizimin-e-Brendshem-ne-Komunen-e-Gjakoves.pdf",
+      "retrieved_at": "2026-09-26T12:25:30+00:00",
+      "status_code": 200,
+      "source_status": "ok",
+      "content_type": "application/pdf",
+      "path": "data\\raw\\gjakova.rks-gov.net_wp-content_uploads_2025_05_Rregullore-per-Organizimin-e-Brendshem-ne-Komunen-e-Gjakoves.pdf.pdf",
+      "error": null
+    },
+    {
+      "url": "https://gjakova.rks-gov.net/wp-content/uploads/2025/04/Rregullore-per-Organizimin-e-Brendshem-ne-Komunen-e-Gjakoves.pdf",
+      "retrieved_at": "2026-09-26T12:25:32+00:00",
+      "status_code": 200,
+      "source_status": "ok",
+      "content_type": "application/pdf",
+      "path": "data\\raw\\gjakova.rks-gov.net_wp-content_uploads_2025_04_Rregullore-per-Organizimin-e-Brendshem-ne-Komunen-e-Gjakoves.pdf.pdf",
+      "error": null
+    },
+    {
+      "url": "https://gjakova.rks-gov.net/wp-content/uploads/2021/12/Draft-Rregullore-per-Organizimin-e-Brendshem-Sistematizimin-dhe-Klasifikimin-e-Vendeve-te-Punes-ne-Komunen-e-Gjakoves.pdf",
+      "retrieved_at": "2026-09-26T12:25:34+00:00",
+      "status_code": 200,
+      "source_status": "ok",
+      "content_type": "application/pdf",
+      "path": "data\\raw\\gjakova.rks-gov.net_wp-content_uploads_2021_12_Draft-Rregullore-per-Organizimin-e-Brendshem-Sistematizimin-dhe-Klasifikimin-e-Vendeve-te-Punes-ne-Komunen-e-Gjakoves.pdf.pdf",
+      "error": null
+    },
+    {
+      "url": "https://gjakova.rks-gov.net/",
+      "retrieved_at": "2026-09-26T12:25:34+00:00",
+      "status_code": 200,
+      "source_status": "ok",
+      "content_type": "text/html; charset=UTF-8",
+      "path": "data\\raw\\gjakova.rks-gov.net.html",
+      "error": null
+    },
+    {
+      "url": "https://kk.rks-gov.net/gjakove/",
+      "retrieved_at": "2026-09-26T12:25:34+00:00",
+      "status_code": null,
+      "source_status": "unreachable",
+      "content_type": "",
+      "path": null,
+      "error": "[Errno 11001] getaddrinfo failed"
+    },
+    {
+      "url": "https://gjakova.rks-gov.net/sherbimet/",
+      "retrieved_at": "2026-09-26T12:25:34+00:00",
+      "status_code": 200,
+      "source_status": "ok",
+      "content_type": "text/html; charset=UTF-8",
+      "path": "data\\raw\\gjakova.rks-gov.net_sherbimet.html",
+      "error": null
+    },
+    {
+      "url": "https://gjakova.rks-gov.net/sherbimet-2/",
+      "retrieved_at": "2026-09-26T12:25:35+00:00",
+      "status_code": 200,
+      "source_status": "ok",
+      "content_type": "text/html; charset=UTF-8",
+      "path": "data\\raw\\gjakova.rks-gov.net_sherbimet-2.html",
+      "error": null
+    },
+    {
+      "url": "https://gjakova.rks-gov.net/sherbimet-6/",
+      "retrieved_at": "2026-09-26T12:25:35+00:00",
+      "status_code": 200,
+      "source_status": "ok",
+      "content_type": "text/html; charset=UTF-8",
+      "path": "data\\raw\\gjakova.rks-gov.net_sherbimet-6.html",
+      "error": null
+    },
+    {
+      "url": "https://gjakova.rks-gov.net/sherbimet-8/",
+      "retrieved_at": "2026-09-26T12:25:35+00:00",
+      "status_code": 200,
+      "source_status": "ok",
+      "content_type": "text/html; charset=UTF-8",
+      "path": "data\\raw\\gjakova.rks-gov.net_sherbimet-8.html",
+      "error": null
+    },
+    {
+      "url": "https://gjakova.rks-gov.net/sherbimet-9/",
+      "retrieved_at": "2026-09-26T12:25:35+00:00",
+      "status_code": 200,
+      "source_status": "ok",
+      "content_type": "text/html; charset=UTF-8",
+      "path": "data\\raw\\gjakova.rks-gov.net_sherbimet-9.html",
+      "error": null
+    },
+    {
+      "url": "https://gjakova.rks-gov.net/staff/drejtoria-per-pune-te-pergjithshme-administrative/",
+      "retrieved_at": "2026-09-26T12:25:36+00:00",
+      "status_code": 200,
+      "source_status": "ok",
+      "content_type": "text/html; charset=UTF-8",
+      "path": "data\\raw\\gjakova.rks-gov.net_staff_drejtoria-per-pune-te-pergjithshme-administrative.html",
+      "error": null
+    },
+    {
+      "url": "https://gjakova.rks-gov.net/staff/drejtoria-per-buxhet-dhe-financa/",
+      "retrieved_at": "2026-09-26T12:25:36+00:00",
+      "status_code": 200,
+      "source_status": "ok",
+      "content_type": "text/html; charset=UTF-8",
+      "path": "data\\raw\\gjakova.rks-gov.net_staff_drejtoria-per-buxhet-dhe-financa.html",
+      "error": null
+    },
+    {
+      "url": "https://gjakova.rks-gov.net/staff/drejtoria-per-sherbime-publike/",
+      "retrieved_at": "2026-09-26T12:25:36+00:00",
+      "status_code": 200,
+      "source_status": "ok",
+      "content_type": "text/html; charset=UTF-8",
+      "path": "data\\raw\\gjakova.rks-gov.net_staff_drejtoria-per-sherbime-publike.html",
+      "error": null
+    },
+    {
+      "url": "https://gjakova.rks-gov.net/staff/drejtoria-per-infrastrukture/",
+      "retrieved_at": "2026-09-26T12:25:36+00:00",
+      "status_code": 200,
+      "source_status": "ok",
+      "content_type": "text/html; charset=UTF-8",
+      "path": "data\\raw\\gjakova.rks-gov.net_staff_drejtoria-per-infrastrukture.html",
+      "error": null
+    },
+    {
+      "url": "https://gjakova.rks-gov.net/staff/drejtoria-per-shendetesi-dhe-mireqenje-sociale/",
+      "retrieved_at": "2026-09-26T12:25:36+00:00",
+      "status_code": 200,
+      "source_status": "ok",
+      "content_type": "text/html; charset=UTF-8",
+      "path": "data\\raw\\gjakova.rks-gov.net_staff_drejtoria-per-shendetesi-dhe-mireqenje-sociale.html",
+      "error": null
+    },
+    {
+      "url": "https://gjakova.rks-gov.net/staff/drejtoria-per-arsim-shkence-dhe-teknologji/",
+      "retrieved_at": "2026-09-26T12:25:37+00:00",
+      "status_code": 200,
+      "source_status": "ok",
+      "content_type": "text/html; charset=UTF-8",
+      "path": "data\\raw\\gjakova.rks-gov.net_staff_drejtoria-per-arsim-shkence-dhe-teknologji.html",
+      "error": null
+    },
+    {
+      "url": "https://gjakova.rks-gov.net/staff/drejtoria-per-kulture-rini-dhe-sport/",
+      "retrieved_at": "2026-09-26T12:25:37+00:00",
+      "status_code": 200,
+      "source_status": "ok",
+      "content_type": "text/html; charset=UTF-8",
+      "path": "data\\raw\\gjakova.rks-gov.net_staff_drejtoria-per-kulture-rini-dhe-sport.html",
+      "error": null
+    },
+    {
+      "url": "https://gjakova.rks-gov.net/staff/drejtoria-per-zhvillim-ekonomik/",
+      "retrieved_at": "2026-09-26T12:25:37+00:00",
+      "status_code": 200,
+      "source_status": "ok",
+      "content_type": "text/html; charset=UTF-8",
+      "path": "data\\raw\\gjakova.rks-gov.net_staff_drejtoria-per-zhvillim-ekonomik.html",
+      "error": null
+    },
+    {
+      "url": "https://gjakova.rks-gov.net/staff/drejtoria-per-urbanizem-dhe-mbrojtje-te-mjedisit/",
+      "retrieved_at": "2026-09-26T12:25:38+00:00",
+      "status_code": 200,
+      "source_status": "ok",
+      "content_type": "text/html; charset=UTF-8",
+      "path": "data\\raw\\gjakova.rks-gov.net_staff_drejtoria-per-urbanizem-dhe-mbrojtje-te-mjedisit.html",
+      "error": null
+    },
+    {
+      "url": "https://gjakova.rks-gov.net/staff/drejtoria-per-bujqesi-pylltari-dhe-zhvillim-rural/",
+      "retrieved_at": "2026-09-26T12:25:38+00:00",
+      "status_code": 200,
+      "source_status": "ok",
+      "content_type": "text/html; charset=UTF-8",
+      "path": "data\\raw\\gjakova.rks-gov.net_staff_drejtoria-per-bujqesi-pylltari-dhe-zhvillim-rural.html",
+      "error": null
+    },
+    {
+      "url": "https://gjakova.rks-gov.net/staff/drejtoria-per-gjeodezi-kadaster-dhe-prone/",
+      "retrieved_at": "2026-09-26T12:25:38+00:00",
+      "status_code": 200,
+      "source_status": "ok",
+      "content_type": "text/html; charset=UTF-8",
+      "path": "data\\raw\\gjakova.rks-gov.net_staff_drejtoria-per-gjeodezi-kadaster-dhe-prone.html",
+      "error": null
+    },
+    {
+      "url": "https://gjakova.rks-gov.net/staff/drejtoria-per-mbrojtje-dhe-shpetim/",
+      "retrieved_at": "2026-09-26T12:25:38+00:00",
+      "status_code": 200,
+      "source_status": "ok",
+      "content_type": "text/html; charset=UTF-8",
+      "path": "data\\raw\\gjakova.rks-gov.net_staff_drejtoria-per-mbrojtje-dhe-shpetim.html",
+      "error": null
+    },
+    {
+      "url": "https://gjakova.rks-gov.net/staff/drejtoria-per-pune-inspektuese/",
+      "retrieved_at": "2026-09-26T12:25:39+00:00",
+      "status_code": 200,
+      "source_status": "ok",
+      "content_type": "text/html; charset=UTF-8",
+      "path": "data\\raw\\gjakova.rks-gov.net_staff_drejtoria-per-pune-inspektuese.html",
+      "error": null
+    },
+    {
+      "url": "https://gjakova.rks-gov.net/sherbimet-10/",
+      "retrieved_at": "2026-09-26T12:25:52+00:00",
+      "status_code": 200,
+      "source_status": "ok",
+      "content_type": "text/html; charset=UTF-8",
+      "path": "data\\raw\\gjakova.rks-gov.net_sherbimet-10.html",
+      "error": null
+    },
+    {
+      "url": "https://gjakova.rks-gov.net/sherbimet-3/",
+      "retrieved_at": "2026-09-26T12:25:58+00:00",
+      "status_code": 200,
+      "source_status": "ok",
+      "content_type": "text/html; charset=UTF-8",
+      "path": "data\\raw\\gjakova.rks-gov.net_sherbimet-3.html",
+      "error": null
+    },
+    {
+      "url": "https://gjakova.rks-gov.net/sherbimet-4/",
+      "retrieved_at": "2026-09-26T12:26:05+00:00",
+      "status_code": 200,
+      "source_status": "ok",
+      "content_type": "text/html; charset=UTF-8",
+      "path": "data\\raw\\gjakova.rks-gov.net_sherbimet-4.html",
+      "error": null
+    },
+    {
+      "url": "https://gjakova.rks-gov.net/sherbimet-5/",
+      "retrieved_at": "2026-09-26T12:26:05+00:00",
+      "status_code": 200,
+      "source_status": "ok",
+      "content_type": "text/html; charset=UTF-8",
+      "path": "data\\raw\\gjakova.rks-gov.net_sherbimet-5.html",
+      "error": null
+    },
+    {
+      "url": "https://gjakova.rks-gov.net/sherbimet-7/",
+      "retrieved_at": "2026-09-26T12:26:06+00:00",
+      "status_code": 200,
+      "source_status": "ok",
+      "content_type": "text/html; charset=UTF-8",
+      "path": "data\\raw\\gjakova.rks-gov.net_sherbimet-7.html",
+      "error": null
+    }
+  ],
+  "built_at": "2026-09-26T12:27:15+00:00"
+}
