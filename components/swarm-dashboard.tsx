@@ -578,36 +578,36 @@ export default function SwarmDashboard() {
       </footer>
 
       <Dialog open={reportOpen} onOpenChange={(open) => !open && resetReport()}>
-        <DialogContent className="max-h-[90vh] w-[calc(100%-1.5rem)] max-w-[960px] overflow-y-auto border-[#e5e5e5] bg-white p-0 text-[#161616] sm:max-w-[960px] sm:rounded-xl">
+        <DialogContent className="w-full max-w-none overflow-y-auto overscroll-contain border-[#e5e5e5] bg-white p-0 text-[#161616] sm:max-h-[90vh] sm:w-[calc(100%-2rem)] sm:max-w-[960px]">
           {!submitted ? (
             <>
-              <DialogHeader className="border-b border-[#e5e5e5] px-5 py-4 sm:px-6 sm:py-5">
-                <div className="flex items-start gap-4 pr-8">
+              <DialogHeader className="sticky top-0 z-10 border-b border-[#e5e5e5] bg-white px-4 py-4 sm:px-6 sm:py-5">
+                <div className="flex items-start gap-3 pr-8 sm:gap-4">
                   <div className="flex size-10 shrink-0 items-center justify-center rounded-sm bg-[#04408b] text-white sm:size-11">
                     <ClipboardPen className="size-5" />
                   </div>
                   <div className="min-w-0">
-                    <DialogTitle className="text-xl tracking-[-0.03em] sm:text-2xl">{t.reportTitle}</DialogTitle>
+                    <DialogTitle className="text-lg tracking-[-0.03em] sm:text-2xl">{t.reportTitle}</DialogTitle>
                     <p className="mt-1 text-sm leading-5 text-[#54595f] sm:max-w-2xl">{t.reportLead}</p>
                   </div>
                 </div>
               </DialogHeader>
-              <form onSubmit={submitReport} className="grid gap-5 px-5 py-5 sm:grid-cols-2 sm:gap-6 sm:px-6 sm:py-6">
+              <form onSubmit={submitReport} className="grid gap-4 px-4 py-4 pb-[max(1.25rem,env(safe-area-inset-bottom))] sm:grid-cols-2 sm:gap-6 sm:px-6 sm:py-6">
                 <div>
                   <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-[#54595f]">{t.whatIsIt}</p>
-                  <div className="grid grid-cols-3 gap-2">
+                  <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
                     {categories.map((category) => (
                       <button
                         key={category.id}
                         type="button"
                         onClick={() => setForm({ ...form, categoryId: category.id })}
-                        className={`flex h-[72px] flex-col items-center justify-center rounded-sm border text-[11px] font-medium transition sm:h-[80px] ${
+                        className={`flex min-h-[64px] flex-col items-center justify-center gap-1 rounded-sm border px-1.5 py-2 text-center text-xs font-medium leading-tight transition sm:min-h-[80px] ${
                           form.categoryId === category.id
                             ? "border-[#04408b]/40 bg-[#edf2f7] text-[#04408b]"
                             : "border-[#e5e5e5] bg-[#f7f8fa] text-[#161616]/70 hover:bg-[#edf2f7]"
                         }`}
                       >
-                        <category.icon className="mb-1.5 size-4" />
+                        <category.icon className="size-4 shrink-0" />
                         {t.categories[category.id]}
                       </button>
                     ))}
@@ -616,20 +616,20 @@ export default function SwarmDashboard() {
 
                 <div>
                   <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-[#54595f]">{t.whereIsIt}</p>
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="grid grid-cols-1 gap-2 min-[360px]:grid-cols-2">
                     {places.map((place) => (
                       <button
                         key={place.id}
                         type="button"
                         onClick={() => setForm({ ...form, placeId: place.id })}
-                        className={`flex min-h-[52px] items-center gap-2 rounded-sm border px-3 py-2.5 text-left text-[11px] transition sm:min-h-[56px] ${
+                        className={`flex min-h-12 items-center gap-2 rounded-sm border px-3 py-2.5 text-left text-xs leading-snug transition sm:min-h-14 ${
                           form.placeId === place.id
                             ? "border-[#04408b]/40 bg-[#edf2f7] text-[#04408b]"
                             : "border-[#e5e5e5] bg-[#f7f8fa] text-[#161616]/70 hover:bg-[#edf2f7]"
                         }`}
                       >
                         <MapPin className="size-3.5 shrink-0" />
-                        {t.places[place.id]}
+                        <span className="min-w-0">{t.places[place.id]}</span>
                       </button>
                     ))}
                   </div>
@@ -648,40 +648,40 @@ export default function SwarmDashboard() {
                     <button
                       type="button"
                       onClick={() => photoInputRef.current?.click()}
-                      className={`flex h-12 items-center justify-center gap-2 rounded-sm border px-3 text-sm font-medium transition ${
+                      className={`flex min-h-12 items-center justify-center gap-2 rounded-sm border px-3 py-2 text-center text-sm font-medium leading-snug transition ${
                         form.photo
                           ? "border-[#04408b]/40 bg-[#edf2f7] text-[#04408b]"
                           : "border-dashed border-[#cfd8e3] bg-[#f7f8fa] text-[#54595f] hover:border-[#04408b]/40 hover:text-[#04408b]"
                       }`}
                     >
                       <ImagePlus className="size-4 shrink-0" />
-                      <span className="truncate">{form.photo ? t.photoAdded : t.addPhoto}</span>
+                      <span className="min-w-0">{form.photo ? t.photoAdded : t.addPhoto}</span>
                     </button>
                     <button
                       type="button"
                       onClick={useMyLocation}
-                      className={`flex h-12 items-center justify-center gap-2 rounded-sm border px-3 text-sm font-medium transition ${
+                      className={`flex min-h-12 items-center justify-center gap-2 rounded-sm border px-3 py-2 text-center text-sm font-medium leading-snug transition ${
                         gps
                           ? "border-[#04408b]/40 bg-[#edf2f7] text-[#04408b]"
                           : "border-dashed border-[#cfd8e3] bg-[#f7f8fa] text-[#54595f] hover:border-[#04408b]/40 hover:text-[#04408b]"
                       }`}
                     >
                       <Crosshair className={`size-4 shrink-0 ${locationStatus === "loading" ? "animate-pulse" : ""}`} />
-                      <span className="truncate">
+                      <span className="min-w-0">
                         {locationStatus === "loading" ? t.locating : gps ? gps.label : t.useMyLocation}
                       </span>
                     </button>
                     <button
                       type="button"
                       onClick={() => setCustomRequestOpen((open) => !open)}
-                      className={`flex h-12 items-center justify-center gap-2 rounded-sm border px-3 text-sm font-medium transition ${
+                      className={`flex min-h-12 items-center justify-center gap-2 rounded-sm border px-3 py-2 text-center text-sm font-medium leading-snug transition ${
                         customRequestOpen || form.customRequest.trim()
                           ? "border-[#04408b]/40 bg-[#edf2f7] text-[#04408b]"
                           : "border-dashed border-[#cfd8e3] bg-[#f7f8fa] text-[#54595f] hover:border-[#04408b]/40 hover:text-[#04408b]"
                       }`}
                     >
                       <PenLine className="size-4 shrink-0" />
-                      <span className="truncate">{t.customRequest}</span>
+                      <span className="min-w-0">{t.customRequest}</span>
                     </button>
                   </div>
                   {photoPreview ? (
