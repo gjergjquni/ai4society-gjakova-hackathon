@@ -1,0 +1,11 @@
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: sqlite:////app/data/pulsi.db
+      DUPLICATE_DAYS: "30"
+      DUPLICATE_DISTANCE_METERS: "120"
+    volumes:
+      - ./data:/app/data
