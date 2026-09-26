@@ -1,7 +1,15 @@
 import type { NextConfig } from "next";
 import path from "path";
 
-const backendOrigin = process.env.BACKEND_URL ?? "http://127.0.0.1:8000";
+function resolveBackendOrigin(): string {
+  const fallback = "http://127.0.0.1:8000";
+  const raw = process.env.BACKEND_URL?.trim().replace(/^['"]|['"]$/g, "");
+  if (!raw) return fallback;
+  const withProtocol = /^https?:\/\//i.test(raw) ? raw : `https://${raw}`;
+  return withProtocol.replace(/\/+$/, "");
+}
+
+const backendOrigin = resolveBackendOrigin();
 
 const nextConfig: NextConfig = {
   turbopack: {
