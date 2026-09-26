@@ -1,42 +1,27 @@
 "use client";
 
-import dynamic from "next/dynamic";
-import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import {
-  Activity,
+  ArrowRight,
   ArrowUpRight,
-  Bot,
   BrainCircuit,
   Check,
-  ChevronRight,
-  Clock3,
+  ClipboardPen,
   Crosshair,
-  FileText,
   ImagePlus,
-  Lightbulb,
+  Mail,
   MapPin,
-  Navigation,
-  Route,
-  Search,
-  Send,
-  Sparkles,
+  Phone,
   TrafficCone,
   Trash2,
   Droplets,
   Lamp,
   Footprints,
   CarFront,
-  Users,
-  Waves,
-  Zap,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-
-const GjakovaMap = dynamic(() => import("@/components/gjakova-map"), {
-  ssr: false,
-  loading: () => <div className="absolute inset-0 bg-[#dce4ec]" />,
-});
+import { DEFAULT_LOCALE, LOCALE_OPTIONS, getMessages, type Locale } from "@/lib/i18n";
 
 type Issue = {
   id: string;
@@ -66,12 +51,6 @@ const categories = [
   { id: "water", label: "Rrjedhje uji", icon: Droplets },
   { id: "sidewalk", label: "Trotuar", icon: Footprints },
   { id: "traffic", label: "Trafik", icon: CarFront },
-];
-
-const severities = [
-  { id: "critical", label: "Rrezik", hint: "dikush mund të lëndohet" },
-  { id: "blocking", label: "Bllokon", hint: "ndalon rrugën ose shërbimin" },
-  { id: "annoying", label: "Bezdis", hint: "nuk është urgjent" },
 ];
 
 const places = [
@@ -190,105 +169,33 @@ const seedIssues: Issue[] = [
   },
 ];
 
-const agents = [
-  { name: "Kuptimi", icon: BrainCircuit, color: "#65e4ff", detail: "tekst + imazh" },
-  { name: "Lokacioni", icon: Crosshair, color: "#8f7cff", detail: "geo + dublikatë" },
-  { name: "Prioriteti", icon: Zap, color: "#d6f36a", detail: "renditje dinamike" },
-  { name: "Ndikimi", icon: Users, color: "#ff9f43", detail: "rrezik + ekspozim" },
-  { name: "Rutimi", icon: Route, color: "#52d6a4", detail: "departamenti" },
-  { name: "Zgjidhja", icon: Lightbulb, color: "#ffd66b", detail: "veprimi i radhës" },
-];
-
-const activity = [
-  { agent: "Lokacioni", text: "Bashkoi 3 raporte në GJK-1031", time: "tani", color: "#8f7cff" },
-  { agent: "Prioriteti", text: "GJK-1042 u ngrit në #1", time: "12s", color: "#d6f36a" },
-  { agent: "Rutimi", text: "Eskalim te KRU Gjakova", time: "38s", color: "#52d6a4" },
-  { agent: "Ndikimi", text: "Zbuloi afërsinë me spitalin", time: "1m", color: "#ff9f43" },
-];
-
 export default function SwarmDashboard() {
+  const [locale, setLocale] = useState<Locale>(DEFAULT_LOCALE);
+  const t = getMessages(locale);
   const [issues, setIssues] = useState(seedIssues);
-  const [selectedId, setSelectedId] = useState(seedIssues[0].id);
   const [reportOpen, setReportOpen] = useState(() =>
     typeof window !== "undefined" &&
     new URLSearchParams(window.location.search).get("report") === "1",
   );
-  const [detailsOpen, setDetailsOpen] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [processing, setProcessing] = useState(false);
-  const [activeAgent, setActiveAgent] = useState(0);
-  const [mapStyle, setMapStyle] = useState<"streets" | "satellite">("streets");
   const [form, setForm] = useState({
     categoryId: "",
-    severityId: "",
     placeId: "",
     photo: false,
   });
   const [mergedId, setMergedId] = useState("GJK-1031");
 
   useEffect(() => {
-    const timer = window.setInterval(
-      () => setActiveAgent((current) => (current + 1) % agents.length),
-      1800,
-    );
-    return () => window.clearInterval(timer);
-  }, []);
-
-  const selected = useMemo(
-    () => issues.find((issue) => issue.id === selectedId) ?? issues[0],
-    [issues, selectedId],
-  );
-  const totalReports = useMemo(
-    () => issues.reduce((sum, issue) => sum + issue.reports, 0),
-    [issues],
-  );
-  const cardRefs = useRef<Record<string, HTMLDivElement | null>>({});
-  const scrollerRef = useRef<HTMLDivElement>(null);
-  const skipCardSync = useRef(false);
-
-  useEffect(() => {
-    skipCardSync.current = true;
-    cardRefs.current[selectedId]?.scrollIntoView({
-      behavior: "smooth",
-      inline: "center",
-      block: "nearest",
-    });
-    const timer = window.setTimeout(() => {
-      skipCardSync.current = false;
-    }, 400);
-    return () => window.clearTimeout(timer);
-  }, [selectedId]);
-
-  useEffect(() => {
-    const root = scrollerRef.current;
-    if (!root) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (skipCardSync.current) return;
-        const best = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-        const id = (best?.target as HTMLElement | undefined)?.dataset.issueId;
-        if (id) setSelectedId(id);
-      },
-      { root, threshold: 0.62 },
-    );
-
-    Object.values(cardRefs.current).forEach((node) => {
-      if (node) observer.observe(node);
-    });
-
-    return () => observer.disconnect();
-  }, [issues]);
-
-  function categoryIcon(categoryId: string) {
-    return categories.find((item) => item.id === categoryId)?.icon ?? TrafficCone;
-  }
+    document.documentElement.lang = locale;
+    document.title = t.metaTitle;
+    const theme = document.querySelector('meta[name="theme-color"]');
+    if (theme) theme.setAttribute("content", "#04408b");
+  }, [locale, t.metaTitle]);
 
   function submitReport(event: FormEvent) {
     event.preventDefault();
-    if (!form.categoryId || !form.severityId || !form.placeId) return;
+    if (!form.categoryId || !form.placeId) return;
 
     const place = places.find((item) => item.id === form.placeId);
     const category = categories.find((item) => item.id === form.categoryId);
@@ -312,7 +219,6 @@ export default function SwarmDashboard() {
           ),
         );
         setMergedId(existingId);
-        setSelectedId(existingId);
       } else {
         const newId = `GJK-${1050 + issues.length}`;
         const newIssue: Issue = {
@@ -323,9 +229,9 @@ export default function SwarmDashboard() {
           categoryId: category.id,
           location: place.label,
           reports: 1,
-          priority: form.severityId === "critical" ? 76 : form.severityId === "blocking" ? 64 : 51,
+          priority: 64,
           trend: 4,
-          severity: form.severityId === "critical" ? "Kritike" : form.severityId === "blocking" ? "E lartë" : "Mesatare",
+          severity: "Mesatare",
           status: "Monitorim",
           department: "Drejtoria e Shërbimeve Publike",
           age: "tani",
@@ -342,7 +248,6 @@ export default function SwarmDashboard() {
         };
         setIssues((current) => [newIssue, ...current].map((issue, index) => ({ ...issue, rank: index + 1 })));
         setMergedId(newId);
-        setSelectedId(newId);
       }
       setProcessing(false);
       setSubmitted(true);
@@ -357,605 +262,281 @@ export default function SwarmDashboard() {
     setReportOpen(false);
     window.setTimeout(() => {
       setSubmitted(false);
-      setForm({ categoryId: "", severityId: "", placeId: "", photo: false });
+      setForm({ categoryId: "", placeId: "", photo: false });
     }, 300);
   }
 
+  const navItems = [
+    { href: "#ballina", label: t.navHome, key: "home" },
+    { href: "#ankesa", label: t.navNotices, key: "notices" },
+    { href: "#ankesa", label: t.navServices, key: "services" },
+    { href: "#kontakt", label: t.navContact, key: "contact" },
+  ];
+
   return (
-    <main className="relative min-h-screen overflow-x-hidden text-[#edf4ef]">
-      <div className="cinema-bg" aria-hidden>
-        <div className="cinema-bg-photo" />
-        <div className="cinema-bg-shade" />
-        <div className="cinema-bg-grain" />
+    <main id="ballina" className="municipal-page relative min-h-screen overflow-x-hidden">
+      <div className="sticky top-0 z-40">
+        <header className="site-header">
+          <div className="mx-auto flex max-w-[1500px] items-center justify-between gap-3 px-4 py-2.5 sm:gap-4 sm:px-6 sm:py-3">
+            <a href="#ballina" className="flex min-w-0 items-center gap-2.5 sm:gap-3">
+              <img
+                src="/gjakova-emblem.png"
+                alt={t.emblemAlt}
+                width={48}
+                height={56}
+                className="h-10 w-auto shrink-0 sm:h-12"
+              />
+              <span className="min-w-0">
+                <span className="block text-[12px] text-[#54595f]">{t.republic}</span>
+                <span className="block truncate text-base font-semibold leading-tight text-[#161616] sm:text-[20px]">
+                  {t.municipality}
+                </span>
+              </span>
+            </a>
+            <div className="lang-switch shrink-0" role="navigation" aria-label="Language Switcher">
+              {LOCALE_OPTIONS.map((option, index) => (
+                <span key={option.id} className="inline-flex items-center">
+                  {index > 0 && <span className="px-0.5 text-[#cfd8e3]">/</span>}
+                  <button
+                    type="button"
+                    lang={option.lang}
+                    aria-current={locale === option.id ? "true" : undefined}
+                    onClick={() => setLocale(option.id)}
+                    className={
+                      locale === option.id
+                        ? "bg-[#04408b] text-white"
+                        : "text-[#54595f] hover:text-[#04408b]"
+                    }
+                  >
+                    {option.label}
+                  </button>
+                </span>
+              ))}
+            </div>
+          </div>
+        </header>
       </div>
 
-      <header className="sticky top-0 z-40 border-b border-white/8 bg-[#07110f]/70 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-[1500px] items-center justify-between px-4 py-3 sm:px-6">
-          <div className="flex items-center gap-3">
-            <div className="relative grid size-9 place-items-center rounded-xl bg-[#d6f36a] text-[#07110f]">
-              <Waves className="size-5" strokeWidth={2.7} />
-              <span className="absolute -right-1 -top-1 size-2.5 rounded-full border-2 border-[#07110f] bg-[#65e4ff]" />
-            </div>
-            <div>
-              <span className="text-lg font-bold tracking-[-0.03em]">PULSI</span>
-              <p className="hidden text-[10px] text-white/40 sm:block">Gjakovë live</p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <div className="flex items-center gap-2 rounded-full border border-[#52d6a4]/20 bg-[#52d6a4]/8 px-2.5 py-1.5 text-[10px] text-[#8cecc4] sm:px-3 sm:py-2 sm:text-[11px]">
-              <span className="relative flex size-2">
-                <span className="absolute inline-flex size-full animate-ping rounded-full bg-[#52d6a4] opacity-60" />
-                <span className="relative inline-flex size-2 rounded-full bg-[#52d6a4]" />
-              </span>
-              <span className="sm:hidden">Live</span>
-              <span className="hidden sm:inline">7 agjentë aktivë</span>
-            </div>
-            <Button
-              onClick={() => setReportOpen(true)}
-              className="hidden h-9 rounded-full bg-[#d6f36a] px-4 text-xs font-bold text-[#0c1713] hover:bg-[#e6ff88] sm:inline-flex"
-            >
-              Raporto problem
-              <ArrowUpRight className="size-3.5" />
-            </Button>
-          </div>
-        </div>
-      </header>
-
-      <div className="relative z-10 mx-auto max-w-[1500px] px-4 pb-28 pt-4 sm:px-6 sm:pb-6 sm:pt-6">
-        <section className="mb-4 hidden flex-col justify-between gap-4 lg:flex lg:flex-row lg:items-end">
-          <div>
-            <h1 className="max-w-2xl text-3xl font-semibold leading-[1.08] tracking-[-0.045em] sm:text-4xl">
-              Një <span className="text-[#d6f36a]">sinjal</span> nga qytetari. Një hap për{" "}
-              <span className="text-[#d6f36a]">Gjakovën</span>.
+      <section id="ankesa" className="hero-complaint">
+        <div className="hero-complaint-shade" aria-hidden />
+        <div className="relative z-10 mx-auto flex w-full max-w-[1200px] flex-1 flex-col justify-center px-4 py-16 sm:px-6 sm:py-20">
+          <div className="max-w-3xl">
+            <h1 className="text-[28px] font-semibold leading-[1.2] tracking-[-0.02em] text-white sm:text-[40px] lg:text-[44px]">
+              {t.heroLine1}
             </h1>
-          </div>
-          <p className="max-w-lg text-sm leading-6 text-white/46">
-            Qytetarët japin sinjalet. Agjentët AI i bashkojnë, i kuptojnë dhe i kthejnë në
-            raste të gatshme për veprim.
-          </p>
-        </section>
-
-        <section className="grid gap-4 lg:grid-cols-[3fr_1fr]">
-          <div className="panel-clear hidden min-w-0 overflow-hidden lg:block">
-            <div className="flex items-center justify-between border-b border-white/10 px-4 py-4">
-              <div>
-                <div className="flex items-center gap-2">
-                  <Activity className="size-4 text-[#d6f36a]" />
-                  <h2 className="text-sm font-semibold">Prioriteti dinamik</h2>
-                </div>
-                <p className="mt-1 text-[10px] text-white/35">Rillogaritet me çdo sinjal të ri</p>
-              </div>
-              <div className="flex items-center gap-1.5 rounded-full bg-white/5 px-2.5 py-1 text-[10px] text-white/45">
-                <Clock3 className="size-3" /> tani
-              </div>
-            </div>
-
-            <div className="divide-y divide-white/6">
-              {issues.map((issue) => (
-                <button
-                  key={issue.id}
-                  onClick={() => setSelectedId(issue.id)}
-                  className={`group w-full px-4 py-4 text-left transition ${
-                    selectedId === issue.id ? "bg-white/[0.06]" : "hover:bg-white/[0.03]"
-                  }`}
-                >
-                  <div className="flex gap-3">
-                    <div className="flex w-7 shrink-0 flex-col items-center">
-                      <span className="text-lg font-semibold text-white/65">{issue.rank}</span>
-                      <span className="mt-1 flex items-center text-[9px] font-semibold text-[#72e3ac]">
-                        ↑{issue.trend}
-                      </span>
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <div className="mb-1.5 flex items-start justify-between gap-3">
-                        <div>
-                          <p className="truncate text-sm font-medium">{issue.title}</p>
-                          <p className="mt-1 flex items-center gap-1 text-[10px] text-white/38">
-                            <MapPin className="size-3" /> {issue.location}
-                          </p>
-                        </div>
-                        <div className="flex shrink-0 items-center gap-1.5">
-                          <span
-                            className="size-1.5 rounded-full"
-                            style={{ backgroundColor: issue.color }}
-                          />
-                          <span className="text-xl font-semibold tracking-[-0.05em]">{issue.priority}</span>
-                        </div>
-                      </div>
-                      <div className="mb-2.5 h-1 overflow-hidden rounded-full bg-white/6">
-                        <div
-                          className="h-full rounded-full transition-all duration-700"
-                          style={{ width: `${issue.priority}%`, backgroundColor: issue.color }}
-                        />
-                      </div>
-                      <div className="flex items-center justify-between text-[10px] text-white/40">
-                        <span>{issue.reports} raporte · {issue.age}</span>
-                        <span className="flex items-center gap-1 text-white/55">
-                          {issue.department.split(" ").slice(0, 2).join(" ")}
-                          <ChevronRight className="size-3 opacity-0 transition group-hover:translate-x-0.5 group-hover:opacity-100" />
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="panel relative h-[calc(100dvh-9.25rem)] min-h-[360px] overflow-hidden sm:h-[min(70vh,640px)] lg:h-auto lg:min-h-[510px]">
-            <div className="absolute inset-x-0 top-0 z-20 flex flex-col gap-2 p-3">
-              <div className="flex items-center justify-between gap-2">
-                <div className="flex items-center gap-2 rounded-full border border-white/10 bg-[#0c1714]/80 px-3 py-1.5 backdrop-blur">
-                  <MapPin className="size-3.5 shrink-0 text-[#65e4ff]" />
-                  <h2 className="truncate text-xs font-semibold sm:text-sm">Harta e Gjakovës</h2>
-                </div>
-                <div className="flex rounded-full border border-white/8 bg-[#0c1714]/80 p-1 backdrop-blur">
-                  <button
-                    onClick={() => setMapStyle("streets")}
-                    className={`rounded-full px-2.5 py-1 text-[10px] ${mapStyle === "streets" ? "bg-white/12 text-white" : "text-white/40"}`}
-                  >
-                    Rrugët
-                  </button>
-                  <button
-                    onClick={() => setMapStyle("satellite")}
-                    className={`rounded-full px-2.5 py-1 text-[10px] ${mapStyle === "satellite" ? "bg-white/12 text-white" : "text-white/40"}`}
-                  >
-                    Sateliti
-                  </button>
-                </div>
-              </div>
-              <div className="flex gap-1.5 lg:hidden">
-                {[
-                  [String(issues.length), "raste"],
-                  [String(totalReports), "sinjale"],
-                  ["7", "AI"],
-                ].map(([value, label]) => (
-                  <div
-                    key={label}
-                    className="rounded-full border border-white/10 bg-[#0c1714]/78 px-2.5 py-1 text-[10px] text-white/70 backdrop-blur"
-                  >
-                    <span className="font-semibold text-white">{value}</span> {label}
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="absolute inset-0">
-              <GjakovaMap
-                issues={issues}
-                selectedId={selectedId}
-                style={mapStyle}
-                onSelect={setSelectedId}
-              />
-
-              <div className="absolute inset-x-0 bottom-0 z-20 hidden bg-gradient-to-t from-[#07110f] via-[#07110f]/55 to-transparent px-3 pb-3 pt-16 lg:block">
-                <div className="rounded-xl border border-white/9 bg-[#0a1512]/92 p-3 shadow-2xl backdrop-blur-xl">
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="min-w-0">
-                      <div className="mb-1 flex items-center gap-1.5">
-                        <span className="text-[10px] font-bold text-white/35">#{selected.rank}</span>
-                        <span className="truncate text-[9px] text-white/30">{selected.id}</span>
-                      </div>
-                      <h3 className="truncate text-sm font-semibold">{selected.title}</h3>
-                    </div>
-                    <div className="shrink-0 text-right">
-                      <div className="text-2xl font-semibold tracking-[-0.06em]" style={{ color: selected.color }}>
-                        {selected.priority}
-                      </div>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => setDetailsOpen(true)}
-                    className="mt-2 flex w-full items-center justify-between rounded-lg border border-white/7 bg-white/[0.035] px-2.5 py-1.5 text-[10px] text-white/60 transition hover:bg-white/[0.07] hover:text-white"
-                  >
-                    Detajet
-                    <ArrowUpRight className="size-3.5" />
-                  </button>
-                </div>
-              </div>
-
-              <div className="absolute inset-x-0 bottom-0 z-20 bg-gradient-to-t from-[#07110f] via-[#07110f]/70 to-transparent pb-3 pt-10 lg:hidden">
-                <div className="mb-2 flex items-center justify-between px-4">
-                  <div className="flex items-center gap-2">
-                    <Activity className="size-3.5 text-[#d6f36a]" />
-                    <p className="text-[11px] font-semibold">Rrëshqit rastet</p>
-                  </div>
-                  <span className="text-[10px] text-white/40">{selected.rank}/{issues.length}</span>
-                </div>
-                <div ref={scrollerRef} className="snap-row px-4">
-                  {issues.map((issue) => {
-                    const Icon = categoryIcon(issue.categoryId);
-                    const active = selectedId === issue.id;
-                    return (
-                      <div
-                        key={issue.id}
-                        data-issue-id={issue.id}
-                        ref={(node) => {
-                          cardRefs.current[issue.id] = node;
-                        }}
-                        onClick={() => setSelectedId(issue.id)}
-                        className={`snap-card cursor-pointer rounded-2xl border p-3.5 text-left transition ${
-                          active
-                            ? "border-white/20 bg-[#0a1512]/95 shadow-2xl"
-                            : "border-white/8 bg-[#0a1512]/78"
-                        }`}
-                        style={active ? { boxShadow: `0 0 0 1px ${issue.color}55, 0 18px 40px rgb(0 0 0 / 0.35)` } : undefined}
-                      >
-                        <div className="mb-2 flex items-center justify-between gap-2">
-                          <div className="flex items-center gap-2">
-                            <span
-                              className="grid size-8 place-items-center rounded-xl text-[#07110f]"
-                              style={{ backgroundColor: issue.color }}
-                            >
-                              <Icon className="size-4" />
-                            </span>
-                            <div>
-                              <p className="text-[10px] font-bold text-white/40">#{issue.rank} · {issue.id}</p>
-                              <p className="text-[11px] font-semibold text-[#72e3ac]">↑{issue.trend} sot</p>
-                            </div>
-                          </div>
-                          <div className="text-right">
-                            <p className="text-2xl font-semibold tracking-[-0.06em]" style={{ color: issue.color }}>
-                              {issue.priority}
-                            </p>
-                            <p className="text-[9px] text-white/35">{issue.severity}</p>
-                          </div>
-                        </div>
-                        <h3 className="line-clamp-2 text-[15px] font-semibold leading-5">{issue.title}</h3>
-                        <p className="mt-1.5 flex items-center gap-1 text-[11px] text-white/48">
-                          <MapPin className="size-3 shrink-0" /> {issue.location}
-                        </p>
-                        <div className="mt-2.5 h-1 overflow-hidden rounded-full bg-white/8">
-                          <div
-                            className="h-full rounded-full"
-                            style={{ width: `${issue.priority}%`, backgroundColor: issue.color }}
-                          />
-                        </div>
-                        <div className="mt-2.5 flex items-center justify-between gap-2">
-                          <span className="text-[10px] text-white/45">{issue.reports} qytetarë · {issue.age}</span>
-                          <button
-                            type="button"
-                            className="inline-flex items-center gap-0.5 text-[10px] font-semibold text-white/80"
-                            onClick={(event) => {
-                              event.stopPropagation();
-                              setSelectedId(issue.id);
-                              setDetailsOpen(true);
-                            }}
-                          >
-                            Detajet <ChevronRight className="size-3" />
-                          </button>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-                <div className="mt-2.5 flex justify-center gap-1.5">
-                  {issues.map((issue) => (
-                    <span
-                      key={issue.id}
-                      className="h-1.5 rounded-full transition-all"
-                      style={{
-                        width: selectedId === issue.id ? 18 : 6,
-                        backgroundColor: selectedId === issue.id ? issue.color : "rgb(255 255 255 / 0.22)",
-                      }}
-                    />
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          <div className="panel overflow-hidden">
-            <div className="border-b border-white/7 px-4 py-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Bot className="size-4 text-[#8f7cff]" />
-                  <h2 className="text-sm font-semibold">Swarm AI</h2>
-                </div>
-                <span className="text-[9px] uppercase tracking-[0.14em] text-[#52d6a4]">në punë</span>
-              </div>
-              <p className="mt-1 text-[10px] text-white/35">Agjentë të koordinuar, jo një chatbot</p>
-            </div>
-            <div className="snap-row gap-2 bg-transparent p-3 sm:hidden">
-              {agents.map((agent, index) => (
-                <div
-                  key={agent.name}
-                  className={`min-w-[42%] rounded-2xl border p-3 transition duration-500 ${
-                    activeAgent === index ? "border-white/16 bg-white/[0.07]" : "border-white/8 bg-white/[0.03]"
-                  }`}
-                >
-                  <agent.icon className="mb-2 size-4" style={{ color: agent.color }} />
-                  <p className="text-[12px] font-medium">{agent.name}</p>
-                  <p className="mt-0.5 text-[10px] text-white/38">{agent.detail}</p>
-                </div>
-              ))}
-            </div>
-            <div className="hidden grid-cols-2 gap-px bg-white/6 sm:grid">
-              {agents.map((agent, index) => (
-                <div
-                  key={agent.name}
-                  className={`relative bg-[#0b1613] p-3 transition duration-500 ${
-                    activeAgent === index ? "bg-white/[0.065]" : ""
-                  }`}
-                >
-                  {activeAgent === index && (
-                    <span className="absolute right-2 top-2 size-1.5 animate-pulse rounded-full" style={{ backgroundColor: agent.color }} />
-                  )}
-                  <agent.icon className="mb-2 size-4" style={{ color: agent.color }} />
-                  <p className="text-[11px] font-medium">{agent.name}</p>
-                  <p className="mt-0.5 text-[8px] text-white/30">{agent.detail}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="panel overflow-hidden">
-            <div className="flex items-center justify-between border-b border-white/7 px-4 py-3.5">
-              <h2 className="text-xs font-semibold">Aktiviteti i fundit</h2>
-              <Search className="size-3.5 text-white/25" />
-            </div>
-            <div className="space-y-0 px-4">
-              {activity.map((item, index) => (
-                <div key={item.text} className="relative flex gap-3 border-b border-white/6 py-3 last:border-0">
-                  <div className="relative mt-1">
-                    <span className="block size-2 rounded-full" style={{ backgroundColor: item.color }} />
-                    {index < activity.length - 1 && <span className="absolute left-[3px] top-3 h-9 w-px bg-white/8" />}
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="text-[9px] font-semibold" style={{ color: item.color }}>{item.agent}</span>
-                      <span className="text-[8px] text-white/25">{item.time}</span>
-                    </div>
-                    <p className="mt-0.5 text-[10px] leading-4 text-white/55">{item.text}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="panel flex flex-col justify-center border-[#d6f36a]/15 bg-[#d6f36a]/[0.055] p-5 md:col-span-2 xl:col-span-1">
-            <div className="mb-2 flex items-center gap-2 text-[#d6f36a]">
-              <Sparkles className="size-4" />
-              <span className="text-[10px] font-bold uppercase tracking-[0.12em]">Sinjal i swarm-it</span>
-            </div>
-            <p className="text-sm leading-6 text-white/66">
-              4 probleme në qendër po ndikojnë të njëjtin korridor. Koordinimi i dy ekipeve mund të
-              shmangë 3 dalje të ndara.
+            <p className="mt-3 max-w-2xl text-base leading-relaxed text-white/85 sm:mt-4 sm:text-lg">
+              {t.heroLine2}
             </p>
           </div>
-        </section>
-      </div>
 
-      <div className="mobile-dock fixed inset-x-0 bottom-0 z-40 px-4 sm:hidden">
-        <button
-          onClick={() => setReportOpen(true)}
-          className="flex h-14 w-full items-center justify-center gap-2 rounded-2xl bg-[#d6f36a] text-sm font-bold text-[#07110f] shadow-[0_16px_40px_rgb(214_243_106/0.28)]"
-        >
-          <Navigation className="size-4" />
-          Raporto problem
-        </button>
-      </div>
+          <div className="mt-10 w-full max-w-sm rounded-2xl bg-white p-0.5 shadow-[0_18px_50px_rgb(0_0_0/0.28)] sm:mt-12">
+            <button
+              type="button"
+              onClick={() => setReportOpen(true)}
+              className="flex h-14 w-full items-center justify-between gap-3 rounded-xl bg-[#04408b] px-5 text-left text-base font-semibold text-white transition hover:bg-[#03346f] sm:h-16 sm:text-lg"
+            >
+              <span className="inline-flex items-center gap-3">
+                <ClipboardPen className="size-5 shrink-0 sm:size-6" />
+                {t.heroCta}
+              </span>
+              <ArrowRight className="size-5 shrink-0 sm:size-6" />
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <footer id="kontakt" className="site-footer">
+        <div className="mx-auto grid max-w-[1500px] gap-8 px-4 py-10 sm:px-6 md:grid-cols-2 xl:grid-cols-4">
+          <div>
+            <div className="mb-3 flex items-center gap-3">
+              <img src="/gjakova-emblem.png" alt={t.emblemAlt} width={40} height={46} className="h-10 w-auto" />
+              <div>
+                <p className="text-[10px] uppercase tracking-[0.14em] text-white/55">{t.republic}</p>
+                <p className="text-base font-semibold">{t.municipality}</p>
+              </div>
+            </div>
+            <p className="text-sm leading-6 text-white/65">{t.footerAbout}</p>
+          </div>
+          <div>
+            <h2 className="mb-3 text-xs font-bold uppercase tracking-[0.12em] text-white/55">{t.footerContact}</h2>
+            <div className="space-y-2 text-sm text-white/80">
+              <p>
+                {t.addressLine1}
+                <br />
+                {t.addressLine2}
+              </p>
+              <p className="flex items-center gap-2">
+                <Phone className="size-3.5" /> Tel: {t.phone}
+              </p>
+              <p className="flex items-center gap-2">
+                <Mail className="size-3.5" /> {t.email}
+              </p>
+            </div>
+          </div>
+          <div>
+            <h2 className="mb-3 text-xs font-bold uppercase tracking-[0.12em] text-white/55">{t.footerInfo}</h2>
+            <p className="text-sm text-white/80">{t.infoCenter}</p>
+            <div className="lang-switch mt-4">
+              {LOCALE_OPTIONS.map((option, index) => (
+                <span key={option.id} className="inline-flex items-center">
+                  {index > 0 && <span className="px-0.5 text-white/30">/</span>}
+                  <button
+                    type="button"
+                    onClick={() => setLocale(option.id)}
+                    className={locale === option.id ? "bg-white text-[#161616]" : "text-white/75 hover:text-white"}
+                  >
+                    {option.label}
+                  </button>
+                </span>
+              ))}
+            </div>
+          </div>
+          <div>
+            <h2 className="mb-3 text-xs font-bold uppercase tracking-[0.12em] text-white/55">{t.footerLinks}</h2>
+            <div className="flex flex-col gap-2 text-sm text-white/80">
+              {navItems.map((item) => (
+                <a key={item.key} href={item.href} className="hover:text-white">
+                  {item.label}
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="border-t border-white/10">
+          <p className="mx-auto max-w-[1500px] px-4 py-4 text-center text-[11px] text-white/45 sm:px-6">
+            {t.copyright}
+          </p>
+        </div>
+      </footer>
 
       <Dialog open={reportOpen} onOpenChange={(open) => !open && resetReport()}>
-        <DialogContent className="max-w-lg border-white/10 bg-[#0c1714] p-0 text-white sm:rounded-3xl">
+        <DialogContent className="max-h-[90vh] w-[calc(100%-1.5rem)] max-w-[960px] overflow-y-auto border-[#e5e5e5] bg-white p-0 text-[#161616] sm:max-w-[960px] sm:rounded-xl">
           {!submitted ? (
             <>
-              <DialogHeader className="border-b border-white/7 px-6 py-5">
-                <div className="mb-3 flex size-10 items-center justify-center rounded-xl bg-[#d6f36a] text-[#07110f]">
-                  <Navigation className="size-5" />
+              <DialogHeader className="border-b border-[#e5e5e5] px-5 py-4 sm:px-6 sm:py-5">
+                <div className="flex items-start gap-4 pr-8">
+                  <div className="flex size-10 shrink-0 items-center justify-center rounded-sm bg-[#04408b] text-white sm:size-11">
+                    <ClipboardPen className="size-5" />
+                  </div>
+                  <div className="min-w-0">
+                    <DialogTitle className="text-xl tracking-[-0.03em] sm:text-2xl">{t.reportTitle}</DialogTitle>
+                    <p className="mt-1 text-sm leading-5 text-[#54595f] sm:max-w-2xl">{t.reportLead}</p>
+                  </div>
                 </div>
-                <DialogTitle className="text-xl tracking-[-0.03em]">Shtyp, mos shkruaj</DialogTitle>
-                <p className="text-sm leading-5 text-white/45">
-                  Tre butona. Swarm-i e kupton problemin, lokacionin dhe sa lart duhet të ngjitet.
-                </p>
               </DialogHeader>
-              <form onSubmit={submitReport} className="space-y-5 px-6 py-5">
+              <form onSubmit={submitReport} className="grid gap-5 px-5 py-5 sm:grid-cols-2 sm:gap-6 sm:px-6 sm:py-6">
                 <div>
-                  <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-white/45">Çfarë është?</p>
+                  <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-[#54595f]">{t.whatIsIt}</p>
                   <div className="grid grid-cols-3 gap-2">
                     {categories.map((category) => (
                       <button
                         key={category.id}
                         type="button"
                         onClick={() => setForm({ ...form, categoryId: category.id })}
-                        className={`flex h-[72px] flex-col items-center justify-center rounded-xl border text-[11px] font-medium transition ${
+                        className={`flex h-[72px] flex-col items-center justify-center rounded-sm border text-[11px] font-medium transition sm:h-[80px] ${
                           form.categoryId === category.id
-                            ? "border-[#d6f36a]/40 bg-[#d6f36a]/12 text-[#d6f36a]"
-                            : "border-white/10 bg-white/[0.03] text-white/65 hover:bg-white/[0.06]"
+                            ? "border-[#04408b]/40 bg-[#edf2f7] text-[#04408b]"
+                            : "border-[#e5e5e5] bg-[#f7f8fa] text-[#161616]/70 hover:bg-[#edf2f7]"
                         }`}
                       >
                         <category.icon className="mb-1.5 size-4" />
-                        {category.label}
+                        {t.categories[category.id]}
                       </button>
                     ))}
                   </div>
                 </div>
+
                 <div>
-                  <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-white/45">Sa serioze?</p>
-                  <div className="grid grid-cols-3 gap-2">
-                    {severities.map((severity) => (
-                      <button
-                        key={severity.id}
-                        type="button"
-                        onClick={() => setForm({ ...form, severityId: severity.id })}
-                        className={`rounded-xl border px-2 py-3 text-center transition ${
-                          form.severityId === severity.id
-                            ? "border-[#ff9f43]/40 bg-[#ff9f43]/12 text-[#ffcf9a]"
-                            : "border-white/10 bg-white/[0.03] text-white/65 hover:bg-white/[0.06]"
-                        }`}
-                      >
-                        <span className="block text-[12px] font-semibold">{severity.label}</span>
-                        <span className="mt-1 block text-[9px] text-white/35">{severity.hint}</span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div>
-                  <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-white/45">Ku ndodhet?</p>
+                  <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-[#54595f]">{t.whereIsIt}</p>
                   <div className="grid grid-cols-2 gap-2">
                     {places.map((place) => (
                       <button
                         key={place.id}
                         type="button"
                         onClick={() => setForm({ ...form, placeId: place.id })}
-                        className={`flex items-center gap-2 rounded-xl border px-3 py-2.5 text-left text-[11px] transition ${
+                        className={`flex min-h-[52px] items-center gap-2 rounded-sm border px-3 py-2.5 text-left text-[11px] transition sm:min-h-[56px] ${
                           form.placeId === place.id
-                            ? "border-[#65e4ff]/40 bg-[#65e4ff]/10 text-[#65e4ff]"
-                            : "border-white/10 bg-white/[0.03] text-white/65 hover:bg-white/[0.06]"
+                            ? "border-[#04408b]/40 bg-[#edf2f7] text-[#04408b]"
+                            : "border-[#e5e5e5] bg-[#f7f8fa] text-[#161616]/70 hover:bg-[#edf2f7]"
                         }`}
                       >
                         <MapPin className="size-3.5 shrink-0" />
-                        {place.label}
+                        {t.places[place.id]}
                       </button>
                     ))}
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <button
-                    type="button"
-                    onClick={() => setForm({ ...form, photo: !form.photo })}
-                    className={`flex h-16 flex-col items-center justify-center rounded-xl border text-[10px] transition ${
-                      form.photo
-                        ? "border-[#d6f36a]/40 bg-[#d6f36a]/10 text-[#d6f36a]"
-                        : "border-dashed border-white/15 bg-white/[0.025] text-white/40 hover:text-[#65e4ff]"
-                    }`}
+
+                <div className="flex flex-col gap-3 sm:col-span-2">
+                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                    <button
+                      type="button"
+                      onClick={() => setForm({ ...form, photo: !form.photo })}
+                      className={`flex h-12 items-center justify-center gap-2 rounded-sm border px-3 text-sm font-medium transition ${
+                        form.photo
+                          ? "border-[#04408b]/40 bg-[#edf2f7] text-[#04408b]"
+                          : "border-dashed border-[#cfd8e3] bg-[#f7f8fa] text-[#54595f] hover:border-[#04408b]/40 hover:text-[#04408b]"
+                      }`}
+                    >
+                      <ImagePlus className="size-4 shrink-0" />
+                      <span className="truncate">{form.photo ? t.photoAdded : t.addPhoto}</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={useMyLocation}
+                      className="flex h-12 items-center justify-center gap-2 rounded-sm border border-dashed border-[#cfd8e3] bg-[#f7f8fa] px-3 text-sm font-medium text-[#54595f] transition hover:border-[#04408b]/40 hover:text-[#04408b]"
+                    >
+                      <Crosshair className="size-4 shrink-0" />
+                      <span className="truncate">{t.useMyLocation}</span>
+                    </button>
+                  </div>
+                  <Button
+                    type="submit"
+                    disabled={processing || !form.categoryId || !form.placeId}
+                    className="h-12 w-full rounded-sm bg-[#04408b] text-base font-bold text-white hover:bg-[#03346f] disabled:bg-[#04408b]/45 disabled:opacity-100"
                   >
-                    <ImagePlus className="mb-1 size-4" />
-                    {form.photo ? "Foto u shtua" : "Shto foto"}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={useMyLocation}
-                    className="flex h-16 flex-col items-center justify-center rounded-xl border border-dashed border-white/15 bg-white/[0.025] text-[10px] text-white/40 transition hover:border-[#65e4ff]/40 hover:text-[#65e4ff]"
-                  >
-                    <Crosshair className="mb-1 size-4" />
-                    Përdor lokacionin tim
-                  </button>
+                    {processing ? (
+                      <span className="flex items-center gap-2">
+                        <BrainCircuit className="size-4 animate-pulse" /> {t.agentsAnalyzing}
+                      </span>
+                    ) : (
+                      <span className="flex items-center gap-2">
+                        {t.sendSignal} <ArrowUpRight className="size-4" />
+                      </span>
+                    )}
+                  </Button>
                 </div>
-                <Button
-                  disabled={processing || !form.categoryId || !form.severityId || !form.placeId}
-                  className="h-12 w-full rounded-xl bg-[#d6f36a] font-bold text-[#07110f] hover:bg-[#e6ff88]"
-                >
-                  {processing ? (
-                    <span className="flex items-center gap-2">
-                      <BrainCircuit className="size-4 animate-pulse" /> Agjentët po e analizojnë...
-                    </span>
-                  ) : (
-                    <span className="flex items-center gap-2">Dërgo sinjalin <ArrowUpRight className="size-4" /></span>
-                  )}
-                </Button>
               </form>
             </>
           ) : (
-            <div className="px-6 py-8">
-              <div className="mx-auto mb-5 grid size-14 place-items-center rounded-2xl bg-[#52d6a4]/12 text-[#52d6a4]">
+            <div className="mx-auto max-w-xl px-6 py-10">
+              <div className="mx-auto mb-5 grid size-14 place-items-center rounded-sm bg-[#e8f6ee] text-[#2f6f4e]">
                 <Check className="size-7" />
               </div>
               <div className="text-center">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#52d6a4]">Sinjali u përpunua</p>
-                <h3 className="mt-2 text-xl font-semibold">U lidh me rastin {mergedId}</h3>
-                <p className="mx-auto mt-2 max-w-sm text-sm leading-6 text-white/45">
-                  Protokolli e gjeti të njëjtin problem në listë. Sinjali yt e ngriti lart dhe
-                  swarm-i e qarkulloi te komuna.
-                </p>
+                <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#2f6f4e]">{t.signalProcessed}</p>
+                <h3 className="mt-2 text-xl font-semibold">
+                  {t.linkedCase} {mergedId}
+                </h3>
+                <p className="mx-auto mt-2 max-w-sm text-sm leading-6 text-[#54595f]">{t.processedLead}</p>
               </div>
               <div className="my-6 grid grid-cols-3 gap-2">
                 {[
-                  ["Kategoria", categories.find((item) => item.id === form.categoryId)?.label ?? "Problem"],
-                  ["Lokacioni", places.find((item) => item.id === form.placeId)?.label ?? "Gjakovë"],
-                  ["Rasti", mergedId],
+                  [t.fieldCategory, t.categories[form.categoryId] ?? ""],
+                  [t.fieldLocation, t.places[form.placeId] ?? ""],
+                  [t.fieldCase, mergedId],
                 ].map(([label, value]) => (
-                  <div key={label} className="rounded-xl border border-white/7 bg-white/[0.03] p-3 text-center">
-                    <p className="text-[8px] uppercase tracking-wider text-white/30">{label}</p>
-                    <p className="mt-1 text-[10px] font-medium text-white/75">{value}</p>
+                  <div key={label} className="rounded-sm border border-[#e5e5e5] bg-[#f7f8fa] p-3 text-center">
+                    <p className="text-[8px] uppercase tracking-wider text-[#54595f]">{label}</p>
+                    <p className="mt-1 text-[10px] font-medium text-[#161616]">{value}</p>
                   </div>
                 ))}
               </div>
-              <Button onClick={resetReport} className="h-11 w-full rounded-xl bg-white text-[#07110f] hover:bg-white/90">
-                Shih rastin në hartë
+              <Button onClick={resetReport} className="h-11 w-full rounded-sm bg-[#04408b] text-white hover:bg-[#03346f]">
+                {t.seeOnMap}
               </Button>
             </div>
           )}
-        </DialogContent>
-      </Dialog>
-
-      <Dialog open={detailsOpen} onOpenChange={setDetailsOpen}>
-        <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto border-white/10 bg-[#0c1714] p-0 text-white sm:rounded-3xl">
-          <DialogHeader className="sr-only">
-            <DialogTitle>Detajet e rastit {selected.id}</DialogTitle>
-          </DialogHeader>
-          <div className="border-b border-white/7 p-6">
-            <div className="mb-3 flex flex-wrap items-center gap-2">
-              <span className="rounded-full px-2.5 py-1 text-[9px] font-bold" style={{ color: selected.color, backgroundColor: `${selected.color}12` }}>
-                Prioritet {selected.priority}
-              </span>
-              <span className="rounded-full bg-white/5 px-2.5 py-1 text-[9px] text-white/45">{selected.status}</span>
-              <span className="text-[9px] text-white/25">{selected.id}</span>
-            </div>
-            <h2 className="text-2xl font-semibold tracking-[-0.04em]">{selected.title}</h2>
-            <p className="mt-2 flex items-center gap-1.5 text-xs text-white/40">
-              <MapPin className="size-3.5" /> {selected.location}
-            </p>
-          </div>
-
-          <div className="grid gap-6 p-6 md:grid-cols-2">
-            <div>
-              <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.14em] text-white/35">
-                Pse është prioritet
-              </p>
-              <div className="space-y-3">
-                {selected.reasons.map((reason) => (
-                  <div key={reason.label}>
-                    <div className="mb-1.5 flex justify-between text-[10px]">
-                      <span className="text-white/55">{reason.label}</span>
-                      <span className="font-medium text-white/80">+{reason.value}</span>
-                    </div>
-                    <div className="h-1.5 overflow-hidden rounded-full bg-white/6">
-                      <div className="h-full rounded-full" style={{ width: `${reason.value * 3.2}%`, backgroundColor: selected.color }} />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.14em] text-white/35">
-                Inteligjenca e rastit
-              </p>
-              <div className="grid grid-cols-2 gap-2">
-                {[
-                  ["Raporte të lidhura", `${selected.reports}`],
-                  ["Aktiv prej", selected.age],
-                  ["Ndikimi", selected.impact],
-                  ["Përgjegjësi", selected.department],
-                ].map(([label, value]) => (
-                  <div key={label} className="rounded-xl border border-white/7 bg-white/[0.025] p-3">
-                    <p className="text-[8px] uppercase tracking-wider text-white/28">{label}</p>
-                    <p className="mt-1.5 text-[11px] font-medium leading-4 text-white/75">{value}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          <div className="mx-6 mb-6 rounded-2xl border border-[#d6f36a]/15 bg-[#d6f36a]/[0.055] p-4">
-            <div className="mb-2 flex items-center gap-2 text-[#d6f36a]">
-              <Lightbulb className="size-4" />
-              <span className="text-[10px] font-bold uppercase tracking-[0.12em]">Veprimi i rekomanduar</span>
-            </div>
-            <p className="text-sm leading-6 text-white/68">{selected.recommendation}</p>
-            <div className="mt-4 flex flex-wrap gap-2">
-              <Button className="h-9 rounded-lg bg-[#d6f36a] text-xs font-bold text-[#07110f] hover:bg-[#e6ff88]">
-                <Send className="size-3.5" /> Dërgo te departamenti
-              </Button>
-              <Button variant="outline" className="h-9 border-white/10 bg-transparent text-xs text-white hover:bg-white/5 hover:text-white">
-                <FileText className="size-3.5" /> Eksporto rastin
-              </Button>
-            </div>
-          </div>
         </DialogContent>
       </Dialog>
     </main>

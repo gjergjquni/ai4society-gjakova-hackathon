@@ -79,11 +79,13 @@ export default function GjakovaMap({
   selectedId,
   style,
   onSelect,
+  emptyMessage = "Shto NEXT_PUBLIC_GOOGLE_MAPS_API_KEY",
 }: {
   issues: MapIssue[];
   selectedId: string;
   style: MapStyle;
   onSelect: (id: string) => void;
+  emptyMessage?: string;
 }) {
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
   const selected = issues.find((issue) => issue.id === selectedId) ?? issues[0];
@@ -91,7 +93,7 @@ export default function GjakovaMap({
   if (!apiKey) {
     return (
       <div className="absolute inset-0 grid place-items-center bg-[#e8eaed] text-sm text-[#5f6368]">
-        Shto NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
+        {emptyMessage}
       </div>
     );
   }
