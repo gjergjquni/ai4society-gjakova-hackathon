@@ -49,6 +49,31 @@
 }
 
 :root {
+  /* Municipal institutional brand (Arkivist / Drejtori) */
+  --color-ark-bg: #f5f6f8;
+  --color-ark-surface: #ffffff;
+  --color-ark-subtle: #f9fafb;
+  --color-ark-line: #e6e8ec;
+  --color-ark-line-strong: #d5d9e0;
+  --color-ark-ink: #111a2b;
+  --color-ark-muted: #5d6677;
+  --color-ark-faint: #8e96a4;
+  --color-ark-brand: #04408b;
+  --color-ark-brand-ink: #ffffff;
+  --color-ark-brand-soft: #eaf0f8;
+
+  /* Priority & Status indicators */
+  --color-ark-crit: #c2261d;
+  --color-ark-high: #d9620b;
+  --color-ark-mid: #c9960a;
+  --color-ark-low: #8e96a4;
+  --color-ark-ok: #1f7a4d;
+  --color-ark-ok-soft: #ebf5ef;
+  --color-ark-warn-soft: #fbf5e6;
+  --color-ark-danger-soft: #fcefee;
+
+  --shadow-ark-pop: 0 12px 32px -12px rgb(17 26 43 / 0.18), 0 2px 6px rgb(17 26 43 / 0.06);
+
   /* Official site chrome: https://gjakova.rks-gov.net/ uses #04408b */
   --gjakova-blue: #04408b;
   --gjakova-blue-dark: #03346f;

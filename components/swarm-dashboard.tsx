@@ -25,6 +25,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { createReport, fetchProblems, type Issue } from "@/lib/api";
 import { DEFAULT_LOCALE, LOCALE_OPTIONS, getMessages, type Locale } from "@/lib/i18n";
+import { LOCALE_STORAGE_KEY } from "@/lib/admin-i18n";
 
 const categories = [
   { id: "pothole", label: "Gropë", icon: TrafficCone },
@@ -152,7 +153,7 @@ const seedIssues: Issue[] = [
 ];
 
 export default function SwarmDashboard() {
-  const [locale, setLocale] = useState<Locale>(DEFAULT_LOCALE);
+  const [locale, setLocaleState] = useState<Locale>(DEFAULT_LOCALE);
   const t = getMessages(locale);
   const [issues, setIssues] = useState(seedIssues);
   const [reportOpen, setReportOpen] = useState(() =>
@@ -180,6 +181,26 @@ export default function SwarmDashboard() {
     category: "",
     location: "",
   });
+
+  useEffect(() => {
+    try {
+      const stored = window.localStorage.getItem(LOCALE_STORAGE_KEY) as Locale | null;
+      if (stored === "sq" || stored === "en" || stored === "sr") {
+        setLocaleState(stored);
+      }
+    } catch {
+      /* ignore */
+    }
+  }, []);
+
+  function setLocale(next: Locale) {
+    setLocaleState(next);
+    try {
+      window.localStorage.setItem(LOCALE_STORAGE_KEY, next);
+    } catch {
+      /* ignore */
+    }
+  }
 
   useEffect(() => {
     document.documentElement.lang = locale;
@@ -356,7 +377,7 @@ export default function SwarmDashboard() {
                   {t.municipality}
                 </span>
                 <span className="mt-0.5 block truncate text-[13px] font-semibold leading-tight tracking-tight text-[#04408b] sm:text-sm">
-                  ReagoGjakove
+                  {t.brand}
                 </span>
               </span>
             </a>
@@ -420,6 +441,7 @@ export default function SwarmDashboard() {
               <div>
                 <p className="text-[10px] uppercase tracking-[0.14em] text-white/55">{t.republic}</p>
                 <p className="text-base font-semibold">{t.municipality}</p>
+                <p className="mt-0.5 text-sm font-medium text-white/80">{t.brand}</p>
               </div>
             </div>
             <p className="text-sm leading-6 text-white/65">{t.footerAbout}</p>

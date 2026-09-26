@@ -13,6 +13,7 @@ export type Messages = {
   metaDescription: string;
   republic: string;
   municipality: string;
+  brand: string;
   emblemAlt: string;
   contactShort: string;
   phone: string;
@@ -122,10 +123,11 @@ export type Messages = {
 
 export const messages: Record<Locale, Messages> = {
   sq: {
-    metaTitle: "Komuna e Gjakovës",
+    metaTitle: "ReagoGjakovë · Komuna e Gjakovës",
     metaDescription: "Raportoni probleme komunale në Gjakovë — harta, prioriteti dhe agjentët e komunës.",
     republic: "Republika e Kosovës",
     municipality: "Komuna e Gjakovës",
+    brand: "ReagoGjakovë",
     emblemAlt: "Emblema e Komunës së Gjakovës",
     contactShort: "Rr. Nëna Tereze, 50000 Gjakovë",
     phone: "+383 390 321 100",
@@ -327,10 +329,11 @@ export const messages: Record<Locale, Messages> = {
     },
   },
   sr: {
-    metaTitle: "Opština Đakovica",
+    metaTitle: "ReagoGjakovë · Opština Đakovica",
     metaDescription: "Prijavite komunalne probleme u Đakovici — mapa, prioritet i opštinski agenti.",
     republic: "Republika Kosovo",
     municipality: "Opština Đakovica",
+    brand: "ReagoGjakovë",
     emblemAlt: "Amblem Opštine Đakovica",
     contactShort: "Rr. Nëna Tereze, 50000 Gjakovë",
     phone: "+383 390 321 100",
@@ -532,10 +535,11 @@ export const messages: Record<Locale, Messages> = {
     },
   },
   en: {
-    metaTitle: "Municipality of Gjakova",
+    metaTitle: "ReagoGjakovë · Municipality of Gjakova",
     metaDescription: "Report municipal problems in Gjakova — map, priority, and municipal agents.",
     republic: "Republic of Kosovo",
     municipality: "Municipality of Gjakova",
+    brand: "ReagoGjakovë",
     emblemAlt: "Emblem of the Municipality of Gjakova",
     contactShort: "Rr. Nëna Tereze, 50000 Gjakovë",
     phone: "+383 390 321 100",
