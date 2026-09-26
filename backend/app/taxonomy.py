@@ -22,15 +22,99 @@ CUSTOM_CATEGORY_LABEL = "Kërkesë e personalizuar"
 NEW_ISSUE_COLOR = "#65e4ff"
 ACTIVE_STATUSES = ("Eskaluar", "Në shqyrtim", "Monitorim")
 
-# Ids match the citizen form. Labels stay Albanian so stored cases do not
-# change when the page language changes.
+DIRECTORATE_IDS = (
+    "ADM",
+    "FIN",
+    "SHP",
+    "INF",
+    "SHS",
+    "ARS",
+    "KRS",
+    "ZHE",
+    "URB",
+    "BUJ",
+    "KAD",
+    "MSH",
+    "INS",
+)
+
+DIRECTORATES = {
+    "ADM": "Drejtoria e Administratës",
+    "FIN": "Drejtoria për Buxhet dhe Financa",
+    "SHP": "Drejtoria për Shërbime Publike",
+    "INF": "Drejtoria për Infrastrukturë",
+    "SHS": "Drejtoria për Shëndetësi dhe Mirëqenie Sociale",
+    "ARS": "Drejtoria për Arsim",
+    "KRS": "Drejtoria për Kulturë, Rini dhe Sport",
+    "ZHE": "Drejtoria për Zhvillim Ekonomik",
+    "URB": "Drejtoria për Urbanizëm dhe Mbrojtje të Mjedisit",
+    "BUJ": "Drejtoria për Bujqësi, Pylltari dhe Zhvillim Rural",
+    "KAD": "Drejtoria për Gjeodezi, Kadastër dhe Pronë",
+    "MSH": "Drejtoria për Mbrojtje dhe Shpëtim",
+    "INS": "Drejtoria për Inspektime",
+}
+
+WORKFLOW_STATUSES = (
+    "SUBMITTED",
+    "AI_ANALYZED",
+    "PENDING_REVIEW",
+    "APPROVED",
+    "REJECTED",
+    "ASSIGNED",
+    "IN_PROGRESS",
+    "RESOLVED",
+    "VERIFIED",
+    "CLOSED",
+)
+
+REVIEW_STATUSES = ("SUBMITTED", "AI_ANALYZED", "PENDING_REVIEW")
+ASSIGNED_STATUSES = ("ASSIGNED", "IN_PROGRESS", "RESOLVED", "VERIFIED", "CLOSED")
+PRIORITY_LABELS = ("Kritike", "E lartë", "Mesatare", "E ulët")
+
+# Citizen form ids → official 13 directorates (ADM…INS).
 CATEGORIES = {
-    "pothole": CategoryRoute("Gropë", "SHP", "Drejtoria e Shërbimeve Publike", "#ff9f43"),
-    "waste": CategoryRoute("Mbeturina", "CAB", "Çabrati Sh.A.", "#d6f36a"),
-    "light": CategoryRoute("Ndriçim", "INF", "Drejtoria e Infrastrukturës", "#8f7cff"),
-    "water": CategoryRoute("Rrjedhje uji", "KRU", "KRU Gjakova", "#ff5e66"),
-    "sidewalk": CategoryRoute("Trotuar", "SHP", "Drejtoria e Shërbimeve Publike", "#65e4ff"),
-    "traffic": CategoryRoute("Trafik", "SHP", "Drejtoria e Shërbimeve Publike", "#65e4ff"),
+    "pothole": CategoryRoute("Gropë", "INF", "Drejtoria për Infrastrukturë", "#ff9f43"),
+    "waste": CategoryRoute("Mbeturina", "SHP", "Drejtoria për Shërbime Publike", "#d6f36a"),
+    "light": CategoryRoute("Ndriçim", "SHP", "Drejtoria për Shërbime Publike", "#8f7cff"),
+    "water": CategoryRoute("Rrjedhje uji", "SHS", "Drejtoria për Shëndetësi dhe Mirëqenie Sociale", "#ff5e66"),
+    "sidewalk": CategoryRoute("Trotuar", "INF", "Drejtoria për Infrastrukturë", "#65e4ff"),
+    "traffic": CategoryRoute("Trafik", "INF", "Drejtoria për Infrastrukturë", "#65e4ff"),
+}
+
+CATEGORY_LABELS = {
+    "pothole": "Infrastrukturë",
+    "waste": "Mbeturina",
+    "light": "Ndriçim",
+    "water": "Ujësjellës",
+    "sidewalk": "Trotuar",
+    "traffic": "Trafik",
+    "custom": "Ambient",
+}
+
+SECTOR_BY_DIRECTORATE = {
+    "ADM": "Administratë",
+    "FIN": "Administratë",
+    "SHP": "Menaxhimi i mbeturinave",
+    "INF": "Mirëmbajtja e rrugëve",
+    "SHS": "Rrjeti i ujësjellësit",
+    "ARS": "Hapësirat publike",
+    "KRS": "Hapësirat publike",
+    "ZHE": "Administratë",
+    "URB": "Urbanizëm",
+    "BUJ": "Hapësirat publike",
+    "KAD": "Administratë",
+    "MSH": "Inspektime",
+    "INS": "Inspektime",
+}
+
+SECTOR_BY_CATEGORY = {
+    "pothole": "Mirëmbajtja e rrugëve",
+    "waste": "Menaxhimi i mbeturinave",
+    "light": "Ndriçimi publik",
+    "water": "Rrjeti i ujësjellësit",
+    "sidewalk": "Mirëmbajtja e rrugëve",
+    "traffic": "Sinjalizimi rrugor",
+    "custom": "Hapësirat publike",
 }
 
 PLACES = {
@@ -64,3 +148,84 @@ def get_place(place_id: str | None) -> Place | None:
         return PLACES[place_id]
     except KeyError as exc:
         raise ValueError(f"Unsupported place: {place_id}") from exc
+
+
+def official_directorate_id(department_id: str | None) -> str:
+    aliases = {
+        "CAB": "SHP",
+        "KRU": "SHS",
+    }
+    candidate = aliases.get(department_id or "", department_id or "SHP")
+    if candidate not in DIRECTORATES:
+        return "SHP"
+    return candidate
+
+
+def directorate_name(directorate_id: str) -> str:
+    return DIRECTORATES.get(official_directorate_id(directorate_id), DIRECTORATES["SHP"])
+
+
+def ui_status(workflow_status: str) -> str:
+    return {
+        "SUBMITTED": "SUBMITTED",
+        "AI_ANALYZED": "AI_ANALYZED",
+        "PENDING_REVIEW": "NE_SHQYRTIM",
+        "APPROVED": "APROVUAR",
+        "REJECTED": "REFUZUAR",
+        "ASSIGNED": "DERGUAR_TE_DREJTORIA",
+        "IN_PROGRESS": "DERGUAR_TE_DREJTORIA",
+        "RESOLVED": "DERGUAR_TE_DREJTORIA",
+        "VERIFIED": "DERGUAR_TE_DREJTORIA",
+        "CLOSED": "DERGUAR_TE_DREJTORIA",
+    }.get(workflow_status, "NE_SHQYRTIM")
+
+
+def ui_directorate_status(workflow_status: str) -> str | None:
+    return {
+        "ASSIGNED": "NEW",
+        "IN_PROGRESS": "IN_PROGRESS",
+        "RESOLVED": "RESOLVED",
+        "VERIFIED": "VERIFIED",
+        "CLOSED": "CLOSED",
+    }.get(workflow_status)
+
+
+def citizen_status_label(workflow_status: str) -> str:
+    return {
+        "SUBMITTED": "Në shqyrtim",
+        "AI_ANALYZED": "Në shqyrtim",
+        "PENDING_REVIEW": "Në shqyrtim",
+        "APPROVED": "Aprovuar",
+        "REJECTED": "Refuzuar",
+        "ASSIGNED": "Te drejtoria",
+        "IN_PROGRESS": "Në proces",
+        "RESOLVED": "E zgjidhur",
+        "VERIFIED": "E verifikuar",
+        "CLOSED": "E mbyllur",
+    }.get(workflow_status, "Në shqyrtim")
+
+
+def timeline_for(workflow_status: str) -> list[str]:
+    steps = [
+        ("SUBMITTED", "Raportuar"),
+        ("AI_ANALYZED", "Analizuar nga AI"),
+        ("PENDING_REVIEW", "Në shqyrtim"),
+        ("APPROVED", "Verifikuar nga Arkivisti"),
+        ("ASSIGNED", "Dërguar te Drejtoria"),
+        ("IN_PROGRESS", "Në proces"),
+        ("RESOLVED", "Zgjidhur"),
+        ("VERIFIED", "Verifikuar"),
+        ("CLOSED", "Mbyllur"),
+    ]
+    if workflow_status == "REJECTED":
+        return ["Raportuar", "Analizuar nga AI", "Në shqyrtim", "Refuzuar"]
+    reached = []
+    for key, label in steps:
+        reached.append(label)
+        if key == workflow_status:
+            break
+        if workflow_status == "APPROVED" and key == "APPROVED":
+            break
+    if workflow_status == "ASSIGNED" and "Dërguar te Drejtoria" not in reached:
+        reached.append("Dërguar te Drejtoria")
+    return reached or ["Raportuar"]

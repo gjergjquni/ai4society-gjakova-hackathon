@@ -6,6 +6,8 @@ TEST_DB = Path(__file__).resolve().parent / "test_pulsi.db"
 if TEST_DB.exists():
     TEST_DB.unlink()
 os.environ["DATABASE_URL"] = f"sqlite:///{TEST_DB}"
+os.environ["AI_TIMEOUT_SECONDS"] = "0.4"
+os.environ["AI_SERVICE_URL"] = "http://127.0.0.1:9"
 
 from fastapi.testclient import TestClient
 from app.main import app
@@ -44,7 +46,7 @@ def test_create_report():
         data = response.json()
         assert data["category"] == "Trafik"
         assert data["category_id"] == "traffic"
-        assert data["department_id"] == "SHP"
+        assert data["department_id"] == "INF"
         assert data["duplicate_decision"] == "NEW_CASE"
         assert data["case_code"].startswith("GJK-")
         assert data["issue"]["id"] == data["case_code"]
@@ -141,3 +143,62 @@ def test_update_status():
         assert response.status_code == 200
         assert response.json()["status"] == "Në shqyrtim"
         assert response.json()["id"] == "GJK-1047"
+
+
+def test_full_workflow_to_citizen_status():
+    with TestClient(app) as client:
+        created = client.post(
+            "/api/v1/reports",
+            json={
+                "custom_text": "Ka një gropë të rrezikshme te Ura e Terzive",
+                "place_id": "ura",
+                "lat": 42.3724,
+                "lon": 20.4308,
+            },
+        )
+        assert created.status_code == 201
+        body = created.json()
+        case_code = body["case_code"]
+        assert body["workflow_status"] == "PENDING_REVIEW"
+        assert body["department_id"] in {
+            "ADM", "FIN", "SHP", "INF", "SHS", "ARS", "KRS",
+            "ZHE", "URB", "BUJ", "KAD", "MSH", "INS",
+        }
+
+        listed = client.get("/api/v1/cases")
+        assert listed.status_code == 200
+        assert any(item["id"].startswith(case_code) for item in listed.json())
+
+        approved = client.post(
+            f"/api/v1/cases/{case_code}/approve",
+            json={"directorateId": body["department_id"], "priority": "E lartë"},
+        )
+        assert approved.status_code == 200
+        assert approved.json()["workflowStatus"] == "ASSIGNED"
+        assert approved.json()["directorateId"] == body["department_id"]
+        assert approved.json()["directorateStatus"] == "NEW"
+
+        directorate_id = approved.json()["directorateId"]
+        queued = client.get(f"/api/v1/cases?directorate_id={directorate_id}")
+        assert queued.status_code == 200
+        assert any(item["id"].startswith(case_code) for item in queued.json())
+        assert all(item["directorateId"] == directorate_id for item in queued.json())
+
+        progressed = client.patch(
+            f"/api/v1/cases/{case_code}/directorate-status",
+            json={"status": "IN_PROGRESS"},
+        )
+        assert progressed.status_code == 200
+        assert progressed.json()["workflowStatus"] == "IN_PROGRESS"
+
+        resolved = client.post(
+            f"/api/v1/cases/{case_code}/resolve",
+            json={"workDescription": "Gropa u asfaltua sot."},
+        )
+        assert resolved.status_code == 200
+        assert resolved.json()["workflowStatus"] == "RESOLVED"
+
+        tracked = client.get(f"/api/v1/cases/lookup?q={case_code}")
+        assert tracked.status_code == 200
+        assert tracked.json()[0]["status"] == "E zgjidhur"
+        assert tracked.json()[0]["workflow_status"] == "RESOLVED"

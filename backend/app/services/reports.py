@@ -1,4 +1,3 @@
-from datetime import datetime, timezone
 from uuid import uuid4
 
 from sqlalchemy import select
@@ -7,14 +6,21 @@ from sqlalchemy.orm import Session
 from ..models import Problem, Report, utcnow
 from ..schemas import ReportCreate, ReportResult
 from ..taxonomy import (
+    CATEGORY_LABELS,
     CUSTOM_CATEGORY_ID,
     CUSTOM_CATEGORY_LABEL,
     NEW_ISSUE_COLOR,
     NEW_REASONS,
+    SECTOR_BY_CATEGORY,
     UNSPECIFIED_LOCATION,
+    citizen_status_label,
+    directorate_name,
     get_category,
     get_place,
+    official_directorate_id,
+    timeline_for,
 )
+from .ai_client import analyze_report
 from .duplicates import find_duplicate
 from .issues import problem_to_issue
 
@@ -31,22 +37,26 @@ def _next_case_code(db: Session) -> str:
     return f"GJK-{highest + 1}"
 
 
-def create_report(db: Session, payload: ReportCreate) -> tuple[Report, Problem]:
+def create_report(
+    db: Session,
+    payload: ReportCreate,
+    photo_url: str | None = None,
+) -> tuple[Report, Problem]:
     custom_text = (payload.custom_text or "").strip()
     place = get_place(payload.place_id)
 
     if payload.category_id:
         route = get_category(payload.category_id)
         category_id = payload.category_id
-        category_label = route.label
-        department_id = route.department_id
-        department_name = route.department_name
+        category_label = CATEGORY_LABELS.get(category_id, route.label)
+        department_id = official_directorate_id(route.department_id)
+        department_name = directorate_name(department_id)
         color = route.color
     else:
         category_id = CUSTOM_CATEGORY_ID
         category_label = CUSTOM_CATEGORY_LABEL
         department_id = "SHP"
-        department_name = "Drejtoria e Shërbimeve Publike"
+        department_name = directorate_name(department_id)
         color = NEW_ISSUE_COLOR
 
     if payload.lat is not None and payload.lon is not None:
@@ -57,6 +67,19 @@ def create_report(db: Session, payload: ReportCreate) -> tuple[Report, Problem]:
         location_text = place.label if place else UNSPECIFIED_LOCATION
         lat = place.lat if place else None
         lon = place.lon if place else None
+
+    analysis_text = custom_text or category_label
+    analysis = analyze_report(
+        text=analysis_text,
+        location_text=location_text,
+        lat=lat,
+        lon=lon,
+        category_id=category_id if category_id != CUSTOM_CATEGORY_ID else None,
+        has_photo=bool(photo_url or payload.has_photo),
+    )
+    department_id = official_directorate_id(analysis["directorateId"])
+    department_name = directorate_name(department_id)
+    category_label = analysis["category"] or category_label
 
     candidate = type(
         "Candidate",
@@ -72,9 +95,9 @@ def create_report(db: Session, payload: ReportCreate) -> tuple[Report, Problem]:
 
     problem, score, location_match = find_duplicate(db, candidate)
     now = utcnow()
+    title = analysis["title"] or custom_text or f"{category_label} e raportuar"
 
     if problem is None:
-        title = custom_text or f"{category_label} e raportuar"
         recommendation = (
             f"Inspektoni {location_text} dhe konfirmoni {title.lower()} "
             "para se të dërgohet ekipi."
@@ -92,8 +115,10 @@ def create_report(db: Session, payload: ReportCreate) -> tuple[Report, Problem]:
             lon=lon,
             title=title,
             status="Monitorim",
-            severity="Mesatare",
-            priority=64,
+            severity=analysis["priority"] if analysis["priority"] in {"Kritike", "E lartë", "Mesatare"} else "Mesatare",
+            priority={"Kritike": 92, "E lartë": 80, "Mesatare": 64, "E ulët": 40}.get(
+                analysis["priority"], 64
+            ),
             trend=4,
             impact="1 sinjal i ri",
             recommendation=recommendation,
@@ -107,12 +132,16 @@ def create_report(db: Session, payload: ReportCreate) -> tuple[Report, Problem]:
         decision = "NEW_CASE"
         location_match = False
         score = 0.0
+        workflow_status = "PENDING_REVIEW"
+        merged_with_id = None
     else:
         decision = "MERGED_INTO_EXISTING_PROBLEM"
         problem.last_reported_at = now
         problem.report_count += 1
         problem.priority = min(99, problem.priority + 2)
         problem.trend += 2
+        workflow_status = "PENDING_REVIEW"
+        merged_with_id = None
 
     report = Report(
         id=str(uuid4()),
@@ -122,7 +151,8 @@ def create_report(db: Session, payload: ReportCreate) -> tuple[Report, Problem]:
         place_id=payload.place_id,
         lat=lat,
         lon=lon,
-        has_photo=payload.has_photo,
+        has_photo=bool(photo_url or payload.has_photo),
+        photo_url=photo_url,
         category=category_label,
         category_id=category_id,
         department_id=department_id,
@@ -131,6 +161,22 @@ def create_report(db: Session, payload: ReportCreate) -> tuple[Report, Problem]:
         duplicate_decision=decision,
         location_match=location_match,
         duplicate_score=score,
+        workflow_status=workflow_status,
+        title=title,
+        sector=analysis["sector"] or SECTOR_BY_CATEGORY.get(category_id, ""),
+        priority_label=analysis["priority"],
+        neighborhood=place.label if place else location_text,
+        timeline_json=timeline_for(workflow_status),
+        merged_with_id=merged_with_id if decision == "MERGED_INTO_EXISTING_PROBLEM" else None,
+        ai_confidence=analysis["confidence"],
+        ai_title=analysis["title"],
+        ai_category=analysis["category"],
+        ai_directorate_id=department_id,
+        ai_sector=analysis["sector"],
+        ai_priority=analysis["priority"],
+        ai_summary=analysis["summary"],
+        ai_intent="ANKESË",
+        ai_model_version="integrated",
     )
 
     db.add(report)
@@ -157,5 +203,9 @@ def build_report_result(report: Report, problem: Problem) -> ReportResult:
         duplicate_score=report.duplicate_score,
         location_match=report.location_match,
         has_photo=report.has_photo,
+        photo_url=report.photo_url,
+        workflow_status=report.workflow_status or "PENDING_REVIEW",
+        status=citizen_status_label(report.workflow_status or "PENDING_REVIEW"),
+        title=report.title or problem.title,
         issue=problem_to_issue(problem, rank=1),
     )
