@@ -220,35 +220,6 @@
     color: #f3f1ee;
   }
 
-  .leaflet-container {
-    background: #dce4ec;
-    font-family: inherit;
-  }
-
-  .pulse-pin {
-    background: transparent !important;
-    border: 0 !important;
-  }
-
-  .pulse-pin-inner {
-    display: grid;
-    place-items: center;
-    width: 42px;
-    height: 42px;
-    border-radius: 999px;
-    color: #161616;
-    font-size: 12px;
-    font-weight: 800;
-    background: var(--pin);
-    border: 4px solid #fff;
-    box-shadow: 0 10px 22px rgb(0 0 0 / 0.28);
-  }
-
-  .pulse-pin-inner.is-selected {
-    transform: scale(1.08);
-    box-shadow: 0 0 0 6px color-mix(in srgb, var(--pin) 28%, transparent), 0 10px 22px rgb(0 0 0 / 0.28);
-  }
-
   .snap-row {
     display: flex;
     gap: 0.75rem;

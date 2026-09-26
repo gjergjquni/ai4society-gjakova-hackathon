@@ -23,9 +23,14 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { createReport, fetchProblems, type Issue } from "@/lib/api";
-import { DEFAULT_LOCALE, LOCALE_OPTIONS, getMessages, type Locale } from "@/lib/i18n";
-import { LOCALE_STORAGE_KEY } from "@/lib/admin-i18n";
+import {
+  createReport,
+  fetchProblems,
+  lookupCitizenCase,
+  type CitizenCase,
+  type Issue,
+} from "@/lib/api";
+import { DEFAULT_LOCALE, LOCALE_OPTIONS, LOCALE_STORAGE_KEY, getMessages, type Locale } from "@/lib/i18n";
 
 const categories = [
   { id: "pothole", label: "Gropë", icon: TrafficCone },
@@ -171,8 +176,13 @@ export default function SwarmDashboard() {
   });
   const photoInputRef = useRef<HTMLInputElement>(null);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+  const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [photoName, setPhotoName] = useState("");
   const [photoError, setPhotoError] = useState("");
+  const [trackCode, setTrackCode] = useState("");
+  const [trackResult, setTrackResult] = useState<CitizenCase | null>(null);
+  const [trackStatus, setTrackStatus] = useState<"idle" | "loading" | "error" | "empty">("idle");
+  const [submittedStatus, setSubmittedStatus] = useState("");
   const [gps, setGps] = useState<{ lat: number; lng: number; label: string } | null>(null);
   const [locationStatus, setLocationStatus] = useState<"idle" | "loading" | "ready" | "denied" | "error">("idle");
   const [customRequestOpen, setCustomRequestOpen] = useState(false);
@@ -240,9 +250,10 @@ export default function SwarmDashboard() {
         category_id: form.categoryId || null,
         custom_text: customText,
         place_id: form.placeId || null,
-        has_photo: form.photo,
+        has_photo: Boolean(photoFile || form.photo),
         lat: gps?.lat ?? null,
         lon: gps?.lng ?? null,
+        photo: photoFile,
       });
 
       const categoryLabel = category
@@ -262,6 +273,7 @@ export default function SwarmDashboard() {
           .map((issue, index) => ({ ...issue, rank: index + 1 }));
       });
       setMergedId(result.case_code);
+      setSubmittedStatus(result.status || "Në shqyrtim");
       setSubmittedSummary({ category: categoryLabel, location: locationLabel });
       setSubmitted(true);
       setCustomRequestOpen(false);
@@ -279,6 +291,7 @@ export default function SwarmDashboard() {
       return null;
     });
     setPhotoName("");
+    setPhotoFile(null);
     setPhotoError("");
     setForm((current) => ({ ...current, photo: false }));
     if (photoInputRef.current) photoInputRef.current.value = "";
@@ -302,6 +315,7 @@ export default function SwarmDashboard() {
       return preview;
     });
     setPhotoName(file.name);
+    setPhotoFile(file);
     setPhotoError("");
     setForm((current) => ({ ...current, photo: true }));
   }
@@ -342,11 +356,31 @@ export default function SwarmDashboard() {
         return null;
       });
       setPhotoName("");
+      setPhotoFile(null);
       setPhotoError("");
+      setSubmittedStatus("");
       setGps(null);
       setLocationStatus("idle");
       if (photoInputRef.current) photoInputRef.current.value = "";
     }, 300);
+  }
+
+  async function trackReport() {
+    const code = trackCode.trim();
+    if (!code) {
+      setTrackStatus("empty");
+      setTrackResult(null);
+      return;
+    }
+    setTrackStatus("loading");
+    try {
+      const found = await lookupCitizenCase(code);
+      setTrackResult(found);
+      setTrackStatus(found ? "idle" : "empty");
+    } catch {
+      setTrackResult(null);
+      setTrackStatus("error");
+    }
   }
 
   const canSubmit = Boolean(form.categoryId || form.customRequest.trim());
@@ -430,6 +464,51 @@ export default function SwarmDashboard() {
               <ArrowRight className="size-5 shrink-0 sm:size-6" />
             </button>
           </div>
+
+          <form
+            className="mt-5 w-full max-w-sm rounded-2xl bg-white/95 p-4 shadow-[0_12px_30px_rgb(0_0_0/0.18)]"
+            onSubmit={(event) => {
+              event.preventDefault();
+              void trackReport();
+            }}
+          >
+            <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#54595f]">
+              {t.trackTitle}
+            </p>
+            <div className="mt-2 flex gap-2">
+              <input
+                value={trackCode}
+                onChange={(event) => setTrackCode(event.target.value)}
+                placeholder={t.trackPlaceholder}
+                className="h-10 min-w-0 flex-1 rounded-sm border border-[#e5e5e5] bg-[#f7f8fa] px-3 text-sm outline-none focus:border-[#04408b]/40"
+              />
+              <button
+                type="submit"
+                className="h-10 shrink-0 rounded-sm bg-[#04408b] px-3 text-sm font-semibold text-white hover:bg-[#03346f]"
+              >
+                {t.trackButton}
+              </button>
+            </div>
+            {trackStatus === "loading" ? (
+              <p className="mt-2 text-sm text-[#54595f]">Duke u ngarkuar...</p>
+            ) : null}
+            {trackStatus === "empty" ? (
+              <p className="mt-2 text-sm text-[#b42318]">{t.trackNotFound}</p>
+            ) : null}
+            {trackStatus === "error" ? (
+              <p className="mt-2 text-sm text-[#b42318]">{t.trackError}</p>
+            ) : null}
+            {trackResult ? (
+              <div className="mt-3 rounded-sm border border-[#e5e5e5] bg-[#f7f8fa] p-3">
+                <p className="text-sm font-semibold text-[#161616]">{trackResult.case_code}</p>
+                <p className="mt-1 text-sm text-[#54595f]">{trackResult.title}</p>
+                <p className="mt-2 text-sm font-medium text-[#04408b]">{trackResult.status}</p>
+                {trackResult.timeline.length ? (
+                  <p className="mt-1 text-xs text-[#54595f]">{trackResult.timeline.join(" → ")}</p>
+                ) : null}
+              </div>
+            ) : null}
+          </form>
         </div>
       </section>
 
@@ -673,11 +752,12 @@ export default function SwarmDashboard() {
                 </h3>
                 <p className="mx-auto mt-2 max-w-sm text-sm leading-6 text-[#54595f]">{t.processedLead}</p>
               </div>
-              <div className="my-6 grid grid-cols-3 gap-2">
+              <div className="my-6 grid grid-cols-2 gap-2 sm:grid-cols-4">
                 {[
                   [t.fieldCategory, submittedSummary.category],
                   [t.fieldLocation, submittedSummary.location],
                   [t.fieldCase, mergedId],
+                  [t.fieldStatus, submittedStatus || "Në shqyrtim"],
                 ].map(([label, value]) => (
                   <div key={label} className="rounded-sm border border-[#e5e5e5] bg-[#f7f8fa] p-3 text-center">
                     <p className="text-[8px] uppercase tracking-wider text-[#54595f]">{label}</p>

@@ -8,6 +8,8 @@ export const LOCALE_OPTIONS: { id: Locale; label: string; lang: string }[] = [
 
 export const DEFAULT_LOCALE: Locale = "sq";
 
+export const LOCALE_STORAGE_KEY = "reagigjakove-locale";
+
 export type Messages = {
   metaTitle: string;
   metaDescription: string;
@@ -78,6 +80,13 @@ export type Messages = {
   fieldCategory: string;
   fieldLocation: string;
   fieldCase: string;
+  fieldStatus: string;
+  trackTitle: string;
+  trackPlaceholder: string;
+  trackButton: string;
+  trackEmpty: string;
+  trackNotFound: string;
+  trackError: string;
   seeOnMap: string;
   whyPriority: string;
   caseIntelligence: string;
@@ -193,6 +202,13 @@ export const messages: Record<Locale, Messages> = {
     fieldCategory: "Kategoria",
     fieldLocation: "Lokacioni",
     fieldCase: "Rasti",
+    fieldStatus: "Statusi",
+    trackTitle: "Gjurmo raportin",
+    trackPlaceholder: "Shkruani kodin e rastit, p.sh. GJK-1050",
+    trackButton: "Shiko statusin",
+    trackEmpty: "Shkruani kodin e rastit për të parë statusin.",
+    trackNotFound: "Nuk u gjet asnjë raport me këtë kod.",
+    trackError: "Statusi nuk u lexua. Provoni përsëri.",
     seeOnMap: "Mbyll",
     whyPriority: "Pse është prioritet",
     caseIntelligence: "Vlerësimi i rastit",
@@ -399,6 +415,13 @@ export const messages: Record<Locale, Messages> = {
     fieldCategory: "Kategorija",
     fieldLocation: "Lokacija",
     fieldCase: "Slučaj",
+    fieldStatus: "Status",
+    trackTitle: "Prati prijavu",
+    trackPlaceholder: "Unesite kod slučaja, npr. GJK-1050",
+    trackButton: "Pogledaj status",
+    trackEmpty: "Unesite kod slučaja da vidite status.",
+    trackNotFound: "Nije pronađena prijava sa ovim kodom.",
+    trackError: "Status nije učitan. Pokušajte ponovo.",
     seeOnMap: "Zatvori",
     whyPriority: "Zašto je prioritet",
     caseIntelligence: "Procena slučaja",
@@ -605,6 +628,13 @@ export const messages: Record<Locale, Messages> = {
     fieldCategory: "Category",
     fieldLocation: "Location",
     fieldCase: "Case",
+    fieldStatus: "Status",
+    trackTitle: "Track report",
+    trackPlaceholder: "Enter the case code, e.g. GJK-1050",
+    trackButton: "View status",
+    trackEmpty: "Enter the case code to see its status.",
+    trackNotFound: "No report was found with this code.",
+    trackError: "Status could not be loaded. Please try again.",
     seeOnMap: "Close",
     whyPriority: "Why it is a priority",
     caseIntelligence: "Case assessment",
