@@ -1,3 +1,5 @@
+import type { DirectorateId } from "./directorates";
+
 export type ReportStatus =
   | "SUBMITTED"
   | "AI_ANALYZED"
@@ -7,28 +9,61 @@ export type ReportStatus =
   | "REFUZUAR"
   | "BASHKUAR";
 
+export type DirectorateReportStatus =
+  | "NEW"
+  | "ACCEPTED"
+  | "IN_PROGRESS"
+  | "RESOLVED"
+  | "VERIFIED"
+  | "CLOSED";
+
 export type PriorityLevel = "Kritike" | "E lartë" | "Mesatare" | "E ulët";
+
+export type ReportLocation = {
+  address: string;
+  lat: number;
+  lng: number;
+  neighborhood: string;
+};
+
+export type AiAnalysis = {
+  confidence: number;
+  suggestedCategory: string;
+  suggestedPriority: PriorityLevel;
+  suggestedDirectorate: DirectorateId;
+  reasoning: string;
+};
+
+export type ResolutionRecord = {
+  workDescription: string;
+  photoBeforeUrl: string;
+  photoAfterUrl: string;
+  completedAt: string;
+};
 
 export type ArkivistReport = {
   id: string;
   title: string;
   description: string;
+  citizenNotes?: string;
+  category: string;
+  sector: string;
+  directorateId: DirectorateId;
+  priority: PriorityLevel;
+  status: ReportStatus;
+  directorateStatus?: DirectorateReportStatus;
+  createdAt: string;
   date: string;
   time: string;
-  location: string;
-  coords: { lat: number; lng: number };
-  category: string;
-  directorate: string;
-  sector: string;
-  priority: PriorityLevel;
-  aiConfidence: number;
-  status: ReportStatus;
+  location: ReportLocation;
   photoUrl: string;
-  aiSummary: string;
-  aiSuggestion: string;
+  aiAnalysis: AiAnalysis;
+  timeline: string[];
   citizenName?: string;
   mergedWithId?: string;
-  rejectReason?: string;
+  rejectionReason?: string;
+  verifiedBy?: string;
+  resolution?: ResolutionRecord;
 };
 
 export type ArkivistNavId =
@@ -39,22 +74,43 @@ export type ArkivistNavId =
   | "te-refuzuara"
   | "statistikat";
 
-export const STATUS_PIPELINE: ReportStatus[] = [
-  "SUBMITTED",
-  "AI_ANALYZED",
-  "NE_SHQYRTIM",
-  "APROVUAR",
-  "DERGUAR_TE_DREJTORIA",
-];
+export type DirectorateNavId =
+  | "paneli"
+  | "raportet"
+  | "te-reja"
+  | "ne-proces"
+  | "te-zgjidhura"
+  | "statistikat";
+
+export const ARKIVIST_TIMELINE = [
+  "Raportuar",
+  "Analizuar nga AI",
+  "Në shqyrtim",
+  "Drejtoria",
+  "Në proces",
+  "Zgjidhur",
+] as const;
 
 export const STATUS_LABELS: Record<ReportStatus, string> = {
-  SUBMITTED: "SUBMITTED",
-  AI_ANALYZED: "AI ANALYZED",
-  NE_SHQYRTIM: "NË SHQYRTIM",
-  APROVUAR: "APROVUAR",
-  DERGUAR_TE_DREJTORIA: "DËRGUAR TE DREJTORIA",
-  REFUZUAR: "REFUZUAR",
-  BASHKUAR: "BASHKUAR",
+  SUBMITTED: "Raportuar",
+  AI_ANALYZED: "Analizuar nga AI",
+  NE_SHQYRTIM: "Në shqyrtim",
+  APROVUAR: "Aprovuar",
+  DERGUAR_TE_DREJTORIA: "Te drejtoria",
+  REFUZUAR: "Refuzuar",
+  BASHKUAR: "Bashkuar",
+};
+
+export const DIRECTORATE_STATUS_LABELS: Record<
+  DirectorateReportStatus,
+  string
+> = {
+  NEW: "I ri",
+  ACCEPTED: "I pranuar",
+  IN_PROGRESS: "Në proces",
+  RESOLVED: "I zgjidhur",
+  VERIFIED: "I verifikuar",
+  CLOSED: "I mbyllur",
 };
 
 export const CATEGORIES = [
@@ -64,15 +120,9 @@ export const CATEGORIES = [
   "Ujësjellës",
   "Trotuar",
   "Trafik",
-] as const;
-
-export const DIRECTORATES = [
-  "Drejtoria e Shërbimeve Publike",
-  "Drejtoria e Infrastrukturës",
-  "KRU Gjakova",
-  "Çabrati Sh.A.",
-  "Drejtoria e Urbanizmit",
-  "Inspektorati Komunal",
+  "Ambient",
+  "Arsim",
+  "Shëndetësi",
 ] as const;
 
 export const SECTORS = [
@@ -82,6 +132,9 @@ export const SECTORS = [
   "Rrjeti i ujësjellësit",
   "Sinjalizimi rrugor",
   "Hapësirat publike",
+  "Urbanizëm",
+  "Inspektime",
+  "Administratë",
 ] as const;
 
 export const PRIORITIES: PriorityLevel[] = [
@@ -90,3 +143,60 @@ export const PRIORITIES: PriorityLevel[] = [
   "Mesatare",
   "E ulët",
 ];
+
+export function priorityBars(priority: PriorityLevel): number {
+  switch (priority) {
+    case "Kritike":
+      return 4;
+    case "E lartë":
+      return 3;
+    case "Mesatare":
+      return 2;
+    case "E ulët":
+      return 1;
+  }
+}
+
+export function arkivistTimelineIndex(status: ReportStatus): number {
+  switch (status) {
+    case "SUBMITTED":
+      return 0;
+    case "AI_ANALYZED":
+      return 1;
+    case "NE_SHQYRTIM":
+      return 2;
+    case "APROVUAR":
+    case "DERGUAR_TE_DREJTORIA":
+      return 3;
+    case "REFUZUAR":
+    case "BASHKUAR":
+      return 2;
+    default:
+      return 0;
+  }
+}
+
+export function directorateTimelineIndex(
+  status: ReportStatus,
+  dirStatus?: DirectorateReportStatus,
+): number {
+  if (status === "REFUZUAR" || status === "BASHKUAR") return 2;
+  if (status !== "DERGUAR_TE_DREJTORIA" && status !== "APROVUAR") {
+    return arkivistTimelineIndex(status);
+  }
+  switch (dirStatus) {
+    case "NEW":
+      return 3;
+    case "ACCEPTED":
+    case "IN_PROGRESS":
+      return 4;
+    case "RESOLVED":
+      return 5;
+    case "VERIFIED":
+      return 6;
+    case "CLOSED":
+      return 7;
+    default:
+      return 3;
+  }
+}

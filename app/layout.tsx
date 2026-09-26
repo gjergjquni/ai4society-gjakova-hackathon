@@ -8,7 +8,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Komuna e Gjakovës",
+  title: "ReagoGjakovë · Komuna e Gjakovës",
   description:
     "Raportoni probleme komunale në Gjakovë — harta, prioriteti dhe agjentët e komunës.",
 };
