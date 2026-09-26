@@ -12,6 +12,7 @@ class ClassifyRequest(BaseModel):
     lat: float | None = None
     lon: float | None = None
     citizen_ref: str | None = None
+    has_photo: bool = False
 
 
 class EvidenceOut(BaseModel):
@@ -55,6 +56,12 @@ class ClassifyResponse(BaseModel):
     department_id: str
     department: str
     confidence: float
+    title: str
+    category: str
+    directorateId: str
+    sector: str
+    priority: Literal["Kritike", "E lartë", "Mesatare", "E ulët"]
+    summary: str
     evidence: list[EvidenceOut]
     duplicate: DuplicateOut
     problem: ProblemOut

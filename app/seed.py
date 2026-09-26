@@ -9,7 +9,6 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.models import Problem
-from app.services.embeddings import embed_query
 
 SEED_PROBLEMS = [
     {
@@ -42,6 +41,15 @@ SEED_PROBLEMS = [
 ]
 
 
+def _embedding_json(text: str) -> str:
+    try:
+        from app.services.embeddings import embed_query
+
+        return json.dumps(embed_query(text).tolist())
+    except Exception:
+        return "[]"
+
+
 def seed_open_problems(session: Session) -> int:
     created = 0
     now = datetime.now(timezone.utc)
@@ -61,7 +69,7 @@ def seed_open_problems(session: Session) -> int:
                 first_reported_at=now - timedelta(days=4),
                 last_reported_at=now - timedelta(days=1),
                 report_count=1,
-                embedding_json=json.dumps(embed_query(item["text"]).tolist()),
+                embedding_json=_embedding_json(item["text"]),
             )
         )
         created += 1

@@ -24,7 +24,7 @@ class Settings(BaseSettings):
     geo_radius_meters: float = 100.0
     log_level: str = "INFO"
     host: str = "127.0.0.1"
-    port: int = 8000
+    port: int = 8001
     kb_version: str = "1.0.0"
     model_version: str = "2.0.0"
 

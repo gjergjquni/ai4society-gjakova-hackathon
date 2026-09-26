@@ -5,6 +5,7 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 
 from fastapi import Depends, FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
@@ -24,41 +25,50 @@ from app.schemas import (
     TaxonomyOut,
 )
 from app.seed import seed_open_problems
-from app.services.case_engine import CaseEngine
-from app.services.department import DepartmentClassifier
-from app.services.duplicate import DuplicateDetector
-from app.services.intent import IntentClassifier
-from app.services.kb import load_kb
 from app.taxonomy import DIRECTORATES
+from app.services.fallback import FallbackCaseEngine
+
+try:
+    from app.services.case_engine import CaseEngine
+    from app.services.department import DepartmentClassifier
+    from app.services.duplicate import DuplicateDetector
+    from app.services.intent import IntentClassifier
+    from app.services.kb import load_kb
+except Exception:  # ML extras are optional at runtime
+    CaseEngine = None  # type: ignore[misc,assignment]
+    DepartmentClassifier = None  # type: ignore[misc,assignment]
+    DuplicateDetector = None  # type: ignore[misc,assignment]
+    IntentClassifier = None  # type: ignore[misc,assignment]
+    load_kb = None  # type: ignore[misc,assignment]
 
 
-engine_holder: dict[str, CaseEngine] = {}
+engine_holder: dict[str, object] = {}
 
 
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
     init_db()
-    kb = load_kb()
-    intent = IntentClassifier()
-    intent.load()
-    department = DepartmentClassifier(kb=kb)
-    department.load()
-    if not department.loaded:
-        raise RuntimeError(
-            "Department artifacts missing. Run: "
-            "python scripts/build_knowledge_base.py && "
-            "python scripts/generate_dataset.py && "
-            "python scripts/train_intent.py && "
-            "python scripts/train_department.py && "
-            "python scripts/train_duplicate.py"
-        )
-    duplicate = DuplicateDetector()
-    engine_holder["engine"] = CaseEngine(intent, department, duplicate)
+    engine_holder["engine"] = FallbackCaseEngine()
+    if CaseEngine and DepartmentClassifier and IntentClassifier and DuplicateDetector and load_kb:
+        try:
+            kb = load_kb()
+            intent = IntentClassifier()
+            intent.load()
+            department = DepartmentClassifier(kb=kb)
+            department.load()
+            if department.loaded:
+                duplicate = DuplicateDetector()
+                engine_holder["engine"] = CaseEngine(intent, department, duplicate)
+        except Exception:
+            engine_holder["engine"] = FallbackCaseEngine()
     from app.db import SessionLocal
 
     with SessionLocal() as session:
-        seed_open_problems(session)
-        session.commit()
+        try:
+            seed_open_problems(session)
+            session.commit()
+        except Exception:
+            session.rollback()
     yield
     engine_holder.clear()
 
@@ -73,8 +83,16 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-def get_engine() -> CaseEngine:
+
+def get_engine():
     return engine_holder["engine"]
 
 
@@ -157,13 +175,18 @@ def get_problem(problem_id: str, session: Session = Depends(get_session)) -> Pro
 
 
 @app.get("/v1/health", response_model=HealthOut)
-def health(engine: CaseEngine = Depends(get_engine)) -> HealthOut:
+def health(engine=Depends(get_engine)) -> HealthOut:
+    department = getattr(engine, "department", None)
+    kb = getattr(department, "kb", None)
     return HealthOut(
         status="ok",
-        kb_version=engine.department.kb.version,
+        kb_version=getattr(kb, "version", settings.kb_version),
         model_version=settings.model_version,
         directorates=len(DIRECTORATES),
-        models_loaded=engine.intent.loaded and engine.department.loaded,
+        models_loaded=bool(
+            getattr(getattr(engine, "intent", None), "loaded", False)
+            and getattr(department, "loaded", False)
+        ),
     )
 
 
